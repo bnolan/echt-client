@@ -1,0 +1,28 @@
+{
+  "name": "echt-server",
+  "version": "0.0.1",
+  "description": "Scripts for serverless operation of the echt app",
+  "main": "index.js",
+  "scripts": {
+    "claudia": "claudia",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bnolan/echt.git"
+  },
+  "keywords": [
+    "lambda",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bnolan/echt/issues"
+  },
+  "homepage": "https://github.com/bnolan/echt#readme",
+  "dependencies": {
+    "claudia": "^2.9.0",
+    "semistandard": "^10.0.0"
+  }
+}
