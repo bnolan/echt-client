@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "claudia update --version dev --region ap-southeast-2 --api-module api --name test --use-s3-bucket echt-deploys",
     "release": "claudia set-version --version production",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape tests/* && semistandard"
   },
   "repository": {
     "type": "git",
@@ -23,10 +23,12 @@
   },
   "homepage": "https://github.com/bnolan/echt#readme",
   "dependencies": {
+    "aws-sdk": "^2.27.0",
     "claudia-api-builder": "^2.4.1"
   },
   "devDependencies": {
     "claudia": "^2.9.0",
-    "semistandard": "^10.0.0"
+    "semistandard": "^10.0.0",
+    "tape": "^4.6.3"
   }
 }
