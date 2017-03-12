@@ -10,10 +10,12 @@ var dynamodb = new AWS.DynamoDB();
 var params = {
   TableName: 'echt.uat.photos',
   KeySchema: [
-    { AttributeName: 'uuid', KeyType: 'HASH' }
+    { AttributeName: 'uuid', KeyType: 'HASH' },
+    { AttributeName: 'userId', KeyType: 'RANGE' }
   ],
   AttributeDefinitions: [
-    { AttributeName: 'uuid', AttributeType: 'S' }
+    { AttributeName: 'uuid', AttributeType: 'S' },
+    { AttributeName: 'userId', AttributeType: 'S' }
   ],
   ProvisionedThroughput: {
     ReadCapacityUnits: 1,
