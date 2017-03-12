@@ -13,7 +13,7 @@ var params = {
     { AttributeName: 'uuid', KeyType: 'HASH' }
   ],
   AttributeDefinitions: [
-    { AttributeName: 'uuid', AttributeType: 'N' }
+    { AttributeName: 'uuid', AttributeType: 'S' }
   ],
   ProvisionedThroughput: {
     ReadCapacityUnits: 1,
