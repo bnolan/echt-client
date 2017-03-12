@@ -21,10 +21,11 @@
     "url": "https://github.com/bnolan/echt/issues"
   },
   "homepage": "https://github.com/bnolan/echt#readme",
-  "dependencies": {},
+  "dependencies": {
+    "claudia-api-builder": "^2.4.1"
+  },
   "devDependencies": {
     "claudia": "^2.9.0",
-    "claudia-api-builder": "^2.4.1",
     "semistandard": "^10.0.0"
   }
 }
