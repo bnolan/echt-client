@@ -6,7 +6,8 @@
   "scripts": {
     "deploy": "claudia update --version dev --region ap-southeast-2 --api-module api --name test --use-s3-bucket echt-deploys",
     "release": "claudia set-version --version production",
-    "test": "tape tests/* && semistandard"
+    "test": "tape tests/* | faucet",
+    "lint": "semistandard"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "claudia": "^2.9.0",
+    "proxyquire": "^1.7.11",
     "semistandard": "^10.0.0",
     "tape": "^4.6.3"
   }
