@@ -19,11 +19,11 @@ var indexFace = (objectKey) => {
   var rekognitionClient = new AWS.Rekognition();
   var params = {
     Image: {
-     S3Object: {
-       // Ensure photos can only be selected from a location we control
-       Bucket: `echt.${stage}`,
-       Name: objectKey
-     }
+      S3Object: {
+        // Ensure photos can only be selected from a location we control
+        Bucket: `echt.${stage}`,
+        Name: objectKey
+      }
     }
   };
   return rekognitionClient.indexFaces(params).promise().then((response) => {
@@ -33,7 +33,7 @@ var indexFace = (objectKey) => {
     // TODO Fail when face is detected with low confidence
     return response.data.FaceRecords[0].Face.FaceId;
   });
-}
+};
 
 /**
  * @param {Object} user
@@ -48,14 +48,14 @@ var storeDoc = (user, objectKey, faceId) => {
     Item: {
       uuid: uuid.v1(),
       userId: user.uuid,
-      faceId: faceId,
+      faceId: faceId
     }
   };
 
   return docClient.put(params).promise().then((response) => {
     return response.data;
   });
-}
+};
 
 exports.handler = function (request) {
   const photoKey = request.body.photoKey;

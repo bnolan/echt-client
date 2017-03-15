@@ -3,7 +3,7 @@ const test = require('tape');
 const sinon = require('sinon');
 
 const configStub = {
-  update: sinon.stub(),
+  update: sinon.stub()
 };
 
 const dynamoPutStub = sinon.stub().returns({
@@ -11,13 +11,13 @@ const dynamoPutStub = sinon.stub().returns({
     data: {
       Attributes: {}
     }
-  }),
+  })
 });
 
 const dynamoStub = {
-  DocumentClient: function DocumentClient() {
+  DocumentClient: function DocumentClient () {
     this.put = dynamoPutStub;
-  },
+  }
 };
 
 const rekognitionIndexFacesStub = sinon.stub().returns({
@@ -33,27 +33,27 @@ const rekognitionIndexFacesStub = sinon.stub().returns({
               Width: 0.3
             },
             Confidence: 99.99,
-            FaceId: "my-faceid",
-            ImageId: "my-imageid",
-          },
-        },
+            FaceId: 'my-faceid',
+            ImageId: 'my-imageid'
+          }
+        }
       ]
-    },
-  }),
+    }
+  })
 });
 
-const rekognitionStub = function Rekognition() {
+const rekognitionStub = function Rekognition () {
   this.indexFaces = rekognitionIndexFacesStub;
 };
 
 const awsStub = {
   config: configStub,
   DynamoDB: dynamoStub,
-  Rekognition: rekognitionStub,
+  Rekognition: rekognitionStub
 };
 
 const uploadPhoto = proxyquire('../handlers/upload-photo', {
-  'aws-sdk': awsStub,
+  'aws-sdk': awsStub
 });
 
 test('stores when called with valid object and a detected face', function (t) {
@@ -63,7 +63,7 @@ test('stores when called with valid object and a detected face', function (t) {
       user: {
         uuid: 'my-uuid'
       }
-    },
+    }
   };
   uploadPhoto.handler(request).then((result) => {
     t.ok(dynamoPutStub.calledOnce);
