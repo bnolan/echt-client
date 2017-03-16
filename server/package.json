@@ -4,8 +4,10 @@
   "description": "Scripts for serverless operation of the echt app",
   "main": "index.js",
   "scripts": {
-    "deploy": "claudia create --version dev --region us-west-2 --api-module api --name echt",
-    "release": "claudia set-version --version production",
+    "start": "claudia create --version dev --region us-west-2 --api-module app --name echt",
+    "release-dev": "claudia update --version dev",
+    "release-uat": "claudia update --version uat",
+    "release-prod": "claudia update --version prod",
     "test": "tape tests/*-test.js | faucet",
     "lint": "semistandard"
   },
