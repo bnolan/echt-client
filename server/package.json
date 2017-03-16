@@ -4,7 +4,7 @@
   "description": "Scripts for serverless operation of the echt app",
   "main": "index.js",
   "scripts": {
-    "deploy": "claudia update --version dev --region ap-southeast-2 --api-module api --name test --use-s3-bucket echt-deploys",
+    "deploy": "claudia create --version dev --region us-west-2 --api-module api --name echt",
     "release": "claudia set-version --version production",
     "test": "tape tests/*-test.js | faucet",
     "lint": "semistandard"

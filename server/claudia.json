@@ -1,11 +1,11 @@
 {
   "lambda": {
-    "role": "test-executor",
-    "name": "test",
-    "region": "ap-southeast-2"
+    "role": "echt-executor",
+    "name": "echt",
+    "region": "us-west-2"
   },
   "api": {
-    "id": "3ri2bj7h80",
+    "id": "xypqnmu05f",
     "module": "app"
   }
 }

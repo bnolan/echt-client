@@ -1,12 +1,16 @@
 const AWS = require('aws-sdk');
 const uuid = require('uuid');
 
-AWS.config.update({
-  region: 'ap-southeast-2'
-});
-
 // TODO Determine from API Gateway stage
 const stage = 'uat';
+
+// TODO Move to environment var
+// Region needs to be supported by Rekognition (and match the S3 bucket)
+const region = 'us-west-2';
+
+AWS.config.update({
+  region: region
+});
 
 /**
  * Analyses a photo for faces. The photo was previously uploaded

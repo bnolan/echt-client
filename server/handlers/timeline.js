@@ -1,7 +1,11 @@
 var AWS = require('aws-sdk');
 
+// TODO Move to environment var
+// Region needs to be supported by Rekognition (and match the S3 bucket)
+const region = 'us-west-2';
+
 AWS.config.update({
-  region: 'ap-southeast-2'
+  region: region
 });
 
 var docClient = new AWS.DynamoDB.DocumentClient();
