@@ -8,9 +8,7 @@ const configStub = {
 
 const dynamoPutStub = sinon.stub().returns({
   promise: () => Promise.resolve({
-    data: {
-      Attributes: {}
-    }
+    Attributes: {}
   })
 });
 
@@ -22,23 +20,21 @@ const dynamoStub = {
 
 const rekognitionIndexFacesStub = sinon.stub().returns({
   promise: () => Promise.resolve({
-    data: {
-      FaceRecords: [
-        {
-          Face: {
-            BoundingBox: {
-              Height: 0.3,
-              Left: 0.3,
-              Top: 0.3,
-              Width: 0.3
-            },
-            Confidence: 99.99,
-            FaceId: 'my-faceid',
-            ImageId: 'my-imageid'
-          }
+    FaceRecords: [
+      {
+        Face: {
+          BoundingBox: {
+            Height: 0.3,
+            Left: 0.3,
+            Top: 0.3,
+            Width: 0.3
+          },
+          Confidence: 99.99,
+          FaceId: 'my-faceid',
+          ImageId: 'my-imageid'
         }
-      ]
-    }
+      }
+    ]
   })
 });
 

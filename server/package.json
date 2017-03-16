@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "claudia": "^2.9.0",
+    "faucet": "^0.0.1",
     "proxyquire": "^1.7.11",
     "semistandard": "^10.0.0",
     "sinon": "^2.0.0",
