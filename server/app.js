@@ -8,6 +8,6 @@ const uploadPhoto = require('./handlers/upload-photo');
 
 api.get('/hello', hello.handler);
 api.get('/photos', timeline.handler);
-api.put('/photos', uploadPhoto.handler);
+api.post('/photos', uploadPhoto.handler);
 
 module.exports = api;
