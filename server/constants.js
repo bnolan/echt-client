@@ -4,10 +4,13 @@ exports.CAMERA = {
   BACK_FACING: 'BACK_FACING'
 };
 
-exports.ACTIONS = {
+exports.ACTION = {
   ADD_FRIEND: 'ADD_FRIEND'
-}
+};
 
-exports.STATUSES = {
-  PENDING: 'PENDING'
-}
+exports.STATUS = {
+  PENDING: 'PENDING',
+  PROPOSED: 'PROPOSED',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED'
+};
