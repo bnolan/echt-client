@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "claudia update --version dev --region ap-southeast-2 --api-module api --name test --use-s3-bucket echt-deploys",
     "release": "claudia set-version --version production",
-    "test": "tape tests/* | faucet",
+    "test": "tape tests/*-test.js | faucet",
     "lint": "semistandard"
   },
   "repository": {

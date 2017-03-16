@@ -6,7 +6,10 @@ const ACTION = require('../constants').ACTION;
 const STATUS = require('../constants').STATUS;
 
 function xtest () {
-  console.log('end-to-end tests disabled');
+  test('end-to-end tests disabled', (t) => {
+    t.ok(true);
+    t.end();
+  });
 }
 
 xtest('full user flow', (t) => {
