@@ -22,10 +22,11 @@ AWS.config.update({
 var indexFace = (objectKey) => {
   var rekognitionClient = new AWS.Rekognition();
   var params = {
+    CollectionId: `echt.${stage}`,
     Image: {
       S3Object: {
         // Ensure photos can only be selected from a location we control
-        Bucket: `echt.${stage}`,
+        Bucket: `echt.${stage}.${region}`,
         Name: objectKey
       }
     }
@@ -35,7 +36,7 @@ var indexFace = (objectKey) => {
     // TODO Limit multi face failure to similar bounding boxes,
     // avoid failing when photo captures people in the background
     // TODO Fail when face is detected with low confidence
-    return response.data.FaceRecords[0].Face.FaceId;
+    return response.FaceRecords[0].Face.FaceId;
   });
 };
 
@@ -57,7 +58,7 @@ var storeDoc = (user, objectKey, faceId) => {
   };
 
   return docClient.put(params).promise().then((response) => {
-    return response.data;
+    return response;
   });
 };
 
