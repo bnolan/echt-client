@@ -1,0 +1,13 @@
+
+exports.CAMERA = {
+  FRONT_FACING: 'FRONT_FACING',
+  BACK_FACING: 'BACK_FACING'
+};
+
+exports.ACTIONS = {
+  ADD_FRIEND: 'ADD_FRIEND'
+}
+
+exports.STATUSES = {
+  PENDING: 'PENDING'
+}
