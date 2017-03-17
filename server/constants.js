@@ -14,3 +14,7 @@ exports.STATUS = {
   ACCEPTED: 'ACCEPTED',
   DECLINED: 'DECLINED'
 };
+
+exports.SIGNUP = {
+  REGISTERED: 'REGISTERED'
+};

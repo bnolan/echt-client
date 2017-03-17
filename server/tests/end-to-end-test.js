@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const Automator = require('./automator');
 const test = require('tape');
 const CAMERA = require('../constants').CAMERA;
@@ -6,10 +7,7 @@ const ACTION = require('../constants').ACTION;
 const STATUS = require('../constants').STATUS;
 
 function xtest () {
-  test('end-to-end tests disabled', (t) => {
-    t.ok(true);
-    t.end();
-  });
+  test();
 }
 
 xtest('full user flow', (t) => {
@@ -37,7 +35,7 @@ xtest('full user flow', (t) => {
     t.test('complete signup', (t) => {
       t.plan(5);
 
-      const blob = fs.readFileSync('./fixtures/ben-1.jpg');
+      const blob = fs.readFileSync(path.join(__dirname, './fixtures/ben-1.jpg'));
 
       a.post('/sign-up', {
         image: blob,

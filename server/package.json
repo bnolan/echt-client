@@ -27,7 +27,9 @@
   "homepage": "https://github.com/bnolan/echt#readme",
   "dependencies": {
     "aws-sdk": "^2.27.0",
-    "claudia-api-builder": "^2.4.1"
+    "claudia-api-builder": "^2.4.1",
+    "jsonwebtoken": "^7.3.0",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "claudia": "^2.9.0",
