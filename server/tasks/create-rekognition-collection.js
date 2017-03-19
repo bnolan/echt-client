@@ -4,11 +4,11 @@ AWS.config.update({
   region: 'us-west-2'
 });
 
-var collections = ['echt.uat', 'echt.prod'];
+var stages = ['dev', 'uat', 'prod'];
 
 var rekognition = new AWS.Rekognition();
-collections.forEach((collection) => {
-  rekognition.createCollection({CollectionId: collection}, function (err, data) {
+stages.forEach((stage) => {
+  rekognition.createCollection({CollectionId: `echt.${stage}`}, function (err, data) {
     if (err) {
       console.error('Unable to create collection. Error JSON:', JSON.stringify(err, null, 2));
     } else {
