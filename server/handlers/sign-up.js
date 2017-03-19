@@ -4,7 +4,12 @@ const AWS = require('aws-sdk');
 const ACCOUNT = require('../constants');
 const getStage = require('../helpers/get-stage');
 
-var storeDoc = (user, env) => {
+/**
+ * @param {Object} user
+ * @param {String} stage
+ * @return {Promise}
+ */
+var storeDoc = (user, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   var params = {
@@ -20,6 +25,11 @@ var storeDoc = (user, env) => {
   });
 };
 
+/**
+ * @param {Object} user
+ * @param {String} deviceId
+ * @return {String}
+ */
 function generateRegisteredKey (user, deviceId) {
   // fixme - sign jwt with a key
 
@@ -47,7 +57,7 @@ exports.handler = (request) => {
   return storeDoc(user, stage).then(() => {
     return {
       success: true,
-      deviceKey: newKey(),
+      deviceKey: newKey,
       user: user
     };
   });
