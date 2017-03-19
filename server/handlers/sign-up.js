@@ -2,11 +2,9 @@ const uuid = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 const ACCOUNT = require('../constants');
+const getStage = require('../helpers/get-stage');
 
-// TODO Determine from API Gateway stage
-const stage = 'uat';
-
-var storeDoc = (user, objectKey, faceId) => {
+var storeDoc = (user, env) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   var params = {
@@ -45,8 +43,8 @@ exports.handler = (request) => {
   };
 
   const newKey = generateRegisteredKey(user, key);
-
-  return storeDoc.then(() => {
+  const stage = getStage(request.lambdaContext);
+  return storeDoc(user, stage).then(() => {
     return {
       success: true,
       deviceKey: newKey(),

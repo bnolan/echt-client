@@ -1,8 +1,6 @@
 const AWS = require('aws-sdk');
 const uuid = require('uuid');
-
-// TODO Determine from API Gateway stage
-const stage = 'uat';
+const getStage = require('../helpers/get-stage');
 
 // TODO Move to environment var
 // Region needs to be supported by Rekognition (and match the S3 bucket)
@@ -17,9 +15,10 @@ AWS.config.update({
  * to a defined S3 bucket by the same user.
  *
  * @param {String} objectKey S3 object (not a URL)
+ * @param {String} env Environment stage (dev, uat, prod)
  * @return {Promise} Returning a FaceId
  */
-var indexFace = (objectKey) => {
+var indexFace = (objectKey, stage) => {
   var rekognitionClient = new AWS.Rekognition();
   var params = {
     CollectionId: `echt.${stage}`,
@@ -44,9 +43,10 @@ var indexFace = (objectKey) => {
  * @param {Object} user
  * @param {String} objectKey S3 object key (not a URL)
  * @param {String} faceId AWS Rekognition detected face
+ * @param {String} env Environment stage (dev, uat, prod)
  * @return {Promise} Returning doc info
  */
-var storeDoc = (user, objectKey, faceId) => {
+var storeDoc = (user, objectKey, faceId, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
   var params = {
     TableName: `echt.${stage}.photos`,
@@ -68,9 +68,11 @@ exports.handler = function (request) {
   // TODO Check user existence in database
   const user = request.body.user;
 
-  return indexFace(photoKey)
+  const stage = getStage(request.lambdaContext);
+
+  return indexFace(photoKey, stage)
     .then(faceData => {
-      return storeDoc(user, photoKey, faceData);
+      return storeDoc(user, photoKey, faceData, stage);
     })
     .then(() => {
       // TODO Return object information in API response
