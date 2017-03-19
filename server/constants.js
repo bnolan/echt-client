@@ -15,6 +15,6 @@ exports.STATUS = {
   DECLINED: 'DECLINED'
 };
 
-exports.SIGNUP = {
+exports.ACCOUNT = {
   REGISTERED: 'REGISTERED'
 };
