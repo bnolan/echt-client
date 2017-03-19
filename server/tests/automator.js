@@ -17,10 +17,34 @@ module.exports = class Automator {
   }
 
   put (path, jsonBody, headers, callback) {
-    throw new Error('not implemented');
+    let headersWithDefaults = Object.assign({'content-type': 'application/json'}, headers);
+    app.proxyRouter({
+      requestContext: {
+        resourcePath: path,
+        httpMethod: 'PUT'
+      },
+      headers: headersWithDefaults,
+      body: jsonBody
+    }, {
+      done: function (something, response) {
+        callback(JSON.parse(response.body));
+      }
+    });
   }
 
-  post () {
-    throw new Error('not implemented');
+  post (path, jsonBody, headers, callback) {
+    let headersWithDefaults = Object.assign({'content-type': 'application/json'}, headers);
+    app.proxyRouter({
+      requestContext: {
+        resourcePath: path,
+        httpMethod: 'POST'
+      },
+      headers: headersWithDefaults,
+      body: jsonBody
+    }, {
+      done: function (something, response) {
+        callback(JSON.parse(response.body));
+      }
+    });
   }
 };
