@@ -24,7 +24,7 @@ module.exports = class Automator {
         httpMethod: 'PUT'
       },
       headers: headersWithDefaults,
-      body: jsonBody
+      body: JSON.stringify(jsonBody)
     }, {
       done: function (something, response) {
         callback(JSON.parse(response.body));

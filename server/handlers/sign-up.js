@@ -15,6 +15,7 @@ var storeDoc = (user, stage) => {
   var params = {
     TableName: `echt.${stage}.users`,
     Item: {
+      userId: user.uuid,
       uuid: user.uuid,
       user: user
     }
@@ -54,7 +55,10 @@ exports.handler = (request) => {
 
   const newKey = generateRegisteredKey(user, key);
   const stage = getStage(request.lambdaContext);
+
   return storeDoc(user, stage).then(() => {
+    console.log('wut');
+
     return {
       success: true,
       deviceKey: newKey,

@@ -33,7 +33,7 @@ xtest('full user flow', (t) => {
     });
 
     t.test('complete signup', (t) => {
-      t.plan(5);
+      t.plan(4);
 
       const blob = fs.readFileSync(path.join(__dirname, './fixtures/ben-1.jpg'));
 
@@ -45,7 +45,6 @@ xtest('full user flow', (t) => {
         t.ok(r.user);
         t.ok(r.user.uuid);
         t.equal(r.user.name, 'Ben');
-        t.ok();
 
         ben.user = r.user;
 
