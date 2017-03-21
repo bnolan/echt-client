@@ -6,11 +6,11 @@ const CAMERA = require('../constants').CAMERA;
 const ACTION = require('../constants').ACTION;
 const STATUS = require('../constants').STATUS;
 
-// function xtest () {
-//   test();
-// }
+function xtest () {
+  test();
+}
 
-test('full user flow', (t) => {
+xtest('full user flow', (t) => {
   let ben = {
     deviceKey: null,
     user: null
