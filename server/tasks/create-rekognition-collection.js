@@ -12,7 +12,7 @@ stages.forEach((stage) => {
     if (err) {
       console.error('Unable to create collection. Error JSON:', JSON.stringify(err, null, 2));
     } else {
-      console.log('Created rekognition collection: ', collection);
+      console.log('Created rekognition collection: ', data);
     }
   });
 });

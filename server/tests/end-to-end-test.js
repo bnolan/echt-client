@@ -6,11 +6,11 @@ const CAMERA = require('../constants').CAMERA;
 const ACTION = require('../constants').ACTION;
 const STATUS = require('../constants').STATUS;
 
-function xtest () {
-  test();
-}
+// function xtest () {
+//   test();
+// }
 
-xtest('full user flow', (t) => {
+test('full user flow', (t) => {
   let ben = {
     deviceKey: null,
     user: null
@@ -35,15 +35,20 @@ xtest('full user flow', (t) => {
     t.test('complete signup', (t) => {
       t.plan(4);
 
-      const blob = fs.readFileSync(path.join(__dirname, './fixtures/ben-1.jpg'));
+      const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-1.jpg'));
+      const b64 = new Buffer(image).toString('base64');
 
       a.post('/sign-up', {
-        image: blob,
+        image: b64,
         name: 'Ben'
       }, { deviceKey: ben.deviceKey }, (r) => {
+        console.log(JSON.stringify(r));
+
         t.ok(r.success);
         t.ok(r.user);
         t.ok(r.user.uuid);
+        t.ok(r.user.photo.url);
+        t.ok(r.user.photo.small.url);
         t.equal(r.user.name, 'Ben');
 
         ben.user = r.user;

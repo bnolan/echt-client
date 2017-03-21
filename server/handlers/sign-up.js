@@ -3,6 +3,13 @@ const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 const {ACCOUNT} = require('../constants');
 const getStage = require('../helpers/get-stage');
+const promisify = require('es6-promisify');
+const tempfile = require('tempfile');
+const im = require('imagemagick');
+const fs = require('fs');
+
+const BUCKET = 'echt.uat.us-west-2';
+const S3 = new AWS.S3();
 
 /**
  * @param {Object} user
@@ -31,7 +38,7 @@ var storeDoc = (user, stage) => {
  * @param {String} deviceId
  * @return {String}
  */
-function generateRegisteredKey (user, deviceId) {
+function generateRegisteredKey (user) {
   // fixme - sign jwt with a key
 
   return jwt.sign({
@@ -45,7 +52,7 @@ function generateRegisteredKey (user, deviceId) {
 
 exports.handler = (request) => {
   // fixme - use verify with a key
-  const key = jwt.decode(request.headers.deviceKey);
+  // const userKey = jwt.decode(request.headers.deviceKey);
 
   const user = {
     uuid: uuid(),
@@ -53,12 +60,57 @@ exports.handler = (request) => {
     status: ACCOUNT.REGISTERED
   };
 
-  const newKey = generateRegisteredKey(user, key);
+  const newKey = generateRegisteredKey(user);
   const stage = getStage(request.lambdaContext);
 
-  return storeDoc(user, stage).then(() => {
-    console.log('wut');
+  var buffer = Buffer.from(request.body.image, 'base64');
 
+  var params = {
+    Bucket: BUCKET,
+    Key: `users/user-${user.uuid}.jpg`,
+    ContentType: 'image/jpeg',
+    Body: buffer
+  };
+
+  const original = tempfile('.jpg');
+  const small = tempfile('.jpg');
+
+  return S3.upload(params).promise().then((data) => {
+    user.photo = {
+      url: data.Location,
+
+      original: {
+        url: data.Location
+      }
+    };
+
+    const crop = promisify(im.crop);
+    fs.writeFileSync(original, buffer);
+    return crop({
+      srcPath: original,
+      dstPath: small,
+      width: 256,
+      height: 256,
+      quality: 1
+    });
+  }).then((stdout) => {
+    buffer = fs.readFileSync(small);
+
+    params = {
+      Bucket: BUCKET,
+      Key: `users/user-${user.uuid}-small.jpg`,
+      ContentType: 'image/jpeg',
+      Body: buffer
+    };
+
+    return S3.upload(params).promise();
+  }).then((data) => {
+    user.photo.small = {
+      url: data.Location
+    };
+
+    return storeDoc(user, stage);
+  }).then(() => {
     return {
       success: true,
       deviceKey: newKey,
