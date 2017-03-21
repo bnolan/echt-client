@@ -3,10 +3,7 @@ const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
 const {ACCOUNT} = require('../constants');
 const getStage = require('../helpers/get-stage');
-const promisify = require('es6-promisify');
-const tempfile = require('tempfile');
-const im = require('imagemagick');
-const fs = require('fs');
+const resize = require('../helpers/resize');
 
 const BUCKET = 'echt.uat.us-west-2';
 const S3 = new AWS.S3();
@@ -90,9 +87,6 @@ exports.handler = (request) => {
     Body: buffer
   };
 
-  const original = tempfile('.jpg');
-  const small = tempfile('.jpg');
-
   return S3.upload(params).promise().then((data) => {
     user.photo = {
       url: data.Location,
@@ -102,18 +96,8 @@ exports.handler = (request) => {
       }
     };
 
-    const crop = promisify(im.crop);
-    fs.writeFileSync(original, buffer);
-    return crop({
-      srcPath: original,
-      dstPath: small,
-      width: 256,
-      height: 256,
-      quality: 1
-    });
-  }).then((stdout) => {
-    buffer = fs.readFileSync(small);
-
+    return resize.toSmall(buffer);
+  }).then((buffer) => {
     params = {
       Bucket: BUCKET,
       Key: `users/user-${user.uuid}-small.jpg`,
