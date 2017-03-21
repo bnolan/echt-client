@@ -68,14 +68,16 @@ test('full user flow', (t) => {
     });
 
     t.test('take selfie', (t) => {
+      t.plan(9);
+
       const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-2.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
-      a.post('/photos', { blob: b64, camera: CAMERA.FRONT_FACING }, { deviceKey: ben.deviceKey }, (r) => {
+      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { deviceKey: ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.photo);
         t.ok(r.photo.uuid);
-        t.ok(r.photo.created_at);
+        t.ok(r.photo.createdAt);
 
         t.ok(r.photo.info);
         t.equal(r.photo.info.camera, CAMERA.FRONT_FACING);
@@ -117,10 +119,11 @@ test('full user flow', (t) => {
         ingo.deviceKey = r.deviceKey;
       });
 
-      const blob = fs.readFileSync('./fixtures/ingo-1.jpg');
+      const image = fs.readFileSync(path.join(__dirname, './fixtures/ingo-1.jpg'));
+      const b64 = new Buffer(image).toString('base64');
 
       a.post('/sign-up', {
-        image: blob,
+        image: b64,
         name: 'Ingo'
       }, { deviceKey: ben.deviceKey }, (r) => {
         t.ok(r.success);
@@ -136,11 +139,12 @@ test('full user flow', (t) => {
     let photo;
 
     t.test('take selfie with ingo', (t) => {
-      t.plan(2);
+      t.plan(5);
 
-      const blob = fs.readFileSync('./fixtures/ben-ingo-1.jpg');
+      const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-ingo-1.jpg'));
+      const b64 = new Buffer(image).toString('base64');
 
-      a.post('/photos', { blob: blob, camera: CAMERA.FRONT_FACING }, { deviceKey: ben.deviceKey }, (r) => {
+      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { deviceKey: ben.deviceKey }, (r) => {
         t.ok(r.success);
 
         t.equal(r.photo.actions.length, 1);
@@ -153,7 +157,7 @@ test('full user flow', (t) => {
     });
 
     t.test('send friend request', (t) => {
-      t.plan(4);
+      t.plan(2);
 
       a.post('/friends', { photo: photo.uuid }, { deviceKey: ben.deviceKey }, (r) => {
         t.ok(r.success);

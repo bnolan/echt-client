@@ -1,6 +1,11 @@
 const AWS = require('aws-sdk');
 const uuid = require('uuid');
+const jwt = require('jsonwebtoken');
 const getStage = require('../helpers/get-stage');
+const resize = require('../helpers/resize');
+
+const BUCKET = 'echt.uat.us-west-2';
+const S3 = new AWS.S3();
 
 // TODO Move to environment var
 // Region needs to be supported by Rekognition (and match the S3 bucket)
@@ -40,12 +45,29 @@ var indexFace = (objectKey, stage) => {
 };
 
 /**
+ * @param {Object} photo
+ * @param {String} stage
+ * @return {Promise}
+ */
+var storePhoto = (photo, stage) => {
+  var docClient = new AWS.DynamoDB.DocumentClient();
+
+  var params = {
+    TableName: `echt.${stage}.photos`,
+    Item: photo
+  };
+
+  return docClient.put(params).promise().then((response) => {
+    return response;
+  });
+};
+
+/**
  * @param {Object} user
  * @param {String} objectKey S3 object key (not a URL)
  * @param {String} faceId AWS Rekognition detected face
  * @param {String} env Environment stage (dev, uat, prod)
  * @return {Promise} Returning doc info
- */
 var storeDoc = (user, objectKey, faceId, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
   var params = {
@@ -61,21 +83,80 @@ var storeDoc = (user, objectKey, faceId, stage) => {
     return response;
   });
 };
+  */
 
 exports.handler = function (request) {
-  const photoKey = request.body.photoKey;
-
-  // TODO Check user existence in database
-  const user = request.body.user;
+  // const photoKey = request.body.photoKey;
 
   const stage = getStage(request.lambdaContext);
 
-  return indexFace(photoKey, stage)
-    .then(faceData => {
-      return storeDoc(user, photoKey, faceData, stage);
-    })
-    .then(() => {
-      // TODO Return object information in API response
-      return {status: 'ok'};
-    });
+  // fixme - use verify with a key
+  const deviceKey = jwt.decode(request.headers.deviceKey);
+
+  // Get buffer from json payload
+  const buffer = Buffer.from(request.body.image, 'base64');
+
+  // Start constructing photo record
+  var photo = {
+    uuid: uuid(),
+    Item: {
+      user: {
+        uuid: deviceKey.userId
+      },
+      createdAt: new Date().toISOString(),
+      info: {
+        camera: request.body.camera
+      }
+    }
+  };
+
+  // Upload
+  var params = {
+    Bucket: BUCKET,
+    Key: `photos/photo-${photo.uuid}-original.jpg`,
+    ContentType: 'image/jpeg',
+    Body: buffer
+  };
+
+  // TODO: Do uploads in parallel
+  return S3.upload(params).promise().then((data) => {
+    photo.url = data.Location;
+    photo.Item.original = {
+      url: data.Location
+    };
+
+    return resize.toSmall(buffer);
+  }).then((buffer) => {
+    params = {
+      Bucket: BUCKET,
+      Key: `photos/photo-${photo.uuid}-small.jpg`,
+      ContentType: 'image/jpeg',
+      Body: buffer
+    };
+
+    return S3.upload(params).promise();
+  }).then(() => {
+    // todo - iterate over friends and fan out to the photos
+    // table using batchPut
+    photo.userId = deviceKey.userId;
+
+    return storePhoto(photo, stage);
+  }).then(() => {
+    return {
+      success: true,
+      photo: Object.assign(photo.Item, {
+        uuid: photo.uuid,
+        actions: []
+      })
+    };
+  });
+
+  // return indexFace(photoKey, stage)
+  //   .then(faceData => {
+  //     return storeDoc(user, photoKey, faceData, stage);
+  //   })
+  //   .then(() => {
+  //     // TODO Return object information in API response
+  //     return {status: 'ok'};
+  //   });
 };
