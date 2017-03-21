@@ -30,12 +30,14 @@ var indexFace = (objectKey, stage) => {
     Image: {
       S3Object: {
         // Ensure photos can only be selected from a location we control
-        Bucket: `echt.${stage}.${region}`,
+        Bucket: BUCKET, // `echt.${stage}.${region}`,
         Name: objectKey
       }
     }
   };
   return rekognitionClient.indexFaces(params).promise().then((response) => {
+    console.log(JSON.stringify(response));
+
     // TODO Fail when more than one face detected
     // TODO Limit multi face failure to similar bounding boxes,
     // avoid failing when photo captures people in the background
@@ -110,31 +112,49 @@ exports.handler = function (request) {
     }
   };
 
-  // Upload
-  var params = {
-    Bucket: BUCKET,
-    Key: `photos/photo-${photo.uuid}-original.jpg`,
-    ContentType: 'image/jpeg',
-    Body: buffer
-  };
-
-  // TODO: Do uploads in parallel
-  return S3.upload(params).promise().then((data) => {
-    photo.url = data.Location;
-    photo.Item.original = {
-      url: data.Location
-    };
-
-    return resize.toSmall(buffer);
-  }).then((buffer) => {
-    params = {
+  return resize.toSmall(buffer).then((smallBuffer) => {
+    var originalPhoto = {
       Bucket: BUCKET,
-      Key: `photos/photo-${photo.uuid}-small.jpg`,
+      Key: `photos/photo-${photo.uuid}-original.jpg`,
       ContentType: 'image/jpeg',
       Body: buffer
     };
 
-    return S3.upload(params).promise();
+    var smallPhoto = {
+      Bucket: BUCKET,
+      Key: `photos/photo-${photo.uuid}-small.jpg`,
+      ContentType: 'image/jpeg',
+      Body: smallBuffer
+    };
+
+    const uploads = [
+      S3.upload(originalPhoto).promise(),
+      S3.upload(smallPhoto).promise()
+    ];
+
+    // Do both uploads in parallel
+    return Promise.all(uploads);
+  }).then((values) => {
+    let [original, small] = values;
+
+    photo.url = {
+      url: original.Location
+    };
+
+    photo.Item.original = {
+      url: original.Location
+    };
+    photo.Item.small = {
+      url: small.Location
+    };
+
+    console.log(JSON.stringify(original));
+
+    return indexFace(original.key, stage);
+  }).then((faceData) => {
+    console.log(faceData);
+
+    photo.Item.faceData = faceData;
   }).then(() => {
     // todo - iterate over friends and fan out to the photos
     // table using batchPut

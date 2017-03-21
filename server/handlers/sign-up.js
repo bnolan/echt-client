@@ -75,7 +75,6 @@ exports.handler = (request) => {
     status: ACCOUNT.REGISTERED
   };
 
-  const newKey = generateRegisteredKey(user);
   const stage = getStage(request.lambdaContext);
 
   var buffer = Buffer.from(request.body.image, 'base64');
@@ -92,7 +91,7 @@ exports.handler = (request) => {
       Bucket: BUCKET,
       Key: `users/user-${user.uuid}-small.jpg`,
       ContentType: 'image/jpeg',
-      Body: buffer
+      Body: smallBuffer
     };
 
     const uploads = [
@@ -128,6 +127,8 @@ exports.handler = (request) => {
 
     return storePhoto(photo, stage);
   }).then(() => {
+    const newKey = generateRegisteredKey(user);
+
     return {
       success: true,
       deviceKey: newKey,
