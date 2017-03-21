@@ -80,35 +80,39 @@ exports.handler = (request) => {
 
   var buffer = Buffer.from(request.body.image, 'base64');
 
-  var params = {
-    Bucket: BUCKET,
-    Key: `users/user-${user.uuid}.jpg`,
-    ContentType: 'image/jpeg',
-    Body: buffer
-  };
-
-  return S3.upload(params).promise().then((data) => {
-    user.photo = {
-      url: data.Location,
-
-      original: {
-        url: data.Location
-      }
+  return resize.toSmall(buffer).then((smallBuffer) => {
+    var originalPhoto = {
+      Bucket: BUCKET,
+      Key: `users/user-${user.uuid}.jpg`,
+      ContentType: 'image/jpeg',
+      Body: buffer
     };
 
-    return resize.toSmall(buffer);
-  }).then((buffer) => {
-    params = {
+    var smallPhoto = {
       Bucket: BUCKET,
       Key: `users/user-${user.uuid}-small.jpg`,
       ContentType: 'image/jpeg',
       Body: buffer
     };
 
-    return S3.upload(params).promise();
-  }).then((data) => {
-    user.photo.small = {
-      url: data.Location
+    const uploads = [
+      S3.upload(originalPhoto).promise(),
+      S3.upload(smallPhoto).promise()
+    ];
+
+    // Do both uploads in parallel
+    return Promise.all(uploads);
+  }).then((values) => {
+    let [original, small] = values;
+
+    user.photo = {
+      url: original.Location,
+      original: {
+        url: original.Location
+      },
+      small: {
+        url: small.Location
+      }
     };
 
     return storeUser(user, stage);
