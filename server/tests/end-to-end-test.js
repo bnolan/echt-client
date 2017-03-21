@@ -33,7 +33,7 @@ test('full user flow', (t) => {
     });
 
     t.test('complete signup', (t) => {
-      t.plan(4);
+      t.plan(6);
 
       const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-1.jpg'));
       const b64 = new Buffer(image).toString('base64');
@@ -42,8 +42,6 @@ test('full user flow', (t) => {
         image: b64,
         name: 'Ben'
       }, { deviceKey: ben.deviceKey }, (r) => {
-        console.log(JSON.stringify(r));
-
         t.ok(r.success);
         t.ok(r.user);
         t.ok(r.user.uuid);
@@ -59,21 +57,21 @@ test('full user flow', (t) => {
     });
 
     t.test('get newsfeed', (t) => {
-      t.plan(5);
+      t.plan(4);
 
       a.get('/photos', {}, { deviceKey: ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.items);
         t.equal(r.items.length, 1);
         t.equal(r.items[0].user.uuid, ben.user.uuid);
-        t.ok();
       });
     });
 
     t.test('take selfie', (t) => {
-      const blob = fs.readFileSync('./fixtures/ben-2.jpg');
+      const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-2.jpg'));
+      const b64 = new Buffer(image).toString('base64');
 
-      a.post('/photos', { blob: blob, camera: CAMERA.FRONT_FACING }, { deviceKey: ben.deviceKey }, (r) => {
+      a.post('/photos', { blob: b64, camera: CAMERA.FRONT_FACING }, { deviceKey: ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.photo);
         t.ok(r.photo.uuid);

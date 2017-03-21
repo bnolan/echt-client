@@ -19,16 +19,16 @@ exports.handler = (request) => {
   const stage = getStage(request.lambdaContext);
   const params = {
     TableName: `echt.${stage}.photos`,
-    Key: {
-      userId: deviceKey.userId
+    FilterExpression: 'userId = :id',
+    ExpressionAttributeValues: {
+      ':id': deviceKey.userId
     }
-    // FilterExpression: 'userId IN (:friends)',
-    // ExpressionAttributeValues: {
-    //   ':friends': ['4278f790-070e-11e7-98f6-d72bef2d4021', '7b545370-070e-11e7-aa98-35a1c7d1e25c']
-    // }
   };
 
   return docClient.scan(params).promise().then((data) => {
-    return { items: data.Items };
+    return {
+      success: true,
+      items: data.Items.map((i) => i.Item)
+    };
   });
 };

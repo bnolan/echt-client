@@ -16,7 +16,7 @@ const S3 = new AWS.S3();
  * @param {String} stage
  * @return {Promise}
  */
-var storeDoc = (user, stage) => {
+var storeUser = (user, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   var params = {
@@ -26,6 +26,24 @@ var storeDoc = (user, stage) => {
       uuid: user.uuid,
       user: user
     }
+  };
+
+  return docClient.put(params).promise().then((response) => {
+    return response;
+  });
+};
+
+/**
+ * @param {Object} photo
+ * @param {String} stage
+ * @return {Promise}
+ */
+var storePhoto = (photo, stage) => {
+  var docClient = new AWS.DynamoDB.DocumentClient();
+
+  var params = {
+    TableName: `echt.${stage}.photos`,
+    Item: photo
   };
 
   return docClient.put(params).promise().then((response) => {
@@ -109,7 +127,18 @@ exports.handler = (request) => {
       url: data.Location
     };
 
-    return storeDoc(user, stage);
+    return storeUser(user, stage);
+  }).then(() => {
+    const photo = {
+      uuid: uuid(),
+      userId: user.uuid,
+      Item: {
+        user: user,
+        createdAt: new Date().toISOString()
+      }
+    };
+
+    return storePhoto(photo, stage);
   }).then(() => {
     return {
       success: true,
