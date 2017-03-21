@@ -8,5 +8,9 @@
  * @param {Object|null} context
  */
 module.exports = (context) => {
-  return (context && context.invokedFunctionArn) ? context.invokedFunctionArn.replace(/.*:/g, '') : 'dev';
+  if (global.ECHT_STAGE) {
+    return global.ECHT_STAGE;
+  } else {
+    return (context && context.invokedFunctionArn) ? context.invokedFunctionArn.replace(/.*:/g, '') : 'dev';
+  }
 };

@@ -14,9 +14,12 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = (request) => {
   // fixme - use verify with a key
-  const deviceKey = jwt.decode(request.headers['X-DeviceKey']);
+  const deviceKey = jwt.decode(request.headers['x-devicekey']);
 
   const stage = getStage(request.lambdaContext);
+
+  console.log('stage:', stage);
+
   const params = {
     TableName: `echt.${stage}.photos`,
     FilterExpression: 'userId = :id',

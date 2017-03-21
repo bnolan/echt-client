@@ -67,7 +67,7 @@ function generateRegisteredKey (user) {
 
 exports.handler = (request) => {
   // fixme - use verify with a key
-  // const userKey = jwt.decode(request.headers['X-DeviceKey']);
+  // const userKey = jwt.decode(request.headers['x-devicekey']);
 
   const user = {
     uuid: uuid(),
@@ -77,7 +77,7 @@ exports.handler = (request) => {
 
   const stage = getStage(request.lambdaContext);
 
-  var buffer = Buffer.from(request.body.image, 'base64');
+  var buffer = new Buffer(request.body.image, 'base64');
 
   return resize.toSmall(buffer).then((smallBuffer) => {
     var originalPhoto = {
@@ -102,7 +102,8 @@ exports.handler = (request) => {
     // Do both uploads in parallel
     return Promise.all(uploads);
   }).then((values) => {
-    let [original, small] = values;
+    var original = values[0];
+    var small = values[1];
 
     user.photo = {
       url: original.Location,

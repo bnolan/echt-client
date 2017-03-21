@@ -6,12 +6,15 @@ const CAMERA = require('../constants').CAMERA;
 const ACTION = require('../constants').ACTION;
 const STATUS = require('../constants').STATUS;
 
+// End-to-end test uses the uat databases
+global.ECHT_STAGE = 'uat';
+
 // function xtest () {
 //   test();
 // }
 
 test('full user flow', (t) => {
-  let ben = {
+  var ben = {
     deviceKey: null,
     user: null
   };
@@ -41,7 +44,7 @@ test('full user flow', (t) => {
       a.post('/sign-up', {
         image: b64,
         name: 'Ben'
-      }, { 'X-DeviceKey': ben.deviceKey }, (r) => {
+      }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.user);
         t.ok(r.user.uuid);
@@ -62,11 +65,14 @@ test('full user flow', (t) => {
     t.test('get newsfeed', (t) => {
       t.plan(4);
 
-      a.get('/photos', {}, { 'X-DeviceKey': ben.deviceKey }, (r) => {
+      a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
+        console.log(ben.deviceKey);
         t.ok(r.success);
         t.ok(r.items);
         t.equal(r.items.length, 1);
         t.equal(r.items[0].user.uuid, ben.user.uuid);
+        console.log(JSON.stringify(r));
+        throw new Error();
       });
     });
 
@@ -76,7 +82,7 @@ test('full user flow', (t) => {
       const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-2.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
-      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'X-DeviceKey': ben.deviceKey }, (r) => {
+      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.photo);
         t.ok(r.photo.uuid);
@@ -96,7 +102,7 @@ test('full user flow', (t) => {
     t.test('get newsfeed again', (t) => {
       t.plan(5);
 
-      a.get('/photos', {}, { 'X-DeviceKey': ben.deviceKey }, (r) => {
+      a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.items);
         t.equal(r.items.length, 2);
@@ -108,7 +114,7 @@ test('full user flow', (t) => {
 
   /* A wild Ingo appears! */
 
-  let ingo = {
+  var ingo = {
     deviceKey: null,
     user: null
   };
@@ -128,7 +134,7 @@ test('full user flow', (t) => {
       a.post('/sign-up', {
         image: b64,
         name: 'Ingo'
-      }, { 'X-DeviceKey': ingo.deviceKey }, (r) => {
+      }, { 'x-devicekey': ingo.deviceKey }, (r) => {
         t.ok(r.success);
         ingo.user = r.user;
         ingo.deviceKey = r.deviceKey;
@@ -142,7 +148,7 @@ test('full user flow', (t) => {
   /* Ben friends Ingo */
 
   t.test('ben', (t) => {
-    let photo;
+    var photo;
 
     t.test('take selfie with ingo', (t) => {
       t.plan(5);
@@ -150,7 +156,7 @@ test('full user flow', (t) => {
       const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-ingo-1.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
-      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'X-DeviceKey': ben.deviceKey }, (r) => {
+      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
 
         t.equal(r.photo.actions.length, 1);
@@ -165,7 +171,7 @@ test('full user flow', (t) => {
     t.test('send friend request', (t) => {
       t.plan(2);
 
-      a.post('/friends', { photo: photo.uuid }, { 'X-DeviceKey': ben.deviceKey }, (r) => {
+      a.post('/friends', { photo: photo.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.equal(r.friend.status, STATUS.PENDING);
       });
@@ -174,7 +180,7 @@ test('full user flow', (t) => {
     t.test('view friend request', (t) => {
       t.plan(3);
 
-      a.get('/friends', {}, { 'X-DeviceKey': ben.deviceKey }, (r) => {
+      a.get('/friends', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.equal(r.friends.length, 1);
         t.equal(r.friends[0].status, STATUS.PENDING);
@@ -188,12 +194,12 @@ test('full user flow', (t) => {
     // fixme - get the notification from some endpoint instead of
     // cheating and using bens uuid directly
 
-    let friend;
+    var friend;
 
     t.test('view pending request', (t) => {
       t.plan(3);
 
-      a.get('/friends', {}, { 'X-DeviceKey': ingo.deviceKey }, (r) => {
+      a.get('/friends', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {
         t.ok(r.success);
         t.equal(r.friends.length, 1);
         t.equal(r.friends[0].status, STATUS.PROPOSED);
@@ -205,7 +211,7 @@ test('full user flow', (t) => {
     t.test('accept friend request', (t) => {
       t.plan(4);
 
-      a.put('/friends', { user_id: friend.user.uuid, status: STATUS.ACCEPTED }, { 'X-DeviceKey': ingo.deviceKey }, (r) => {
+      a.put('/friends', { user_id: friend.user.uuid, status: STATUS.ACCEPTED }, { 'x-devicekey': ingo.deviceKey }, (r) => {
         t.ok(r.success);
         t.equal(r.friend.status, STATUS.ACCEPTED);
       });
@@ -216,7 +222,7 @@ test('full user flow', (t) => {
     t.test('get newsfeed', (t) => {
       t.plan(4);
 
-      a.get('/photos', {}, { 'X-DeviceKey': ingo.deviceKey }, (r) => {
+      a.get('/photos', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {
         t.ok(r.success);
         t.equal(r.items.length, 2);
 

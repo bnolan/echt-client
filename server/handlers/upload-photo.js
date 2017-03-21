@@ -93,10 +93,10 @@ exports.handler = function (request) {
   const stage = getStage(request.lambdaContext);
 
   // fixme - use verify with a key
-  const deviceKey = jwt.decode(request.headers['X-DeviceKey']);
+  const deviceKey = jwt.decode(request.headers['x-devicekey']);
 
   // Get buffer from json payload
-  const buffer = Buffer.from(request.body.image, 'base64');
+  const buffer = new Buffer(request.body.image, 'base64');
 
   // Start constructing photo record
   var photo = {
@@ -135,7 +135,8 @@ exports.handler = function (request) {
     // Do both uploads in parallel
     return Promise.all(uploads);
   }).then((values) => {
-    let [original, small] = values;
+    var original = values[0];
+    var small = values[1];
 
     photo.url = {
       url: original.Location

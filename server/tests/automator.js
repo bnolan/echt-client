@@ -1,6 +1,8 @@
+'use strict';
+
 const app = require('../app');
 
-module.exports = class Automator {
+class Automator {
   get (path, queryString, headers, callback) {
     app.proxyRouter({
       requestContext: {
@@ -47,4 +49,6 @@ module.exports = class Automator {
       }
     });
   }
-};
+}
+
+module.exports = Automator;
