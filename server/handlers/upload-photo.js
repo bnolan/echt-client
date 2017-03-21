@@ -93,7 +93,7 @@ exports.handler = function (request) {
   const stage = getStage(request.lambdaContext);
 
   // fixme - use verify with a key
-  const deviceKey = jwt.decode(request.headers.deviceKey);
+  const deviceKey = jwt.decode(request.headers['X-DeviceKey']);
 
   // Get buffer from json payload
   const buffer = Buffer.from(request.body.image, 'base64');

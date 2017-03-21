@@ -14,7 +14,7 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = (request) => {
   // fixme - use verify with a key
-  const deviceKey = jwt.decode(request.headers.deviceKey);
+  const deviceKey = jwt.decode(request.headers['X-DeviceKey']);
 
   const stage = getStage(request.lambdaContext);
   const params = {

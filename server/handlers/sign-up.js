@@ -1,7 +1,7 @@
 const uuid = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
-const {ACCOUNT} = require('../constants');
+const ACCOUNT = require('../constants').ACCOUNT;
 const getStage = require('../helpers/get-stage');
 const resize = require('../helpers/resize');
 
@@ -67,7 +67,7 @@ function generateRegisteredKey (user) {
 
 exports.handler = (request) => {
   // fixme - use verify with a key
-  // const userKey = jwt.decode(request.headers.deviceKey);
+  // const userKey = jwt.decode(request.headers['X-DeviceKey']);
 
   const user = {
     uuid: uuid(),
