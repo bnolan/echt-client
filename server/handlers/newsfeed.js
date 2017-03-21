@@ -19,6 +19,7 @@ exports.handler = (request) => {
   const stage = getStage(request.lambdaContext);
 
   console.log('stage:', stage);
+  console.log(JSON.stringify(deviceKey));
 
   const params = {
     TableName: `echt.${stage}.photos`,
@@ -31,7 +32,7 @@ exports.handler = (request) => {
   return docClient.scan(params).promise().then((data) => {
     return {
       success: true,
-      items: data.Items.map((i) => i.Item)
+      items: data.Items
     };
   });
 };

@@ -101,14 +101,12 @@ exports.handler = function (request) {
   // Start constructing photo record
   var photo = {
     uuid: uuid(),
-    Item: {
-      user: {
-        uuid: deviceKey.userId
-      },
-      createdAt: new Date().toISOString(),
-      info: {
-        camera: request.body.camera
-      }
+    author: {
+      uuid: deviceKey.userId
+    },
+    createdAt: new Date().toISOString(),
+    info: {
+      camera: request.body.camera
     }
   };
 
@@ -141,21 +139,18 @@ exports.handler = function (request) {
     photo.url = {
       url: original.Location
     };
-
-    photo.Item.original = {
+    photo.original = {
       url: original.Location
     };
-    photo.Item.small = {
+    photo.small = {
       url: small.Location
     };
-
-    console.log(JSON.stringify(original));
 
     return indexFace(original.key, stage);
   }).then((faceData) => {
     console.log(faceData);
 
-    photo.Item.faceData = faceData;
+    photo.faceData = faceData;
   }).then(() => {
     // todo - iterate over friends and fan out to the photos
     // table using batchPut
@@ -165,8 +160,7 @@ exports.handler = function (request) {
   }).then(() => {
     return {
       success: true,
-      photo: Object.assign(photo.Item, {
-        uuid: photo.uuid,
+      photo: Object.assign(photo, {
         actions: []
       })
     };

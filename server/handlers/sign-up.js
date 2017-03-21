@@ -1,9 +1,10 @@
 const uuid = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
-const ACCOUNT = require('../constants').ACCOUNT;
 const getStage = require('../helpers/get-stage');
 const resize = require('../helpers/resize');
+const ACCOUNT = require('../constants').ACCOUNT;
+const CAMERA = require('../constants').CAMERA;
 
 const BUCKET = 'echt.uat.us-west-2';
 const S3 = new AWS.S3();
@@ -37,6 +38,8 @@ var storeUser = (user, stage) => {
  */
 var storePhoto = (photo, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
+
+  console.log(JSON.stringify(photo));
 
   var params = {
     TableName: `echt.${stage}.photos`,
@@ -119,12 +122,23 @@ exports.handler = (request) => {
   }).then(() => {
     const photo = {
       uuid: uuid(),
-      userId: user.uuid,
-      Item: {
-        user: user,
-        createdAt: new Date().toISOString()
-      }
+
+      // fixme: Use object.assign?
+      url: user.photo.url,
+      original: user.photo.original,
+      small: user.photo.small,
+
+      author: {
+        uuid: user.uuid,
+        name: user.name
+      },
+      info: {
+        camera: CAMERA.FRONT_FACING
+      },
+      createdAt: new Date().toISOString()
     };
+
+    photo.userId = user.uuid;
 
     return storePhoto(photo, stage);
   }).then(() => {

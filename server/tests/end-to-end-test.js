@@ -23,7 +23,7 @@ test('full user flow', (t) => {
 
   // Is this call necessary at all? Maybe could do some
   // captcha / robot prevention in here.
-  t.test('ben', (t) => {
+  t.test('👨  ben', (t) => {
     t.test('start signup', (t) => {
       t.plan(2);
 
@@ -66,13 +66,11 @@ test('full user flow', (t) => {
       t.plan(4);
 
       a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
-        console.log(ben.deviceKey);
+        console.log(JSON.stringify(r));
         t.ok(r.success);
         t.ok(r.items);
         t.equal(r.items.length, 1);
-        t.equal(r.items[0].user.uuid, ben.user.uuid);
-        console.log(JSON.stringify(r));
-        throw new Error();
+        t.equal(r.items[0].author.uuid, ben.user.uuid);
       });
     });
 
@@ -91,8 +89,8 @@ test('full user flow', (t) => {
         t.ok(r.photo.info);
         t.equal(r.photo.info.camera, CAMERA.FRONT_FACING);
 
-        t.ok(r.photo.user);
-        t.equal(r.photo.user.uuid, ben.user.uuid);
+        t.ok(r.photo.author);
+        t.equal(r.photo.author.uuid, ben.user.uuid);
 
         // Not a selfie with friends, so no actions
         t.equal(r.photo.actions.length, 0);
@@ -106,8 +104,8 @@ test('full user flow', (t) => {
         t.ok(r.success);
         t.ok(r.items);
         t.equal(r.items.length, 2);
-        t.equal(r.items[0].user.uuid, ben.user.uuid);
-        t.equal(r.items[1].user.uuid, ben.user.uuid);
+        t.equal(r.items[0].author.uuid, ben.user.uuid);
+        t.equal(r.items[1].author.uuid, ben.user.uuid);
       });
     });
   });
@@ -119,7 +117,7 @@ test('full user flow', (t) => {
     user: null
   };
 
-  t.test('ingo', (t) => {
+  t.test('👳  ingo', (t) => {
     t.test('signup', (t) => {
       t.plan(2);
 
@@ -147,7 +145,7 @@ test('full user flow', (t) => {
 
   /* Ben friends Ingo */
 
-  t.test('ben', (t) => {
+  t.test('👨  ben', (t) => {
     var photo;
 
     t.test('take selfie with ingo', (t) => {
@@ -190,7 +188,7 @@ test('full user flow', (t) => {
 
   /* Ingo accepts request */
 
-  t.test('ingo', (t) => {
+  t.test('👳 ingo', (t) => {
     // fixme - get the notification from some endpoint instead of
     // cheating and using bens uuid directly
 
@@ -227,8 +225,8 @@ test('full user flow', (t) => {
         t.equal(r.items.length, 2);
 
         // Photos are sorted newest -> oldest
-        t.equal(r.items[0].user.uuid, ben.user.uuid);
-        t.equal(r.items[1].user.uuid, ingo.user.uuid);
+        t.equal(r.items[0].author.uuid, ben.user.uuid);
+        t.equal(r.items[1].author.uuid, ingo.user.uuid);
       });
     });
 
