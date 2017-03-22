@@ -28,6 +28,7 @@
   "homepage": "https://github.com/bnolan/echt#readme",
   "dependencies": {
     "aws-sdk": "^2.27.0",
+    "aws-signature-v4": "^1.0.1",
     "claudia-api-builder": "^2.4.1",
     "es6-promisify": "^5.0.0",
     "imagemagick": "^0.1.3",

@@ -2,10 +2,9 @@
 
 import React from 'react';
 import { TouchableHighlight, StyleSheet, Image, Text, View } from 'react-native';
-
 // Lightbox is ganky and out of date but shows the idea
-const Lightbox = require('react-native-lightbox');
-
+import Lightbox from 'react-native-lightbox';
+import Friends from './components/friends';
 import Swiper from 'react-native-swiper';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIwNGM0YjE1ZS1hYmQzLTQ4N2EtYjQxZi03MWM0MzQwYWEwODEiLCJkZXZpY2VJZCI6IjdlNGExODY5LTEyNzItNDk2ZS1iMmYyLTE3MWNiZWRlNjBkMSIsImlhdCI6MTQ5MDEwNjUyMX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
@@ -75,7 +74,7 @@ export default class App extends React.Component {
           </View>
         </View>
         <View style={styles.slide3}>
-          <Text style={styles.text}>Friends here</Text>
+          <Friends />
         </View>
       </Swiper>
     );
