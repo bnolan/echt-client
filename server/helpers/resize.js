@@ -28,9 +28,9 @@ exports.toInline = (buffer) => {
 
   fs.writeFileSync(original, buffer);
 
-  const command = `convert ${original} -resize 16x16 -quality 90 -strip -gravity center -crop 16x16+0+0 +repage - | base64`
+  const command = `convert ${original} -resize 16x16 -quality 90 -strip -gravity center -crop 16x16+0+0 +repage - | base64`;
 
-  exec(command).then((stdout, stderr) => {
+  return exec(command).then((stdout, stderr) => {
     return stdout;
   });
 };

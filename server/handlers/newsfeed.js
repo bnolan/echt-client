@@ -18,9 +18,6 @@ exports.handler = (request) => {
 
   const stage = getStage(request.lambdaContext);
 
-  console.log('stage:', stage);
-  console.log(JSON.stringify(deviceKey));
-
   const params = {
     TableName: `echt.${stage}.photos`,
     FilterExpression: 'userId = :id',

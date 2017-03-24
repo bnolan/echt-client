@@ -56,9 +56,6 @@ test('full user flow', (t) => {
 
         // Devicekey now has user info in it too
         ben.deviceKey = r.deviceKey;
-
-        console.log('ben deviceKey:');
-        console.log(r.deviceKey);
       });
     });
 
@@ -66,7 +63,6 @@ test('full user flow', (t) => {
       t.plan(4);
 
       a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
-        console.log(JSON.stringify(r));
         t.ok(r.success);
         t.ok(r.items);
         t.equal(r.items.length, 1);
@@ -79,9 +75,6 @@ test('full user flow', (t) => {
 
       const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-2.jpg'));
       const b64 = new Buffer(image).toString('base64');
-
-      console.log(b64.slice(0, 40));
-      console.log(b64.length);
 
       a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
@@ -99,9 +92,8 @@ test('full user flow', (t) => {
         t.equal(r.photo.actions.length, 0);
 
         t.ok(r.photo.inline);
-        t.equal(r.photo.inline.url.match(/data:/));
-        t.equal(r.photo.inline.url.length, 364);
-
+        t.ok(r.photo.inline.url.match(/data:/));
+        t.equal(r.photo.inline.url.length, 651);
       });
     });
 
@@ -144,9 +136,6 @@ test('full user flow', (t) => {
         t.ok(r.success);
         ingo.user = r.user;
         ingo.deviceKey = r.deviceKey;
-
-        console.log('ingo deviceKey:');
-        console.log(r.deviceKey);
       });
     });
   });

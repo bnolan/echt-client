@@ -36,7 +36,7 @@ var indexFace = (objectKey, stage) => {
     }
   };
   return rekognitionClient.indexFaces(params).promise().then((response) => {
-    console.log(JSON.stringify(response));
+    // console.log(JSON.stringify(response));
 
     // TODO Fail when more than one face detected
     // TODO Limit multi face failure to similar bounding boxes,
@@ -157,8 +157,6 @@ exports.handler = function (request) {
 
     return indexFace(original.key, stage);
   }).then((faceData) => {
-    console.log(faceData);
-
     photo.faceData = faceData;
   }).then(() => {
     // todo - iterate over friends and fan out to the photos

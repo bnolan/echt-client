@@ -39,8 +39,6 @@ var storeUser = (user, stage) => {
 var storePhoto = (photo, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
-  console.log(JSON.stringify(photo));
-
   var params = {
     TableName: `echt.${stage}.photos`,
     Item: photo
