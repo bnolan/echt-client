@@ -75,10 +75,13 @@ test('full user flow', (t) => {
     });
 
     t.test('take selfie', (t) => {
-      t.plan(9);
+      t.plan(12);
 
       const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-2.jpg'));
       const b64 = new Buffer(image).toString('base64');
+
+      console.log(b64.slice(0, 40));
+      console.log(b64.length);
 
       a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
@@ -94,6 +97,11 @@ test('full user flow', (t) => {
 
         // Not a selfie with friends, so no actions
         t.equal(r.photo.actions.length, 0);
+
+        t.ok(r.photo.inline);
+        t.equal(r.photo.inline.url.match(/data:/));
+        t.equal(r.photo.inline.url.length, 364);
+
       });
     });
 

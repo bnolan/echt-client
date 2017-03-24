@@ -1,4 +1,5 @@
 const promisify = require('es6-promisify');
+const childProcess = require('child_process');
 const tempfile = require('tempfile');
 const im = require('imagemagick');
 const fs = require('fs');
@@ -18,5 +19,18 @@ exports.toSmall = (buffer) => {
     quality: 1
   }).then((stdout, stderr) => {
     return fs.readFileSync(small);
+  });
+};
+
+exports.toInline = (buffer) => {
+  const original = tempfile('.jpg');
+  const exec = promisify(childProcess.exec);
+
+  fs.writeFileSync(original, buffer);
+
+  const command = `convert ${original} -resize 16x16 -quality 90 -strip -gravity center -crop 16x16+0+0 +repage - | base64`
+
+  exec(command).then((stdout, stderr) => {
+    return stdout;
   });
 };

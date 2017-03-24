@@ -110,6 +110,8 @@ exports.handler = function (request) {
     }
   };
 
+  let uploads;
+
   return resize.toSmall(buffer).then((smallBuffer) => {
     var originalPhoto = {
       Bucket: BUCKET,
@@ -125,10 +127,17 @@ exports.handler = function (request) {
       Body: smallBuffer
     };
 
-    const uploads = [
+    uploads = [
       S3.upload(originalPhoto).promise(),
       S3.upload(smallPhoto).promise()
     ];
+
+    return resize.toInline(smallBuffer);
+  }).then((base64) => {
+    // Set the inline content
+    photo.inline = {
+      url: `data:image/jpg;base64,${base64}`
+    };
 
     // Do both uploads in parallel
     return Promise.all(uploads);
