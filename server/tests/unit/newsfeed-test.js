@@ -16,7 +16,7 @@ test('scan', function (t) {
   t.plan(2);
 
   const request = {
-    headers: { deviceKey }
+    headers: { 'x-devicekey': deviceKey }
   };
 
   newsfeed.handler(request).then((result) => {

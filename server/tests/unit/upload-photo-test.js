@@ -75,7 +75,7 @@ test('stores when called with valid object and a detected face', function (t) {
     body: {
       image: b64
     },
-    headers: { deviceKey }
+    headers: { 'x-devicekey': deviceKey }
   };
   uploadPhoto.handler(request).then((result) => {
     t.ok(dynamoPutStub.calledOnce);

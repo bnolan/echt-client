@@ -19,6 +19,16 @@ const configStub = {
   update: sinon.stub()
 };
 
+const s3UploadStub = sinon.stub().returns({
+  promise: () => Promise.resolve({
+    Attributes: {}
+  })
+});
+
+const s3Stub = function S3 () {
+  this.upload = s3UploadStub;
+};
+
 const dynamoPutStub = sinon.stub().returns({
   promise: () => Promise.resolve({
     Attributes: {}
@@ -33,7 +43,8 @@ const dynamoStub = {
 
 const awsStub = {
   config: configStub,
-  DynamoDB: dynamoStub
+  DynamoDB: dynamoStub,
+  S3: s3Stub
 };
 
 const signUp = proxyquire('../../handlers/sign-up', {
@@ -49,7 +60,7 @@ function getRequest () {
       name: 'my-name',
       image: b64
     },
-    headers: { deviceKey }
+    headers: { 'x-devicekey': deviceKey }
   };
 }
 
