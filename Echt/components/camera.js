@@ -16,8 +16,17 @@ export default class Camera extends React.Component {
     super();
 
     this.state = {
-      photos: []
+      photos: [],
+      cameraType: RNCamera.constants.Type.front
     };
+  }
+
+  toggleType () {
+    if (this.state.cameraType === RNCamera.constants.Type.front) {
+      this.setState({cameraType: RNCamera.constants.Type.back});
+    } else {
+      this.setState({cameraType: RNCamera.constants.Type.front});
+    }
   }
 
   takePhoto () {
@@ -60,8 +69,13 @@ export default class Camera extends React.Component {
         style={styles.preview}
         captureTarget={RNCamera.constants.CaptureTarget.disk}
         captureQuality={RNCamera.constants.CaptureQuality.medium}
-        type={RNCamera.constants.Type.front}
+        type={this.state.cameraType}
         aspect={RNCamera.constants.Aspect.fill}>
+
+        <TouchableHighlight onPress={(e) => this.toggleType()}>
+          <View style={styles.cameraType} />
+        </TouchableHighlight>
+
         <TouchableHighlight onPress={(e) => this.takePhoto()}>
           <View style={styles.shutter} />
         </TouchableHighlight>
@@ -73,13 +87,21 @@ export default class Camera extends React.Component {
 const styles = StyleSheet.create({
   wrapper: {
   },
+  cameraType: {
+    borderWidth: 4,
+    borderColor: 'red',
+    width: 48,
+    height: 48,
+    borderRadius: 64,
+    marginTop: 50
+  },
   shutter: {
     borderWidth: 4,
     borderColor: 'white',
     width: 64,
     height: 64,
-    borderRadius: 64,
-    marginTop: 500
+    borderRadius: 48,
+    marginTop: 400
   },
   preview: {
     flex: 1,
