@@ -1,5 +1,7 @@
+"use strict";
+
 const test = require('tape');
-const newsfeed = require('../handlers/newsfeed');
+const newsfeed = require('../../handlers/newsfeed');
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid/v4');
 

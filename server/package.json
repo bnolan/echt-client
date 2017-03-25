@@ -8,7 +8,9 @@
     "release-dev": "claudia update --version dev --use-s3-bucket echt-deploys.us-west-2",
     "release-uat": "claudia update --version uat --use-s3-bucket echt-deploys.us-west-2",
     "release-prod": "claudia update --version prod --use-s3-bucket echt-deploys.us-west-2",
-    "test": "tape tests/*-test.js | faucet",
+    "test": "tape tests/**/*-test.js | faucet",
+    "test-unit": "tape tests/unit/*-test.js | faucet",
+    "test-end-to-end": "tape tests/end-to-end/*-test.js | faucet",
     "lint": "semistandard",
     "logs": "open https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logEventViewer:group=/aws/lambda/echt"
   },

@@ -1,3 +1,5 @@
+"use strict";
+
 const proxyquire = require('proxyquire');
 const test = require('tape');
 const sinon = require('sinon');
@@ -34,12 +36,12 @@ const awsStub = {
   DynamoDB: dynamoStub
 };
 
-const signUp = proxyquire('../handlers/sign-up', {
+const signUp = proxyquire('../../handlers/sign-up', {
   'aws-sdk': awsStub
 });
 
 function getRequest () {
-  const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-1.jpg'));
+  const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-1.jpg'));
   const b64 = new Buffer(image).toString('base64');
 
   return {

@@ -1,3 +1,5 @@
+"use strict";
+
 const proxyquire = require('proxyquire');
 const test = require('tape');
 const sinon = require('sinon');
@@ -61,12 +63,12 @@ const awsStub = {
   Rekognition: rekognitionStub
 };
 
-const uploadPhoto = proxyquire('../handlers/upload-photo', {
+const uploadPhoto = proxyquire('../../handlers/upload-photo', {
   'aws-sdk': awsStub
 });
 
 test('stores when called with valid object and a detected face', function (t) {
-  const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-1.jpg'));
+  const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-1.jpg'));
   const b64 = new Buffer(image).toString('base64');
 
   const request = {

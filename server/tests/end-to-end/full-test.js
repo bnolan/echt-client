@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const Automator = require('./automator');
 const test = require('tape');
-const CAMERA = require('../constants').CAMERA;
-const ACTION = require('../constants').ACTION;
-const STATUS = require('../constants').STATUS;
+const CAMERA = require('../../constants').CAMERA;
+const ACTION = require('../../constants').ACTION;
+const STATUS = require('../../constants').STATUS;
 
 // End-to-end test uses the uat databases
 global.ECHT_STAGE = 'uat';
@@ -38,7 +38,7 @@ test('full user flow', (t) => {
     t.test('complete signup', (t) => {
       t.plan(6);
 
-      const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-1.jpg'));
+      const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-1.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
       a.post('/sign-up', {
@@ -73,7 +73,7 @@ test('full user flow', (t) => {
     t.test('take selfie', (t) => {
       t.plan(12);
 
-      const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-2.jpg'));
+      const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-2.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
       a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }, (r) => {
@@ -126,7 +126,7 @@ test('full user flow', (t) => {
         ingo.deviceKey = r.deviceKey;
       });
 
-      const image = fs.readFileSync(path.join(__dirname, './fixtures/ingo-1.jpg'));
+      const image = fs.readFileSync(path.join(__dirname, '../fixtures/ingo-1.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
       a.post('/sign-up', {
@@ -148,7 +148,7 @@ test('full user flow', (t) => {
     t.test('take selfie with ingo', (t) => {
       t.plan(5);
 
-      const image = fs.readFileSync(path.join(__dirname, './fixtures/ben-ingo-1.jpg'));
+      const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-ingo-1.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
       a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }, (r) => {

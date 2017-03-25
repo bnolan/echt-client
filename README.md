@@ -13,8 +13,11 @@ In the `server/` folder, run `yarn`
 You'll need to [configure AWS access credentials](https://claudiajs.com/tutorials/installing.html). In case you're not using the default profile,
 remember to set the `AWS_PROFILE` environment variable accordingly.
 
- * `yarn run deploy`: Deploy the current code to UAT
- * `yarn run release`: Promote the current code to Production (does not deploy current code)
+ * `yarn run start`: Initialise the app (not required in an existing AWS setup)
+ * `yarn run release-dev`: Deploys the current code to dev
+ * `yarn run test`: Run all tests (interacts with AWS resources)
+ * `yarn run test`: Run unit tests
+ * `yarn run logs`: View Lambda logs
 
 ### Adding policies
 
