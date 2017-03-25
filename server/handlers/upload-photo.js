@@ -42,7 +42,7 @@ var indexFace = (objectKey, stage) => {
     // TODO Limit multi face failure to similar bounding boxes,
     // avoid failing when photo captures people in the background
     // TODO Fail when face is detected with low confidence
-    return response.FaceRecords[0].Face.FaceId;
+    return response.FaceRecords[0] && response.FaceRecords[0].Face.FaceId;
   });
 };
 
