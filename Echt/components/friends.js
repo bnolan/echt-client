@@ -1,5 +1,3 @@
-/* globals fetch */
-
 import React from 'react';
 import { Modal, TouchableHighlight, StyleSheet, Image, Text, View } from 'react-native';
 import Settings from './settings';

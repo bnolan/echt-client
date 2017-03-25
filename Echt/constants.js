@@ -1,1 +1,20 @@
-../server/constants.js
+
+exports.CAMERA = {
+  FRONT_FACING: 'FRONT_FACING',
+  BACK_FACING: 'BACK_FACING'
+};
+
+exports.ACTION = {
+  ADD_FRIEND: 'ADD_FRIEND'
+};
+
+exports.STATUS = {
+  PENDING: 'PENDING',
+  PROPOSED: 'PROPOSED',
+  ACCEPTED: 'ACCEPTED',
+  DECLINED: 'DECLINED'
+};
+
+exports.ACCOUNT = {
+  REGISTERED: 'REGISTERED'
+};

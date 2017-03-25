@@ -4,7 +4,8 @@
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
-		"test": "jest"
+		"test": "jest",
+    "release-uat": "react-native bundle --platform ios --dev false --entry-file index.ios.js --bundle-output iOS/main.jsbundle && aws s3 cp iOS/main.jsbundle s3://echt.uat.us-west-2/main.jsbundle --acl public-read"
 	},
 	"dependencies": {
 		"react": "~15.4.1",
