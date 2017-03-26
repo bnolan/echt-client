@@ -21,6 +21,16 @@ const configStub = {
   update: sinon.stub()
 };
 
+const s3UploadStub = sinon.stub().returns({
+  promise: () => Promise.resolve({
+    Attributes: {}
+  })
+});
+
+const s3Stub = function S3 () {
+  this.upload = s3UploadStub;
+};
+
 const dynamoPutStub = sinon.stub().returns({
   promise: () => Promise.resolve({
     Attributes: {}
@@ -57,14 +67,21 @@ const rekognitionStub = function Rekognition () {
   this.indexFaces = rekognitionIndexFacesStub;
 };
 
+const resizeStub = {
+  toSmall: (buffer) => Promise.resolve(buffer),
+  toInline: (buffer) => Promise.resolve('DECAFBAD')
+};
+
 const awsStub = {
   config: configStub,
   DynamoDB: dynamoStub,
-  Rekognition: rekognitionStub
+  Rekognition: rekognitionStub,
+  S3: s3Stub
 };
 
 const uploadPhoto = proxyquire('../../handlers/upload-photo', {
-  'aws-sdk': awsStub
+  'aws-sdk': awsStub,
+  '../helpers/resize': resizeStub
 });
 
 test('stores when called with valid object and a detected face', function (t) {

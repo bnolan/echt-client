@@ -47,8 +47,14 @@ const awsStub = {
   S3: s3Stub
 };
 
+const resizeStub = {
+  toSmall: (buffer) => Promise.resolve(buffer),
+  toInline: (buffer) => Promise.resolve('DECAFBAD')
+};
+
 const signUp = proxyquire('../../handlers/sign-up', {
-  'aws-sdk': awsStub
+  'aws-sdk': awsStub,
+  '../helpers/resize': resizeStub
 });
 
 function getRequest () {
