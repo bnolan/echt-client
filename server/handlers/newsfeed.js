@@ -31,7 +31,7 @@ exports.handler = (request) => {
     return {
       success: true,
       items: _.sortBy(data.Items, (i) => {
-        return 0 - new Date(i.created_at).getTime()
+        return 0 - new Date(i.createdAt).getTime();
       })
     };
   });
