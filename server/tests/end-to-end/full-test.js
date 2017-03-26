@@ -9,7 +9,7 @@ const STATUS = require('../../constants').STATUS;
 // End-to-end test uses the uat databases
 global.ECHT_STAGE = 'uat';
 
-// function xtest () {
+// function skip () {
 //   test();
 // }
 
@@ -145,7 +145,7 @@ test('full user flow', (t) => {
   t.test('👨  ben', (t) => {
     var photo;
 
-    t.test('take selfie with ingo', (t) => {
+    t.skip('take selfie with ingo', (t) => {
       t.plan(5);
 
       const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-ingo-1.jpg'));
@@ -163,7 +163,7 @@ test('full user flow', (t) => {
       });
     });
 
-    t.test('send friend request', (t) => {
+    t.skip('send friend request', (t) => {
       t.plan(2);
 
       a.post('/friends', { photo: photo.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
@@ -172,7 +172,7 @@ test('full user flow', (t) => {
       });
     });
 
-    t.test('view friend request', (t) => {
+    t.skip('view friend request', (t) => {
       t.plan(3);
 
       a.get('/friends', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
@@ -181,6 +181,8 @@ test('full user flow', (t) => {
         t.equal(r.friends[0].status, STATUS.PENDING);
       });
     });
+
+    t.end();
   });
 
   /* Ingo accepts request */
@@ -191,7 +193,7 @@ test('full user flow', (t) => {
 
     var friend;
 
-    t.test('view pending request', (t) => {
+    t.skip('view pending request', (t) => {
       t.plan(3);
 
       a.get('/friends', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {
@@ -203,7 +205,7 @@ test('full user flow', (t) => {
       });
     });
 
-    t.test('accept friend request', (t) => {
+    t.skip('accept friend request', (t) => {
       t.plan(4);
 
       a.put('/friends', { user_id: friend.user.uuid, status: STATUS.ACCEPTED }, { 'x-devicekey': ingo.deviceKey }, (r) => {
@@ -214,7 +216,7 @@ test('full user flow', (t) => {
 
     // Ingo can see the selfie ben took of them both
 
-    t.test('get newsfeed', (t) => {
+    t.skip('get newsfeed', (t) => {
       t.plan(4);
 
       a.get('/photos', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {
@@ -230,5 +232,7 @@ test('full user flow', (t) => {
     // Ingo takes a photo of hashigo zake
 
     // ...
+
+    t.end();
   });
 });
