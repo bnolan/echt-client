@@ -92,8 +92,8 @@ test('full user flow', (t) => {
         t.equal(r.photo.actions.length, 0);
 
         t.ok(r.photo.inline);
-        t.ok(r.photo.inline.url.match(/data:/));
-        t.equal(r.photo.inline.url.length, 651);
+        t.ok(r.photo.inline.url.match(/data:/), 'Image string contains data pragma');
+        t.ok(r.photo.inline.url.length > 0, 'Image string contains data');
       });
     });
 
