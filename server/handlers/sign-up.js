@@ -44,8 +44,59 @@ var storePhoto = (photo, stage) => {
     Item: photo
   };
 
-  return docClient.put(params).promise().then((response) => {
-    return response;
+  return docClient.put(params).promise().then((response) => response);
+};
+
+/**
+ * @param {String} faceId
+ * @param {String} userId
+ * @param {String} stage
+ * @return {Promise}
+ */
+var storeFace = (faceId, userId, stage) => {
+  var docClient = new AWS.DynamoDB.DocumentClient();
+
+  var params = {
+    TableName: `echt.${stage}.faces`,
+    Item: {
+      faceId: faceId,
+      userId: userId
+    }
+  };
+
+  return docClient.put(params).promise().then((response) => response);
+};
+
+/**
+ * Analyses a photo for faces. The photo was previously uploaded
+ * to a defined S3 bucket by the same user.
+ *
+ * @param {String} objectKey S3 object (not a URL)
+ * @param {String} stage Environment stage (dev, uat, prod)
+ * @return {Promise} Returning a FaceId
+ */
+var indexFace = (objectKey, stage) => {
+  var rekognitionClient = new AWS.Rekognition();
+  var params = {
+    CollectionId: `echt.${stage}`,
+    Image: {
+      S3Object: {
+        // Ensure photos can only be selected from a location we control
+        Bucket: BUCKET, // `echt.${stage}.${region}`,
+        Name: objectKey
+      }
+    }
+  };
+  return rekognitionClient.indexFaces(params).promise().then((response) => {
+    console.log(JSON.stringify(response));
+
+    // TODO Fail when more than one face detected
+    // TODO Limit multi face failure to similar bounding boxes,
+    // avoid failing when photo captures people in the background
+    // TODO Fail when face is detected with low confidence
+    if (response.FaceRecords[0]) {
+      return response.FaceRecords[0].Face.FaceId;
+    }
   });
 };
 
@@ -116,7 +167,17 @@ exports.handler = (request) => {
       }
     };
 
-    return storeUser(user, stage);
+    return values;
+  }).then((values) => {
+    // Index the face, in order to detect users in further selfies,
+    // as well as to correlate friends for friendship requests
+    var original = values[0];
+    return indexFace(original.key, stage);
+  }).then((faceId) => {
+    return Promise.all([
+      storeUser(user, stage),
+      storeFace(faceId, user.uuid, stage)
+    ]);
   }).then(() => {
     const photo = {
       uuid: uuid(),

@@ -88,6 +88,8 @@ test('full user flow', (t) => {
         t.ok(r.photo.author);
         t.equal(r.photo.author.uuid, ben.user.uuid);
 
+        t.ok(r.photo.isSelfie);
+
         // Not a selfie with friends, so no actions
         t.equal(r.photo.actions.length, 0);
 
@@ -145,7 +147,7 @@ test('full user flow', (t) => {
   t.test('👨  ben', (t) => {
     var photo;
 
-    t.skip('take selfie with ingo', (t) => {
+    t.test('take selfie with ingo', (t) => {
       t.plan(5);
 
       const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-ingo-1.jpg'));

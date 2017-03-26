@@ -21,13 +21,13 @@ var stages = ['dev', 'uat', 'prod'];
 stages.forEach(stage => {
   // users
   create({
-    TableName: `echt.${stage}.users`,
+    TableName: `echt.${stage}.faces`,
     KeySchema: [
-      { AttributeName: 'uuid', KeyType: 'HASH' },
+      { AttributeName: 'faceId', KeyType: 'HASH' },
       { AttributeName: 'userId', KeyType: 'RANGE' }
     ],
     AttributeDefinitions: [
-      { AttributeName: 'uuid', AttributeType: 'S' },
+      { AttributeName: 'faceId', AttributeType: 'S' },
       { AttributeName: 'userId', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
@@ -45,6 +45,23 @@ stages.forEach(stage => {
     ],
     AttributeDefinitions: [
       { AttributeName: 'uuid', AttributeType: 'S' },
+      { AttributeName: 'userId', AttributeType: 'S' }
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1
+    }
+  });
+
+  // faces
+  create({
+    TableName: `echt.${stage}.faces`,
+    KeySchema: [
+      { AttributeName: 'faceId', KeyType: 'HASH' },
+      { AttributeName: 'userId', KeyType: 'RANGE' }
+    ],
+    AttributeDefinitions: [
+      { AttributeName: 'faceId', AttributeType: 'S' },
       { AttributeName: 'userId', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
