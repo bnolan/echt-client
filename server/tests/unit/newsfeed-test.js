@@ -53,7 +53,7 @@ test('scan', function (t) {
   });
 });
 
-test('is sortd', function (t) {
+test('is sorted', function (t) {
   t.plan(5);
 
   const request = {

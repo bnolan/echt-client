@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const proxyquire = require('proxyquire');
 const test = require('tape');
