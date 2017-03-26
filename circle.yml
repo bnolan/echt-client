@@ -1,0 +1,12 @@
+machine:
+  node:
+    version: v4.5.0
+general:
+  build_dir: server
+dependencies:
+  override:
+    - yarn
+test:
+  override:
+    - yarn test
+    - yarn lint
