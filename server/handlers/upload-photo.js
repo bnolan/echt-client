@@ -46,20 +46,26 @@ var detectFaces = (objectKey, stage) => {
 /**
  * Finds the best match for a previously indexed face.
  *
- * @param {String} faceId
- * @param {String} stage Environment stage (dev, uat, prod)
- * @return {Promise} Returning a FaceId
+ * @param {Object} faceRecord
+ * @param {String} buffer
+ * @param {String} stage
+ * @return {Promise} Returning a searchFacesByImage result
  */
-var searchFace = (faceId, stage) => {
+var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
   var rekognitionClient = new AWS.Rekognition();
-  var params = {
-    CollectionId: `echt.${stage}`,
-    FaceId: faceId,
-    FaceMatchThreshold: 90,
-    MaxFaces: 1
+  return resize.cropByBoundingBox(buffer, faceRecord.BoundingBox)
+    .then(croppedImageStr => {
+      var params = {
+        CollectionId: `echt.${stage}`,
+        Image: {
+          Bytes: new Buffer(croppedImageStr, 'base64')
+        },
+        FaceMatchThreshold: 90,
+        MaxFaces: 1
 
-  };
-  return rekognitionClient.searchFaces(params).promise().then((response) => response);
+      };
+      return rekognitionClient.searchFacesByImage(params).promise().then((response) => response);
+    });
 };
 
 /**
@@ -174,7 +180,7 @@ exports.handler = function (request) {
 
     return detectFaces(original.key, stage);
   }).then((response) => {
-    console.log('detectFaces', response);
+    console.log('detectFaces', JSON.stringify(response));
     photo.faceData = response;
 
     // TODO Only count "major" faces
@@ -190,41 +196,38 @@ exports.handler = function (request) {
 
     // Search for matching faces for each face
     const faceLookups = response.FaceDetails.map((faceRecord) => {
-      const faceId = faceRecord.Face.FaceId;
-      console.log('faceId', faceId);
-      // TODO Crop images, and use searchFacesByImage
-      return searchFace(faceId, stage)
+      return searchFacesByCroppedImage(faceRecord, buffer, stage)
         .then(response => {
-          console.log('searchFace', JSON.stringify(response));
-          const userLookups = response.FaceMatches.map(match => {
-            return getUserForFace(match.Face.FaceId, stage);
-          });
-          return Promise.all(userLookups)
-            .then((userIds) => {
-              console.log('userIds', userIds);
-
-              if (detectedFacesCount === 1 && userIds.length === 1) {
-                // Potential selfie
-                if (userIds[0] === userId) {
-                  console.log('IS_SELFIE!');
-                  photo.isSelfie = true;
-                }
-              } else if (detectedFacesCount === 2 && userIds.length === 2) {
-                // Potential friendship request
-                const me = _.find(userIds, userId);
-                const friend = _.without(userIds, userId)[0];
-
-                if (me && friend) {
-                  console.log('FRIENDING!');
-                }
-              }
-            });
+          if (!response.FaceMatches.length) {
+            return null;
+          }
+          console.log('searchFacesByCroppedImage', JSON.stringify(response.FaceMatches[0]));
+          return getUserForFace(response.FaceMatches[0].Face.FaceId, stage);
         });
     });
 
-    console.log('faceLookups.length', faceLookups);
     return Promise.all(faceLookups);
-  }).then(() => {
+  }).then((userIds) => {
+    // Note that null entries in userIds are significant for the amount
+    // of originally detected faces (even though they don't have a user match)
+    console.log('userIds', userIds);
+
+    if (userIds.length === 1) {
+      // Potential selfie
+      if (userIds[0] === userId) {
+        console.log('IS_SELFIE!');
+        photo.isSelfie = true;
+      }
+    } else if (userIds.length === 2) {
+      // Potential friendship request
+      const me = _.find(userIds, userId);
+      const friend = _.without(userIds, userId)[0];
+
+      if (me && friend) {
+        console.log('FRIENDING!');
+      }
+    }
+
     // TODO Iterate over friends and fan out to the photos
     // table using batchPut
     photo.userId = userId;

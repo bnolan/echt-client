@@ -34,3 +34,40 @@ exports.toInline = (buffer) => {
     return stdout;
   });
 };
+
+/**
+ * Crops by percentage-based bounding boxes.
+ *
+ * @param {Buffer}
+ * @param {Object} boundingBox See http://docs.aws.amazon.com/rekognition/latest/dg/API_BoundingBox.html
+ * @return {String} Base64 encoded image string
+ */
+exports.cropByBoundingBox = (buffer, boundingBox) => {
+  const exec = promisify(childProcess.exec);
+  const original = tempfile('.jpg');
+
+  fs.writeFileSync(original, buffer);
+
+  const identifyCommand = `identify -format %w,%h ${original}`;
+  return exec(identifyCommand)
+    .then((stdout, stderr) => {
+      console.log('identify', stdout);
+      return stdout.split(',');
+    })
+    .then(dimensions => {
+      const origWidth = dimensions[0];
+      const cropWidth = Math.round(origWidth * boundingBox.Width);
+
+      const origHeight = dimensions[1];
+      const cropHeight = Math.round(origHeight * boundingBox.Height);
+
+      const cropLeft = Math.round(origWidth * boundingBox.Left);
+      const cropTop = Math.round(origHeight * boundingBox.Top);
+
+      const convertCommand = `convert ${original} -quality 90 -crop ${cropWidth}x${cropHeight}+${cropLeft}+${cropTop} +repage - | base64`;
+      return exec(convertCommand);
+    })
+    .then((stdout, stderr) => {
+      return stdout;
+    });
+};
