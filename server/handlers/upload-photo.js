@@ -64,7 +64,11 @@ var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
         MaxFaces: 1
 
       };
-      return rekognitionClient.searchFacesByImage(params).promise().then((response) => response);
+      return rekognitionClient.searchFacesByImage(params).promise().then((response) => {
+        console.log('#searchFacesByCroppedImage:');
+        console.log(response);
+        return response;
+      });
     });
 };
 
@@ -73,8 +77,11 @@ var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
  * @param {String} stage
  * @return {Promise}
  */
-var getUserForFace = (faceId, stage) => {
+var getUserIdsForFace = (faceId, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
+
+  console.log('#getUserIdsForFace');
+  console.log(faceId);
 
   var params = {
     TableName: `echt.${stage}.faces`,
@@ -85,7 +92,10 @@ var getUserForFace = (faceId, stage) => {
   };
 
   return docClient.query(params).promise().then((response) => {
-    return response.userId;
+    console.log('#getUserIdsForFace response:');
+    console.log(response);
+
+    return response.Items.map((item) => item.userId);
   });
 };
 
@@ -180,7 +190,7 @@ exports.handler = function (request) {
 
     return detectFaces(original.key, stage);
   }).then((response) => {
-    console.log('detectFaces', JSON.stringify(response));
+    // console.log('detectFaces', JSON.stringify(response));
     photo.faceData = response;
 
     // TODO Only count "major" faces
@@ -202,7 +212,7 @@ exports.handler = function (request) {
             return null;
           }
           console.log('searchFacesByCroppedImage', JSON.stringify(response.FaceMatches[0]));
-          return getUserForFace(response.FaceMatches[0].Face.FaceId, stage);
+          return getUserIdsForFace(response.FaceMatches[0].Face.FaceId, stage);
         });
     });
 

@@ -56,6 +56,9 @@ var storePhoto = (photo, stage) => {
 var storeFace = (faceId, userId, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
+  console.log('#storeFace');
+  console.log(faceId);
+
   var params = {
     TableName: `echt.${stage}.faces`,
     Item: {
