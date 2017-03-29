@@ -7,19 +7,35 @@ AWS.config.update({
 
 var dynamodb = new AWS.DynamoDB();
 
-function create (params) {
+function create (params, callback) {
   dynamodb.createTable(params, function (err, data) {
     if (err) {
       console.error('Unable to create table. Error JSON:', JSON.stringify(err, null, 2));
     } else {
       console.log('Created table. Table description JSON:', JSON.stringify(data, null, 2));
+
+      if (callback) {
+        callback(null);
+      }
     }
   });
 }
 
-var stages = ['dev', 'uat', 'prod'];
-stages.forEach(stage => {
-  // users
+function drop (params, callback) {
+  dynamodb.deleteTable(params, function (err, data) {
+    if (err) {
+      console.error('Unable to drop table. Error JSON:', JSON.stringify(err, null, 2));
+    } else {
+      console.log(`Dropped table ${params.TableName}.`);
+
+      if (callback) {
+        callback(null);
+      }
+    }
+  });
+}
+
+const createUsers = (stage, callback) => {
   create({
     TableName: `echt.${stage}.faces`,
     KeySchema: [
@@ -34,9 +50,10 @@ stages.forEach(stage => {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1
     }
-  });
+  }, callback);
+};
 
-  // photos
+const createPhotos = (stage, callback) => {
   create({
     TableName: `echt.${stage}.photos`,
     KeySchema: [
@@ -51,9 +68,10 @@ stages.forEach(stage => {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1
     }
-  });
+  }, callback);
+};
 
-  // faces
+const createFaces = (stage, callback) => {
   create({
     TableName: `echt.${stage}.faces`,
     KeySchema: [
@@ -68,5 +86,30 @@ stages.forEach(stage => {
       ReadCapacityUnits: 1,
       WriteCapacityUnits: 1
     }
+  }, callback);
+};
+
+const dropFaces = (stage, callback) => {
+  drop({
+    TableName: `echt.${stage}.faces`
+  }, callback);
+};
+
+const createAllTables = () => {
+  var stages = ['dev', 'uat', 'prod'];
+
+  stages.forEach(stage => {
+    // users
+    createUsers(stage);
+
+    // photos
+    createPhotos(stage);
+
+    // faces
+    createFaces(stage);
   });
-});
+};
+
+module.exports = {
+  createAllTables, createUsers, createPhotos, createFaces, dropFaces
+};
