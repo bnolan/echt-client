@@ -64,7 +64,9 @@ exports.cropByBoundingBox = (buffer, boundingBox) => {
       const cropLeft = Math.round(origWidth * boundingBox.Left);
       const cropTop = Math.round(origHeight * boundingBox.Top);
 
-      const convertCommand = `convert ${original} -quality 90 -crop ${cropWidth}x${cropHeight}+${cropLeft}+${cropTop} +repage - | base64`;
+      const id = 'crop-' + Math.floor(Math.random() * 0xFFFFF) + '.jpg';
+
+      const convertCommand = `convert ${original} -quality 90 -crop ${cropWidth}x${cropHeight}+${cropLeft}+${cropTop} +repage - | tee /tmp/${id} | base64`;
       return exec(convertCommand);
     })
     .then((stdout, stderr) => {
