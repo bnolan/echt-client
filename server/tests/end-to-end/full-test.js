@@ -5,13 +5,44 @@ const test = require('tape');
 const CAMERA = require('../../constants').CAMERA;
 const ACTION = require('../../constants').ACTION;
 const STATUS = require('../../constants').STATUS;
+const exec = require('child_process').exec;
+const db = require('../../tasks/create-db');
 
-// End-to-end test uses the uat databases
-global.ECHT_STAGE = 'uat';
+// End-to-end test use the uat databases
+const stage = 'uat';
+global.ECHT_STAGE = stage;
 
 // function skip () {
 //   test();
 // }
+
+test('🔥  empty collection', (t) => {
+  const command = `
+    aws rekognition delete-collection --collection-id=echt.${stage};
+    aws rekognition create-collection --collection-id=echt.${stage};
+  `;
+
+  exec(command, (err, stdout, stderr) => {
+    if (err) {
+      throw new Error(err);
+    }
+
+    t.end();
+  });
+});
+
+test('⚡️  empty table', (t) => {
+  db.dropFaces(stage, () => {
+    // lol amazon
+    setTimeout(() => {
+      db.createFaces(stage, () => {
+        setTimeout(() => {
+          t.end();
+        }, 500);
+      });
+    }, 1500);
+  });
+});
 
 test('full user flow', (t) => {
   var ben = {
