@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Automator = require('./automator');
+const Automator = require('../helpers/automator');
 const test = require('tape');
 const CAMERA = require('../../constants').CAMERA;
 const ACTION = require('../../constants').ACTION;
@@ -102,7 +102,7 @@ test('full user flow', (t) => {
     });
 
     t.test('take selfie', (t) => {
-      t.plan(12);
+      t.plan(13);
 
       const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-2.jpg'));
       const b64 = new Buffer(image).toString('base64');

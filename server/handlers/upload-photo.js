@@ -60,7 +60,7 @@ var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
         Image: {
           Bytes: new Buffer(croppedImageStr, 'base64')
         },
-        FaceMatchThreshold: 90,
+        FaceMatchThreshold: 50,
         MaxFaces: 1
 
       };
@@ -95,7 +95,9 @@ var getUserIdsForFace = (faceId, stage) => {
     console.log('#getUserIdsForFace response:');
     console.log(response);
 
-    return response.Items.map((item) => item.userId);
+    if (response.Items.length > 0) {
+      return response.Items[0].userId;
+    }
   });
 };
 
@@ -211,8 +213,16 @@ exports.handler = function (request) {
           if (!response.FaceMatches.length) {
             return null;
           }
+
           console.log('searchFacesByCroppedImage', JSON.stringify(response.FaceMatches[0]));
-          return getUserIdsForFace(response.FaceMatches[0].Face.FaceId, stage);
+
+          if (response.FaceMatches.length > 0) {
+            return response.FaceMatches[0].Face.FaceId;
+          }
+        }).then(faceId => {
+          if (faceId) {
+            return getUserIdsForFace(faceId, stage);
+          }
         });
     });
 
@@ -225,7 +235,6 @@ exports.handler = function (request) {
     if (userIds.length === 1) {
       // Potential selfie
       if (userIds[0] === userId) {
-        console.log('IS_SELFIE!');
         photo.isSelfie = true;
       }
     } else if (userIds.length === 2) {
