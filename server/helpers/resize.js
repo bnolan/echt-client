@@ -55,18 +55,20 @@ exports.cropByBoundingBox = (buffer, boundingBox) => {
       return stdout.split(',');
     })
     .then(dimensions => {
+      const overSize = 0.2;
+
       const origWidth = dimensions[0];
-      const cropWidth = Math.round(origWidth * boundingBox.Width);
+      const cropWidth = Math.ceil(origWidth * boundingBox.Width) + (origWidth * overSize);
 
       const origHeight = dimensions[1];
-      const cropHeight = Math.round(origHeight * boundingBox.Height);
+      const cropHeight = Math.ceil(origHeight * boundingBox.Height) + (origHeight * overSize);
 
-      const cropLeft = Math.round(origWidth * boundingBox.Left);
-      const cropTop = Math.round(origHeight * boundingBox.Top);
+      const cropLeft = Math.floor(origWidth * boundingBox.Left) - (origWidth * overSize * 0.5);
+      const cropTop = Math.floor(origHeight * boundingBox.Top) - (origHeight * overSize * 0.5);
 
       const id = 'crop-' + Math.floor(Math.random() * 0xFFFFF) + '.jpg';
 
-      const convertCommand = `convert ${original} -quality 90 -crop ${cropWidth}x${cropHeight}+${cropLeft}+${cropTop} +repage - | tee /tmp/${id} | base64`;
+      const convertCommand = `convert ${original} -quality 80 -crop ${cropWidth}x${cropHeight}+${cropLeft}+${cropTop} +repage - | tee /tmp/${id} | base64`;
       return exec(convertCommand);
     })
     .then((stdout, stderr) => {

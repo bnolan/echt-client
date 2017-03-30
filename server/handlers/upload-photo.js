@@ -60,7 +60,7 @@ var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
         Image: {
           Bytes: new Buffer(croppedImageStr, 'base64')
         },
-        FaceMatchThreshold: 50,
+        FaceMatchThreshold: 10,
         MaxFaces: 1
 
       };
@@ -239,11 +239,17 @@ exports.handler = function (request) {
       }
     } else if (userIds.length === 2) {
       // Potential friendship request
-      const me = _.find(userIds, userId);
+      const me = _.includes(userIds, userId);
       const friend = _.without(userIds, userId)[0];
 
       if (me && friend) {
         console.log('FRIENDING!');
+      } else if (me && !friend) {
+        console.log('LOL FRIEND DOESNT USE APP');
+      } else if (!me && friend) {
+        console.log('ITS NOT YOU BUT I KNOW THE OTHER PERSON');
+      } else {
+        console.log('wtf happened', me, friend);
       }
     }
 
