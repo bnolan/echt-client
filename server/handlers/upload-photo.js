@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const getStage = require('../helpers/get-stage');
 const resize = require('../helpers/resize');
 const _ = require('lodash');
+const ACTION = require('../constants').ACTION;
 
 const BUCKET = 'echt.uat.us-west-2';
 const S3 = new AWS.S3();
@@ -119,6 +120,53 @@ var storePhoto = (photo, stage) => {
   });
 };
 
+/**
+ * @param {String} user id
+ * @param {String} stage
+ * @return {Promise => Object} user
+ */
+var getUser = (userId, stage) => {
+  var docClient = new AWS.DynamoDB.DocumentClient();
+
+  var params = {
+    TableName: `echt.${stage}.users`,
+    KeyConditionExpression: '#uuid = :userId',
+    ExpressionAttributeValues: {
+      ':userId': userId
+    },
+    ExpressionAttributeNames: {
+      '#uuid': 'uuid'
+    }
+  };
+
+  console.log('#getUser', userId, params);
+
+  return docClient.query(params).promise().then((response) => {
+    console.log('#getUser', response);
+    return response.Items[0].user;
+  });
+};
+
+/**
+ * @param {Object} user uuid
+ * @return {Promise => Object} action object
+ */
+
+var addFriend = (userId, stage) => {
+  return getUser(userId, stage)
+    .then((user) => {
+      console.log('addFriend', JSON.stringify(user));
+
+      return {
+        type: ACTION.ADD_FRIEND,
+        user: {
+          uuid: user.uuid,
+          avatar: user.photo.url
+        }
+      };
+    });
+};
+
 exports.handler = function (request) {
   // const photoKey = request.body.photoKey;
 
@@ -139,7 +187,8 @@ exports.handler = function (request) {
     createdAt: new Date().toISOString(),
     info: {
       camera: request.body.camera
-    }
+    },
+    actions: []
   };
 
   // TODO Better way to get user identifeir
@@ -232,6 +281,8 @@ exports.handler = function (request) {
     // of originally detected faces (even though they don't have a user match)
     console.log('userIds', userIds);
 
+    const actions = [];
+
     if (userIds.length === 1) {
       // Potential selfie
       if (userIds[0] === userId) {
@@ -244,6 +295,7 @@ exports.handler = function (request) {
 
       if (me && friend) {
         console.log('FRIENDING!');
+        actions.push(addFriend(friend, stage));
       } else if (me && !friend) {
         console.log('LOL FRIEND DOESNT USE APP');
       } else if (!me && friend) {
@@ -253,6 +305,11 @@ exports.handler = function (request) {
       }
     }
 
+    return Promise.all(actions);
+  }).then((actions) => {
+    // Add actions
+    photo.actions = photo.actions.concat(actions);
+
     // TODO Iterate over friends and fan out to the photos
     // table using batchPut
     photo.userId = userId;
@@ -261,9 +318,7 @@ exports.handler = function (request) {
   }).then(() => {
     return {
       success: true,
-      photo: Object.assign(photo, {
-        actions: []
-      })
+      photo: photo
     };
   });
 };

@@ -40,7 +40,7 @@ test('⚡️  empty table', (t) => {
           t.end();
         }, 500);
       });
-    }, 1500);
+    }, 3000);
   });
 });
 
@@ -189,14 +189,15 @@ test('full user flow', (t) => {
 
         t.equal(r.photo.actions.length, 1);
         t.equal(r.photo.actions[0].type, ACTION.ADD_FRIEND);
-        t.ok(!r.photo.actions[0].user.uuid);
+
+        t.ok(r.photo.actions[0].user.uuid);
         t.ok(r.photo.actions[0].user.avatar);
 
         photo = r.photo;
       });
     });
 
-    t.skip('send friend request', (t) => {
+    t.test('send friend request', (t) => {
       t.plan(2);
 
       a.post('/friends', { photo: photo.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {

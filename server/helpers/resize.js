@@ -55,7 +55,7 @@ exports.cropByBoundingBox = (buffer, boundingBox) => {
       return stdout.split(',');
     })
     .then(dimensions => {
-      const overSize = 0.2;
+      const overSize = 0; // .2;
 
       const origWidth = dimensions[0];
       const cropWidth = Math.ceil(origWidth * boundingBox.Width) + (origWidth * overSize);
