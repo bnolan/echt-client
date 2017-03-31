@@ -198,19 +198,21 @@ test('full user flow', (t) => {
     });
 
     t.test('send friend request', (t) => {
-      t.plan(2);
+      t.plan(3);
 
       a.post('/friends', { photo: photo.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
+        t.ok(r.friend);
         t.equal(r.friend.status, STATUS.PENDING);
       });
     });
 
-    t.skip('view friend request', (t) => {
-      t.plan(3);
+    t.test('view friend request', (t) => {
+      t.plan(4);
 
       a.get('/friends', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
+        t.ok(r.friends);
         t.equal(r.friends.length, 1);
         t.equal(r.friends[0].status, STATUS.PENDING);
       });
@@ -242,7 +244,7 @@ test('full user flow', (t) => {
     t.skip('accept friend request', (t) => {
       t.plan(4);
 
-      a.put('/friends', { user_id: friend.user.uuid, status: STATUS.ACCEPTED }, { 'x-devicekey': ingo.deviceKey }, (r) => {
+      a.put(`/friends/${friend.user.uuid}`, { status: STATUS.ACCEPTED }, { 'x-devicekey': ingo.deviceKey }, (r) => {
         t.ok(r.success);
         t.equal(r.friend.status, STATUS.ACCEPTED);
       });

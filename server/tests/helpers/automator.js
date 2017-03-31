@@ -12,7 +12,11 @@ class Automator {
       queryStringParameters: queryString,
       headers: headers
     }, {
-      done: function (something, response) {
+      done: function (err, response) {
+        if (err) {
+          throw new Error(err);
+        }
+
         callback(JSON.parse(response.body));
       }
     });
@@ -20,6 +24,7 @@ class Automator {
 
   put (path, jsonBody, headers, callback) {
     let headersWithDefaults = Object.assign({'content-type': 'application/json'}, headers);
+    console.log('#put', arguments);
     app.proxyRouter({
       requestContext: {
         resourcePath: path,
@@ -28,7 +33,11 @@ class Automator {
       headers: headersWithDefaults,
       body: JSON.stringify(jsonBody)
     }, {
-      done: function (something, response) {
+      done: function (err, response) {
+        if (err) {
+          throw new Error(err);
+        }
+
         callback(JSON.parse(response.body));
       }
     });
@@ -44,7 +53,11 @@ class Automator {
       headers: headersWithDefaults,
       body: jsonBody
     }, {
-      done: function (something, response) {
+      done: function (err, response) {
+        if (err) {
+          throw new Error(err);
+        }
+
         callback(JSON.parse(response.body));
       }
     });
