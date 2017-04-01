@@ -20,11 +20,11 @@ const createUsers = (stage) => {
   return create({
     TableName: `echt.${stage}.users`,
     KeySchema: [
-      { AttributeName: 'faceId', KeyType: 'HASH' },
+      { AttributeName: 'uuid', KeyType: 'HASH' },
       { AttributeName: 'userId', KeyType: 'RANGE' }
     ],
     AttributeDefinitions: [
-      { AttributeName: 'faceId', AttributeType: 'S' },
+      { AttributeName: 'uuid', AttributeType: 'S' },
       { AttributeName: 'userId', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
