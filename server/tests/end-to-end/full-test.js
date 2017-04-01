@@ -9,9 +9,10 @@ const STATUS = require('../../constants').STATUS;
 const dynamodbHelper = require('../../helpers/dynamodb');
 const rekognitionHelper = require('../../helpers/rekognition');
 const config = require('../../config');
+const yargs = require('yargs').argv;
 
 // End-to-end test use the uat databases
-const stage = config.tapeTestStage;
+const stage = yargs.stage ? yargs.stage : config.tapeTestStage;
 global.ECHT_STAGE = stage;
 
 // function skip () {

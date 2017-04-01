@@ -15,7 +15,7 @@ remember to set the `AWS_PROFILE` environment variable accordingly.
 
  * `yarn run start`: Initialise the app (not required in an existing AWS setup)
  * `yarn run release-dev`: Deploys the current code to dev
- * `yarn run test`: Run all tests (interacts with AWS resources)
+ * `yarn run test`: Run all tests (interacts with AWS resources). You can run your own "stage" via `yarn run test -- --stage=<my-stage>` for integration tests.
  * `yarn run test`: Run unit tests
  * `yarn run logs`: View Lambda logs
 

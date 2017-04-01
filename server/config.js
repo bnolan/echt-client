@@ -1,5 +1,5 @@
 module.exports = {
   awsRegion: 'us-west-2',
-  defaultStages: ['dev', 'uat', 'prod'],
-  tapeTestStage: 'dev'
+  defaultStages: ['test', 'uat', 'prod'],
+  tapeTestStage: 'test'
 };
