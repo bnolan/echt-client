@@ -18,7 +18,7 @@ function drop (params, callback) {
 
 const createUsers = (stage) => {
   return create({
-    TableName: `echt.${stage}.faces`,
+    TableName: `echt.${stage}.users`,
     KeySchema: [
       { AttributeName: 'faceId', KeyType: 'HASH' },
       { AttributeName: 'userId', KeyType: 'RANGE' }
