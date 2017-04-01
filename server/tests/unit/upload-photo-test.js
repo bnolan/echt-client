@@ -84,7 +84,7 @@ const uploadPhoto = proxyquire('../../handlers/upload-photo', {
   '../helpers/resize': resizeStub
 });
 
-test('stores when called with valid object and a detected face', function (t) {
+test.skip('stores when called with valid object and a detected face', function (t) {
   const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-1.jpg'));
   const b64 = new Buffer(image).toString('base64');
 

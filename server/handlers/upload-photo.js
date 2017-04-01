@@ -66,8 +66,8 @@ var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
 
       };
       return rekognitionClient.searchFacesByImage(params).promise().then((response) => {
-        console.log('#searchFacesByCroppedImage:');
-        console.log(response);
+        // console.log('#searchFacesByCroppedImage:');
+        // console.log(response);
         return response;
       });
     });
@@ -81,8 +81,8 @@ var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
 var getUserIdsForFace = (faceId, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
-  console.log('#getUserIdsForFace');
-  console.log(faceId);
+  // console.log('#getUserIdsForFace');
+  // console.log(faceId);
 
   var params = {
     TableName: `echt.${stage}.faces`,
@@ -93,8 +93,8 @@ var getUserIdsForFace = (faceId, stage) => {
   };
 
   return docClient.query(params).promise().then((response) => {
-    console.log('#getUserIdsForFace response:');
-    console.log(response);
+    // console.log('#getUserIdsForFace response:');
+    // console.log(response);
 
     if (response.Items.length > 0) {
       return response.Items[0].userId;
@@ -139,10 +139,10 @@ var getUser = (userId, stage) => {
     }
   };
 
-  console.log('#getUser', userId, params);
+  // console.log('#getUser', userId, params);
 
   return docClient.query(params).promise().then((response) => {
-    console.log('#getUser', response);
+    // console.log('#getUser', response);
     return response.Items[0].user;
   });
 };
@@ -155,7 +155,7 @@ var getUser = (userId, stage) => {
 var addFriend = (userId, stage) => {
   return getUser(userId, stage)
     .then((user) => {
-      console.log('addFriend', JSON.stringify(user));
+      // console.log('addFriend', JSON.stringify(user));
 
       return {
         type: ACTION.ADD_FRIEND,
@@ -263,7 +263,7 @@ exports.handler = function (request) {
             return null;
           }
 
-          console.log('searchFacesByCroppedImage', JSON.stringify(response.FaceMatches[0]));
+          // console.log('searchFacesByCroppedImage', JSON.stringify(response.FaceMatches[0]));
 
           if (response.FaceMatches.length > 0) {
             return response.FaceMatches[0].Face.FaceId;
@@ -279,7 +279,7 @@ exports.handler = function (request) {
   }).then((userIds) => {
     // Note that null entries in userIds are significant for the amount
     // of originally detected faces (even though they don't have a user match)
-    console.log('userIds', userIds);
+    // console.log('userIds', userIds);
 
     const actions = [];
 
