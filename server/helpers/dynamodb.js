@@ -101,7 +101,14 @@ const emptyFaces = (stage) => {
     .promise()
     .then(data => {
       const requests = data.Items.map(item => {
-        return {DeleteRequest: {Key: item.faceId}};
+        return {
+          DeleteRequest: {
+            Key: {
+              faceId: item.faceId,
+              userId: item.userId
+            }
+          }
+        };
       });
       if (requests.length) {
         return dynamodb.batchWriteItem({
