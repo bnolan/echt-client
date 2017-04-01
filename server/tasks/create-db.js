@@ -93,6 +93,24 @@ const createFaces = (stage, callback) => {
   }, callback);
 };
 
+const createFriends = (stage, callback) => {
+  create({
+    TableName: `echt.${stage}.friends`,
+    KeySchema: [
+      { AttributeName: 'fromId', KeyType: 'HASH' },
+      { AttributeName: 'toId', KeyType: 'RANGE' }
+    ],
+    AttributeDefinitions: [
+      { AttributeName: 'fromId', AttributeType: 'S' },
+      { AttributeName: 'toId', AttributeType: 'S' }
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1
+    }
+  }, callback);
+};
+
 const dropFaces = (stage, callback) => {
   drop({
     TableName: `echt.${stage}.faces`
@@ -111,9 +129,12 @@ const createAllTables = () => {
 
     // faces
     createFaces(stage);
+
+    // friends
+    createFriends(stage);
   });
 };
 
 module.exports = {
-  createAllTables, createUsers, createPhotos, createFaces, dropFaces
+  createAllTables, createUsers, createPhotos, createFaces, dropFaces, createFriends
 };

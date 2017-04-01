@@ -200,7 +200,7 @@ test('full user flow', (t) => {
     t.test('send friend request', (t) => {
       t.plan(3);
 
-      a.post('/friends', { photo: photo.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
+      a.post('/friends', { user: photo.actions[0].user.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.friend);
         t.equal(r.friend.status, STATUS.PENDING);
