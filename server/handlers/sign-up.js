@@ -127,7 +127,7 @@ function generateRegisteredKey (user) {
 exports.handler = (request) => {
   // fixme - use verify with a key
   // const userKey = jwt.decode(request.headers['x-devicekey']);
-  
+
   const user = {
     uuid: uuid(),
     name: request.body.name,
