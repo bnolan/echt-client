@@ -3,12 +3,10 @@ const getStage = require('../helpers/get-stage');
 const jwt = require('jsonwebtoken');
 const STATUS = require('../constants').STATUS;
 const _ = require('lodash');
-
-// TODO Move to environment var
-const region = 'us-west-2';
+const config = require('../config');
 
 AWS.config.update({
-  region: region
+  region: config.awsRegion
 });
 
 var stage;

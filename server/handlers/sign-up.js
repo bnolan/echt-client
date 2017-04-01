@@ -7,14 +7,10 @@ const ACCOUNT = require('../constants').ACCOUNT;
 const CAMERA = require('../constants').CAMERA;
 const config = require('../config');
 
-// TODO Move to environment var
-const region = 'us-west-2';
-
 AWS.config.update({
-  region: region
+  region: config.awsRegion
 });
 
-const BUCKET = 'echt.uat.us-west-2';
 const S3 = new AWS.S3();
 
 /**

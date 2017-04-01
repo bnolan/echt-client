@@ -2,12 +2,10 @@ const AWS = require('aws-sdk');
 const jwt = require('jsonwebtoken');
 const getStage = require('../helpers/get-stage');
 const STATUS = require('../constants').STATUS;
-
-// TODO Move to environment var
-const region = 'us-west-2';
+const config = require('../config');
 
 AWS.config.update({
-  region: region
+  region: config.awsRegion
 });
 
 var stage;
