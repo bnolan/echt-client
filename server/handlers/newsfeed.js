@@ -2,13 +2,11 @@ var AWS = require('aws-sdk');
 const getStage = require('../helpers/get-stage');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
-
-// TODO Move to environment var
-// Region needs to be supported by Rekognition (and match the S3 bucket)
-const region = 'us-west-2';
+const config = require('../config');
 
 AWS.config.update({
-  region: region
+  // Region needs to be supported by Rekognition (and match the S3 bucket)
+  region: config.awsRegion
 });
 
 var docClient = new AWS.DynamoDB.DocumentClient();

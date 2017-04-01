@@ -5,16 +5,13 @@ const getStage = require('../helpers/get-stage');
 const resize = require('../helpers/resize');
 const _ = require('lodash');
 const ACTION = require('../constants').ACTION;
+const config = require('../config');
 
-const BUCKET = 'echt.uat.us-west-2';
 const S3 = new AWS.S3();
 
-// TODO Move to environment var
-// Region needs to be supported by Rekognition (and match the S3 bucket)
-const region = 'us-west-2';
-
 AWS.config.update({
-  region: region
+  // Region needs to be supported by Rekognition (and match the S3 bucket)
+  region: config.awsRegion
 });
 
 /**
@@ -33,7 +30,7 @@ var detectFaces = (objectKey, stage) => {
     Image: {
       S3Object: {
         // Ensure photos can only be selected from a location we control
-        Bucket: BUCKET, // `echt.${stage}.${region}`,
+        Bucket: `echt.${stage}.${config.awsRegion}`,
         Name: objectKey
       }
     }
@@ -198,14 +195,14 @@ exports.handler = function (request) {
 
   return resize.toSmall(buffer).then((smallBuffer) => {
     var originalPhoto = {
-      Bucket: BUCKET,
+      Bucket: `echt.${stage}.${config.awsRegion}`,
       Key: `photos/photo-${photo.uuid}-original.jpg`,
       ContentType: 'image/jpeg',
       Body: buffer
     };
 
     var smallPhoto = {
-      Bucket: BUCKET,
+      Bucket: `echt.${stage}.${config.awsRegion}`,
       Key: `photos/photo-${photo.uuid}-small.jpg`,
       ContentType: 'image/jpeg',
       Body: smallBuffer

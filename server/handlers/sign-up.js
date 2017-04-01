@@ -5,6 +5,7 @@ const getStage = require('../helpers/get-stage');
 const resize = require('../helpers/resize');
 const ACCOUNT = require('../constants').ACCOUNT;
 const CAMERA = require('../constants').CAMERA;
+const config = require('../config');
 
 // TODO Move to environment var
 const region = 'us-west-2';
@@ -92,7 +93,7 @@ var indexFace = (objectKey, stage) => {
     Image: {
       S3Object: {
         // Ensure photos can only be selected from a location we control
-        Bucket: BUCKET, // `echt.${stage}.${region}`,
+        Bucket: `echt.${stage}.${config.awsRegion}`,
         Name: objectKey
       }
     }
@@ -143,14 +144,14 @@ exports.handler = (request) => {
 
   return resize.toSmall(buffer).then((smallBuffer) => {
     var originalPhoto = {
-      Bucket: BUCKET,
+      Bucket: `echt.${stage}.${config.awsRegion}`,
       Key: `users/user-${user.uuid}.jpg`,
       ContentType: 'image/jpeg',
       Body: buffer
     };
 
     var smallPhoto = {
-      Bucket: BUCKET,
+      Bucket: `echt.${stage}.${config.awsRegion}`,
       Key: `users/user-${user.uuid}-small.jpg`,
       ContentType: 'image/jpeg',
       Body: smallBuffer
