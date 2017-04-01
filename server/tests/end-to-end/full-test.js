@@ -1,15 +1,17 @@
 const fs = require('fs');
 const path = require('path');
 const Automator = require('../helpers/automator');
-const test = require('tape');
+const test = require('tape-catch');
 const CAMERA = require('../../constants').CAMERA;
 const ACTION = require('../../constants').ACTION;
 const STATUS = require('../../constants').STATUS;
-const exec = require('child_process').exec;
-const db = require('../../tasks/create-db');
+// const exec = require('child_process').exec;
+const dynamodbHelper = require('../../helpers/dynamodb');
+const rekognitionHelper = require('../../helpers/rekognition');
+const config = require('../../config');
 
 // End-to-end test use the uat databases
-const stage = 'uat';
+const stage = config.tapeTestStage;
 global.ECHT_STAGE = stage;
 
 // function skip () {
@@ -17,31 +19,17 @@ global.ECHT_STAGE = stage;
 // }
 
 test('🔥  empty collection', (t) => {
-  const command = `
-    aws rekognition delete-collection --collection-id=echt.${stage};
-    aws rekognition create-collection --collection-id=echt.${stage};
-  `;
-
-  exec(command, (err, stdout, stderr) => {
-    if (err) {
-      throw new Error(err);
-    }
-
-    t.end();
-  });
+  rekognitionHelper.emptyCollection(stage)
+    .then(() => {
+      t.end();
+    });
 });
 
 test('⚡️  empty table', (t) => {
-  db.dropFaces(stage, () => {
-    // lol amazon
-    setTimeout(() => {
-      db.createFaces(stage, () => {
-        setTimeout(() => {
-          t.end();
-        }, 500);
-      });
-    }, 3000);
-  });
+  dynamodbHelper.emptyFaces(stage)
+    .then(() => {
+      t.end();
+    });
 });
 
 test('full user flow', (t) => {

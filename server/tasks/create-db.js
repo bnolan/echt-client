@@ -1,140 +1,35 @@
-var AWS = require('aws-sdk');
+const helper = require('../helpers/dynamodb');
+const config = require('../config');
+const yargs = require('yargs').argv;
 
-AWS.config.update({
-  region: 'us-west-2'
-  // endpoint: 'http://127.0.0.1:8000'
+process.on('unhandledRejection', (err) => {
+  console.trace();
+  console.log(JSON.stringify(err));
 });
 
-var dynamodb = new AWS.DynamoDB();
+const stages = yargs.stages ? yargs.stages.split(',') : config.defaultStages;
+stages.forEach(stage => {
+  // users
+  helper.createUsers(stage)
+    .then(data => {
+      console.log('Created users table. Table description JSON:', JSON.stringify(data, null, 2));
+    });
 
-function create (params, callback) {
-  dynamodb.createTable(params, function (err, data) {
-    if (err) {
-      console.error('Unable to create table. Error JSON:', JSON.stringify(err, null, 2));
-    } else {
-      console.log('Created table. Table description JSON:', JSON.stringify(data, null, 2));
-
-      if (callback) {
-        callback(null);
-      }
-    }
+  // photos
+  helper.createPhotos(stage)
+  .then(data => {
+    console.log('Created photos table. Table description JSON:', JSON.stringify(data, null, 2));
   });
-}
 
-function drop (params, callback) {
-  dynamodb.deleteTable(params, function (err, data) {
-    if (err) {
-      console.error('Unable to drop table. Error JSON:', JSON.stringify(err, null, 2));
-
-      if (callback) {
-        callback(null);
-      }
-    } else {
-      console.log(`Dropped table ${params.TableName}.`);
-
-      if (callback) {
-        callback(null);
-      }
-    }
+  // faces
+  helper.createFaces(stage)
+  .then(data => {
+    console.log('Created faces table. Table description JSON:', JSON.stringify(data, null, 2));
   });
-}
 
-const createUsers = (stage, callback) => {
-  create({
-    TableName: `echt.${stage}.faces`,
-    KeySchema: [
-      { AttributeName: 'faceId', KeyType: 'HASH' },
-      { AttributeName: 'userId', KeyType: 'RANGE' }
-    ],
-    AttributeDefinitions: [
-      { AttributeName: 'faceId', AttributeType: 'S' },
-      { AttributeName: 'userId', AttributeType: 'S' }
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
-      WriteCapacityUnits: 1
-    }
-  }, callback);
-};
-
-const createPhotos = (stage, callback) => {
-  create({
-    TableName: `echt.${stage}.photos`,
-    KeySchema: [
-      { AttributeName: 'uuid', KeyType: 'HASH' },
-      { AttributeName: 'userId', KeyType: 'RANGE' }
-    ],
-    AttributeDefinitions: [
-      { AttributeName: 'uuid', AttributeType: 'S' },
-      { AttributeName: 'userId', AttributeType: 'S' }
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
-      WriteCapacityUnits: 1
-    }
-  }, callback);
-};
-
-const createFaces = (stage, callback) => {
-  create({
-    TableName: `echt.${stage}.faces`,
-    KeySchema: [
-      { AttributeName: 'faceId', KeyType: 'HASH' },
-      { AttributeName: 'userId', KeyType: 'RANGE' }
-    ],
-    AttributeDefinitions: [
-      { AttributeName: 'faceId', AttributeType: 'S' },
-      { AttributeName: 'userId', AttributeType: 'S' }
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
-      WriteCapacityUnits: 1
-    }
-  }, callback);
-};
-
-const createFriends = (stage, callback) => {
-  create({
-    TableName: `echt.${stage}.friends`,
-    KeySchema: [
-      { AttributeName: 'fromId', KeyType: 'HASH' },
-      { AttributeName: 'toId', KeyType: 'RANGE' }
-    ],
-    AttributeDefinitions: [
-      { AttributeName: 'fromId', AttributeType: 'S' },
-      { AttributeName: 'toId', AttributeType: 'S' }
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
-      WriteCapacityUnits: 1
-    }
-  }, callback);
-};
-
-const dropFaces = (stage, callback) => {
-  drop({
-    TableName: `echt.${stage}.faces`
-  }, callback);
-};
-
-const createAllTables = () => {
-  var stages = ['dev', 'uat', 'prod'];
-
-  stages.forEach(stage => {
-    // users
-    createUsers(stage);
-
-    // photos
-    createPhotos(stage);
-
-    // faces
-    createFaces(stage);
-
-    // friends
-    createFriends(stage);
+  // friends
+  helper.createFriends(stage)
+  .then(data => {
+    console.log('Created friends table. Table description JSON:', JSON.stringify(data, null, 2));
   });
-};
-
-module.exports = {
-  createAllTables, createUsers, createPhotos, createFaces, dropFaces, createFriends
-};
+});

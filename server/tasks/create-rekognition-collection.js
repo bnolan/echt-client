@@ -1,18 +1,16 @@
-var AWS = require('aws-sdk');
+const helper = require('../helpers/rekognition');
+const config = require('../config');
+const yargs = require('yargs').argv;
 
-AWS.config.update({
-  region: 'us-west-2'
+process.on('unhandledRejection', (err) => {
+  console.trace();
+  console.log(JSON.stringify(err));
 });
 
-var stages = ['dev', 'uat', 'prod'];
-
-var rekognition = new AWS.Rekognition();
-stages.forEach((stage) => {
-  rekognition.createCollection({CollectionId: `echt.${stage}`}, function (err, data) {
-    if (err) {
-      console.error('Unable to create collection. Error JSON:', JSON.stringify(err, null, 2));
-    } else {
+const stages = yargs.stages ? yargs.stages.split(',') : config.defaultStages;
+stages.forEach(stage => {
+  helper.createCollection(stage)
+    .then((data) => {
       console.log('Created rekognition collection: ', data);
-    }
-  });
+    });
 });
