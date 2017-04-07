@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 const getStage = require('../helpers/get-stage');
 const jwt = require('jsonwebtoken');
 const STATUS = require('../constants').STATUS;
-const _ = require('lodash');
 const config = require('../config');
 const assert = require('assert');
 
@@ -21,9 +20,6 @@ const getRequest = (toId, fromId) => {
       ':toId': toId
     }
   };
-
-  console.log('#getRequest');
-  console.log(params);
 
   const docClient = new AWS.DynamoDB.DocumentClient();
 
@@ -51,9 +47,6 @@ const updateRequest = (toId, fromId, status) => {
       ':status': status
     }
   };
-
-  console.log('#updateRequest');
-  console.log(params);
 
   const docClient = new AWS.DynamoDB.DocumentClient();
 
