@@ -11,6 +11,40 @@ AWS.config.update({
 
 var stage;
 
+var storePhoto = (photo) => {
+  var docClient = new AWS.DynamoDB.DocumentClient();
+
+  var params = {
+    TableName: `echt.${stage}.photos`,
+    Item: photo
+  };
+
+  return docClient.put(params).promise().then((response) => {
+    return response;
+  });
+};
+
+const addPhotoToNewsfeed = (userId, photoId) => {
+  const params = {
+    TableName: `echt.${stage}.photos`,
+    FilterExpression: '#uuid = :photoId',
+    ExpressionAttributeNames: {
+      '#uuid': 'uuid'
+    },
+    ExpressionAttributeValues: {
+      ':photoId': photoId
+    }
+  };
+
+  const docClient = new AWS.DynamoDB.DocumentClient();
+
+  return docClient.scan(params).promise().then((data) => {
+    const item = data.Items[0];
+    item.userId = userId;
+    return storePhoto(item);
+  });
+};
+
 const getRequest = (toId, fromId) => {
   const params = {
     TableName: `echt.${stage}.friends`,
@@ -53,8 +87,6 @@ const updateRequest = (toId, fromId, status) => {
   return docClient.update(params).promise().then((data) => {
     return getRequest(toId, fromId);
   }).then((friend) => {
-    console.log('#updateRequest');
-    console.log(friend);
     return friend;
   });
 };
@@ -67,8 +99,16 @@ exports.handler = (request) => {
 
   assert(request.body.uuid);
 
+  var friend;
+
   return updateRequest(deviceKey.userId, request.body.uuid, STATUS.ACCEPTED)
-    .then((friend) => {
+    .then((result) => {
+      friend = result;
+
+      // Share the selfie photo to your newsfeed
+      return addPhotoToNewsfeed(deviceKey.userId, result.photoId);
+    })
+    .then(() => {
       return {
         success: true,
         friend: friend

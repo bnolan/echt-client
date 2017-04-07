@@ -33,7 +33,7 @@ test('⚡️  empty table', (t) => {
     });
 });
 
-test('full user flow', (t) => {
+test('🏊  full user flow', (t) => {
   var ben = {
     deviceKey: null,
     user: null
@@ -193,7 +193,7 @@ test('full user flow', (t) => {
 
       ingoUuid = photo.actions[0].user.uuid;
 
-      a.post('/friends', { user: ingoUuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
+      a.post('/friends', { user: ingoUuid, photoId: photo.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.friend);
         t.equal(r.friend.status, STATUS.PENDING);
@@ -227,9 +227,6 @@ test('full user flow', (t) => {
       t.plan(4);
 
       a.get('/friends', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {
-        console.log('/friends');
-        console.log(r);
-
         t.ok(r.success);
         t.equal(r.friends.length, 1);
         t.equal(r.friends[0].status, STATUS.PROPOSED);
@@ -250,7 +247,7 @@ test('full user flow', (t) => {
 
     // Ingo can see the selfie ben took of them both
 
-    t.skip('get newsfeed', (t) => {
+    t.test('get newsfeed', (t) => {
       t.plan(4);
 
       a.get('/photos', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {

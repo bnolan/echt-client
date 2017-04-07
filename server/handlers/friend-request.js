@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const getStage = require('../helpers/get-stage');
 const STATUS = require('../constants').STATUS;
 const config = require('../config');
+const assert = require('assert');
 
 AWS.config.update({
   region: config.awsRegion
@@ -37,13 +38,19 @@ exports.handler = function (request) {
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);
 
+  assert(request.body.user);
+  assert(request.body.photoId);
+
   // Start constructing friend record
   var friend = {
     fromId: deviceKey.userId,
     toId: request.body.user,
+    photoId: request.body.photoId,
     createdAt: new Date().toISOString(),
     status: STATUS.PENDING
   };
+
+  // Todo - check friend and photo exists
 
   return storeFriend(friend, stage)
     .then(() => {
