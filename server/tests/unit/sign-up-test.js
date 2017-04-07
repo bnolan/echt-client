@@ -76,7 +76,7 @@ function getRequest () {
 
 test.skip('creates user with unique key', function (t) {
   const request = getRequest();
-  let results = [];
+  var results = [];
   Promise.all([
     signUp.handler(request).then((result) => results.push(result)),
     signUp.handler(request).then((result) => results.push(result))

@@ -186,7 +186,7 @@ test('full user flow', (t) => {
       });
     });
 
-    let ingoUuid;
+    var ingoUuid;
 
     t.test('send friend request', (t) => {
       t.plan(3);
