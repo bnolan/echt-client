@@ -186,10 +186,14 @@ test('full user flow', (t) => {
       });
     });
 
+    let ingoUuid;
+
     t.test('send friend request', (t) => {
       t.plan(3);
 
-      a.post('/friends', { user: photo.actions[0].user.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
+      ingoUuid = photo.actions[0].user.uuid;
+
+      a.post('/friends', { user: ingoUuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.friend);
         t.equal(r.friend.status, STATUS.PENDING);
@@ -197,13 +201,14 @@ test('full user flow', (t) => {
     });
 
     t.test('view friend request', (t) => {
-      t.plan(4);
+      t.plan(5);
 
       a.get('/friends', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
         t.ok(r.success);
         t.ok(r.friends);
         t.equal(r.friends.length, 1);
         t.equal(r.friends[0].status, STATUS.PENDING);
+        t.equal(r.friends[0].toId, ingoUuid);
       });
     });
 
@@ -218,22 +223,26 @@ test('full user flow', (t) => {
 
     var friend;
 
-    t.skip('view pending request', (t) => {
-      t.plan(3);
+    t.test('view pending request', (t) => {
+      t.plan(4);
 
       a.get('/friends', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {
+        console.log('/friends');
+        console.log(r);
+
         t.ok(r.success);
         t.equal(r.friends.length, 1);
         t.equal(r.friends[0].status, STATUS.PROPOSED);
+        t.equal(r.friends[0].uuid, ben.user.uuid);
 
         friend = r.friends[0];
       });
     });
 
-    t.skip('accept friend request', (t) => {
-      t.plan(4);
+    t.test('accept friend request', (t) => {
+      t.plan(2);
 
-      a.put(`/friends/${friend.user.uuid}`, { status: STATUS.ACCEPTED }, { 'x-devicekey': ingo.deviceKey }, (r) => {
+      a.put('/friends', { uuid: friend.uuid, status: STATUS.ACCEPTED }, { 'x-devicekey': ingo.deviceKey }, (r) => {
         t.ok(r.success);
         t.equal(r.friend.status, STATUS.ACCEPTED);
       });

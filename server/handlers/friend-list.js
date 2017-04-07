@@ -39,12 +39,17 @@ const getProposals = (uuid) => {
   const docClient = new AWS.DynamoDB.DocumentClient();
 
   return docClient.scan(params).promise().then((data) => {
-    return data.Items.forEach((friend) => {
+    data.Items.forEach((friend) => {
       if (friend.status === STATUS.PENDING) {
         // Pending requests to us we call proposed requests
         friend.status = STATUS.PROPOSED;
+        friend.uuid = friend.fromId;
+        delete friend.toId;
+        delete friend.fromId;
       }
     });
+
+    return data.Items;
   });
 };
 

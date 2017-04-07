@@ -24,7 +24,6 @@ class Automator {
 
   put (path, jsonBody, headers, callback) {
     let headersWithDefaults = Object.assign({'content-type': 'application/json'}, headers);
-    console.log('#put', arguments);
     app.proxyRouter({
       requestContext: {
         resourcePath: path,

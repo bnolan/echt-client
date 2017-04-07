@@ -18,6 +18,6 @@ api.post('/photos', uploadPhoto.handler);
 
 api.get('/friends', friends.handler);
 api.post('/friends', friendRequest.handler);
-api.put('/friends/{uuid}', confirmFriend.handler);
+api.put('/friends', confirmFriend.handler);
 
 module.exports = api;
