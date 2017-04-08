@@ -24,6 +24,12 @@ const getFriends = (uuid) => {
   const docClient = new AWS.DynamoDB.DocumentClient();
 
   return docClient.scan(params).promise().then((data) => {
+    data.Items.forEach(friend => {
+      friend.uuid = friend.toId;
+      delete friend.toId;
+      delete friend.fromId;
+    });
+
     return data.Items;
   });
 };
@@ -54,6 +60,33 @@ const getProposals = (uuid) => {
   });
 };
 
+/**
+ * @param {Array} friends Object with uuid attribute
+ * @return {Array} Matching users records
+ */
+const getUsersForFriends = (friends) => {
+  const table = `echt.${stage}.users`;
+  const uuids = _.uniq(friends.map(friend => friend.uuid));
+  const keys = uuids.map(uuid => {
+    return {
+      uuid: uuid,
+      userId: uuid
+    };
+  });
+  const params = {
+    RequestItems: {
+      [table]: {
+        Keys: keys
+      }
+    }
+  };
+
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  return docClient.batchGet(params).promise().then((data) => {
+    return data.Responses[table];
+  });
+};
+
 exports.handler = (request) => {
   const errorHandlers = addErrorReporter(request);
 
@@ -62,18 +95,31 @@ exports.handler = (request) => {
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);
 
+  // Closed over because ... broken promises
+  var friends;
+
   const queries = [getFriends(deviceKey.userId), getProposals(deviceKey.userId)];
 
-  return Promise.all(queries).then((results) => {
-    // todo - concatenate friends from user object
-
-    var friends = _.flatten(results);
-    friends = _.compact(friends);
-
-    return {
-      success: true,
-      friends: friends
-    };
-  })
-  .catch(errorHandlers.catchPromise);
+  return Promise.all(queries)
+    .then(responses => {
+      friends = _.flatten(responses);
+      friends = _.compact(friends);
+      return getUsersForFriends(friends);
+    })
+    .then(users => {
+      return friends.map(friend => {
+        const record = _.find(users, {uuid: friend.uuid});
+        if (record) {
+          friend.user = record.user;
+        }
+        return friend;
+      });
+    })
+    .then(friendsWithUsers => {
+      return {
+        success: true,
+        friends: friendsWithUsers
+      };
+    })
+    .catch(errorHandlers.catchPromise);
 };

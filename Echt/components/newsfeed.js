@@ -29,6 +29,11 @@ export default class Newsfeed extends React.Component {
     });
 
     AsyncStorage.getItem('deviceKey').then((key) => {
+      // No user registered yet
+      if (!key) {
+        return Promise.resolve();
+      }
+
       fetch(`${config.endpoint.uat}/photos`, {
         headers: {
           'Accept': 'application/json, text/plain, */*',
