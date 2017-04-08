@@ -6,10 +6,9 @@ import { ScrollView, AsyncStorage, TouchableHighlight, StyleSheet, Image, Text, 
 import Lightbox from 'react-native-lightbox';
 import RNFS from 'react-native-fs';
 import { CAMERA } from '../constants';
+import config from '../config';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
-
-const endpoint = 'https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat';
 
 export default class Newsfeed extends React.Component {
   constructor () {
@@ -30,9 +29,7 @@ export default class Newsfeed extends React.Component {
     });
 
     AsyncStorage.getItem('deviceKey').then((key) => {
-      console.log(key);
-
-      fetch(`${endpoint}/photos`, {
+      fetch(`${config.endpoint.uat}/photos`, {
         headers: {
           'Accept': 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
@@ -41,8 +38,6 @@ export default class Newsfeed extends React.Component {
       }).then(
         (response) => response.json()
       ).then((r) => {
-        console.log(r);
-
         this.setState({
           photos: r.items || []
         });
@@ -59,18 +54,14 @@ export default class Newsfeed extends React.Component {
 
       return this.camera.capture({metadata: options});
     }).then((data) => {
-      console.log(data.path);
       return RNFS.readFile(data.path, 'base64');
     }).then((data) => {
-      console.log(data.slice(0, 40));
-      console.log(data.length);
-
       const request = {
         image: data,
         camera: CAMERA.FRONT_FACING
       };
 
-      return fetch(`${endpoint}/photos`, {
+      return fetch(`${config.endpoint.uat}/photos`, {
         method: 'post',
         headers: {
           'Accept': 'application/json, text/plain, */*',
