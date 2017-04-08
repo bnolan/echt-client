@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "release-uat": "code-push release-react Echt ios"
+    "release-uat": "code-push release-react Echt ios",
+    "release-prod": "code-push promote Echt Staging Production"
   },
   "dependencies": {
     "react": "~15.4.1",
