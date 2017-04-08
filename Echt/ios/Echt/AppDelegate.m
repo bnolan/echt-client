@@ -8,6 +8,7 @@
  */
 
 #import "AppDelegate.h"
+#import <CodePush/CodePush.h>
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -18,9 +19,16 @@
 {
   NSURL *jsCodeLocation;
 
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  
+#ifdef DEBUG
+    jsCodeLocation = [NSURL URLWithString:@"http://10.0.0.136:8081/index.ios.bundle?platform=ios&dev=true"];
+    // jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+#else
+#endif
 
-  jsCodeLocation = [NSURL URLWithString:@"http://10.0.0.136:8081/index.ios.bundle?platform=ios&dev=true"];
+  jsCodeLocation = [CodePush bundleURL];
+
+  
 
   // jsCodeLocation = [NSURL URLWithString:@"https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/main.jsbundle"];
   

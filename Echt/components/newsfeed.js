@@ -52,7 +52,7 @@ export default class Newsfeed extends React.Component {
 
   takePhoto () {
     const options = {};
-    let key;
+    var key;
 
     AsyncStorage.getItem('deviceKey').then((k) => {
       key = k;
