@@ -13,6 +13,8 @@ In the `server/` folder, run `yarn`
 You'll need to [configure AWS access credentials](https://claudiajs.com/tutorials/installing.html). In case you're not using the default profile,
 remember to set the `AWS_PROFILE` environment variable accordingly.
 
+Get your [credentials from aws](https://942514019561.signin.aws.amazon.com/console).
+
  * `yarn run start`: Initialise the app (not required in an existing AWS setup)
  * `yarn run release-dev`: Deploys the current code to dev
  * `yarn run test`: Run all tests (interacts with AWS resources). You can run your own "stage" via `yarn run test -- --stage=<my-stage>` for integration tests.
