@@ -43,7 +43,7 @@ In the `Echt/` folder, run `yarn`
 
 ### Usage
 
- * `react-native run-ios`: Build for iOS and run in simulator
+ * `yarn run ios`: Build for iOS and run in simulator
 
 Adjust the server address in the `jsCodeLocation` variable in `ios/AppDelegate.m`
 if you want to run a local development server, rather than serving the JavaScript bundle from S3.
