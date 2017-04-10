@@ -205,6 +205,7 @@ exports.handler = (request) => {
     };
 
     photo.userId = user.uuid;
+    user.photo.uuid = photo.uuid;
 
     return storePhoto(photo, stage);
   }).then(() => {
