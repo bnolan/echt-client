@@ -47,7 +47,7 @@ test('🏊  full user flow', (t) => {
     t.test('start signup', (t) => {
       t.plan(2);
 
-      a.get('/sign-up', {}, {}, (r) => {
+      a.get('/sign-up', {}, {}).then(r => {
         t.ok(r.success);
         t.ok(r.deviceKey);
 
@@ -64,7 +64,7 @@ test('🏊  full user flow', (t) => {
       a.post('/sign-up', {
         image: b64,
         name: 'Ben'
-      }, { 'x-devicekey': ben.deviceKey }, (r) => {
+      }, { 'x-devicekey': ben.deviceKey }).then(r => {
         t.ok(r.success);
         t.ok(r.user);
         t.ok(r.user.uuid);
@@ -82,7 +82,7 @@ test('🏊  full user flow', (t) => {
     t.test('get newsfeed', (t) => {
       t.plan(4);
 
-      a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
+      a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }).then(r => {
         t.ok(r.success);
         t.ok(r.items);
         t.equal(r.items.length, 1);
@@ -96,7 +96,7 @@ test('🏊  full user flow', (t) => {
       const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-2.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
-      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }, (r) => {
+      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }).then(r => {
         t.ok(r.success);
         t.ok(r.photo);
         t.ok(r.photo.uuid);
@@ -122,7 +122,7 @@ test('🏊  full user flow', (t) => {
     t.test('get newsfeed again', (t) => {
       t.plan(5);
 
-      a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
+      a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }).then(r => {
         t.ok(r.success);
         t.ok(r.items);
         t.equal(r.items.length, 2);
@@ -143,7 +143,7 @@ test('🏊  full user flow', (t) => {
     t.test('signup', (t) => {
       t.plan(2);
 
-      a.get('/sign-up', {}, {}, (r) => {
+      a.get('/sign-up', {}, {}).then(r => {
         t.ok(r.success);
         ingo.deviceKey = r.deviceKey;
       });
@@ -154,7 +154,7 @@ test('🏊  full user flow', (t) => {
       a.post('/sign-up', {
         image: b64,
         name: 'Ingo'
-      }, { 'x-devicekey': ingo.deviceKey }, (r) => {
+      }, { 'x-devicekey': ingo.deviceKey }).then(r => {
         t.ok(r.success);
         ingo.user = r.user;
         ingo.deviceKey = r.deviceKey;
@@ -173,7 +173,7 @@ test('🏊  full user flow', (t) => {
       const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-ingo-1.jpg'));
       const b64 = new Buffer(image).toString('base64');
 
-      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }, (r) => {
+      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ben.deviceKey }).then(r => {
         t.ok(r.success);
 
         t.equal(r.photo.actions.length, 1);
@@ -193,7 +193,7 @@ test('🏊  full user flow', (t) => {
 
       ingoUuid = photo.actions[0].user.uuid;
 
-      a.post('/friends', { user: ingoUuid, photoId: photo.uuid }, { 'x-devicekey': ben.deviceKey }, (r) => {
+      a.post('/friends', { user: ingoUuid, photoId: photo.uuid }, { 'x-devicekey': ben.deviceKey }).then(r => {
         t.ok(r.success);
         t.ok(r.friend);
         t.equal(r.friend.status, STATUS.PENDING);
@@ -203,7 +203,7 @@ test('🏊  full user flow', (t) => {
     t.test('view friend request', (t) => {
       t.plan(5);
 
-      a.get('/friends', {}, { 'x-devicekey': ben.deviceKey }, (r) => {
+      a.get('/friends', {}, { 'x-devicekey': ben.deviceKey }).then(r => {
         t.ok(r.success);
         t.ok(r.friends);
         t.equal(r.friends.length, 1);
@@ -226,7 +226,7 @@ test('🏊  full user flow', (t) => {
     t.test('view pending request', (t) => {
       t.plan(4);
 
-      a.get('/friends', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {
+      a.get('/friends', {}, { 'x-devicekey': ingo.deviceKey }).then(r => {
         t.ok(r.success);
         t.equal(r.friends.length, 1);
         t.equal(r.friends[0].status, STATUS.PROPOSED);
@@ -239,7 +239,7 @@ test('🏊  full user flow', (t) => {
     t.test('accept friend request', (t) => {
       t.plan(2);
 
-      a.put('/friends', { uuid: friend.uuid, status: STATUS.ACCEPTED }, { 'x-devicekey': ingo.deviceKey }, (r) => {
+      a.put('/friends', { uuid: friend.uuid, status: STATUS.ACCEPTED }, { 'x-devicekey': ingo.deviceKey }).then(r => {
         t.ok(r.success);
         t.equal(r.friend.status, STATUS.ACCEPTED);
       });
@@ -250,7 +250,7 @@ test('🏊  full user flow', (t) => {
     t.test('get newsfeed', (t) => {
       t.plan(4);
 
-      a.get('/photos', {}, { 'x-devicekey': ingo.deviceKey }, (r) => {
+      a.get('/photos', {}, { 'x-devicekey': ingo.deviceKey }).then(r => {
         t.ok(r.success);
         t.equal(r.items.length, 2);
 
