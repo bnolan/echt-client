@@ -44,17 +44,13 @@ exports.handler = function (request) {
   assert(request.body.user);
   assert(request.body.photoId);
 
-  // Allow status override for testing purposes
-  // TODO Replace with user.isAdmin permission check
-  const status = request.body._status || STATUS.PENDING;
-
   // Start constructing friend record
   var friend = {
     fromId: deviceKey.userId,
     toId: request.body.user,
     photoId: request.body.photoId,
     createdAt: new Date().toISOString(),
-    status: status
+    status: STATUS.PENDING
   };
 
   // Todo - check friend and photo exists
