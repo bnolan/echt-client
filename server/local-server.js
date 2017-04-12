@@ -18,7 +18,7 @@ app.all('/:path', function (req, res) {
   const headers = req.headers;
   console.log(path);
   a[method](path, body, headers).then(r => {
-    console.log(r);
+    console.log(JSON.stringify(r));
     res.type('json');
     res.send(r);
   });
