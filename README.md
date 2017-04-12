@@ -70,3 +70,10 @@ Code push has a `Staging` and `Production` stage. You can release to them via th
  * `yarn run release-uat`: Pushes the current iOS react-native bundle to uat (`Staging`)
  * `yarn run release-prod`: [Promotes](http://microsoft.github.io/code-push/docs/cli.html#link-7)
    the `Staging` code to `Production`
+
+### Local Server
+
+You can run a simple local copy of the Lambda commands via `yarn run server`.
+It'll use the ClaudiaJS proxying system to use locally executed handlers
+instead of Lambda functions, but interact with the real AWS services.
+Force a different stage via `yarn run server -- --stage=dev-ingo`,
