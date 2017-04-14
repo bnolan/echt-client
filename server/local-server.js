@@ -16,9 +16,10 @@ app.all('/:path', function (req, res) {
   const path = req.path;
   const body = (method === 'get') ? qs.stringify(req.query) : req.body;
   const headers = req.headers;
-  console.log(path);
+  const id = `${req.method} ${path}`;
+  console.log(id);
   a[method](path, body, headers).then(r => {
-    console.log(JSON.stringify(r));
+    console.log(id, JSON.stringify(r, null, ' '));
     res.type('json');
     res.send(r);
   });
