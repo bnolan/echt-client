@@ -262,7 +262,17 @@ test('🏊  full user flow', (t) => {
 
     // Ingo takes a photo of hashigo zake
 
-    // ...
+    t.test('take selfie', (t) => {
+      t.plan(2);
+
+      const image = fs.readFileSync(path.join(__dirname, '../fixtures/hashigo.jpg'));
+      const b64 = new Buffer(image).toString('base64');
+
+      a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ingo.deviceKey }).then(r => {
+        t.ok(r.success);
+        t.ok(r.photo);
+      });
+    });
 
     t.end();
   });

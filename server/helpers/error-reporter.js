@@ -6,12 +6,10 @@ module.exports = function addErrorReporter (request) {
   const stage = getStage(request.lambdaContext);
 
   if (stage !== 'uat') {
-    console.log('not uat');
     return {};
   }
 
   if (!request.lambdaContext.awsRequestId) {
-    console.log('not aws request id');
     return {};
   }
 

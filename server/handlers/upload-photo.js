@@ -283,7 +283,9 @@ exports.handler = function (request) {
 
     const actions = [];
 
-    if (userIds.length === 1) {
+    if (!userIds) {
+      // No photos
+    } else if (userIds.length === 1) {
       // Potential selfie
       if (userIds[0] === userId) {
         photo.isSelfie = true;
