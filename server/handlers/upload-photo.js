@@ -6,6 +6,7 @@ const resize = require('../helpers/resize');
 const _ = require('lodash');
 const ACTION = require('../constants').ACTION;
 const config = require('../config');
+const addErrorReporter = require('../helpers/error-reporter');
 
 const S3 = new AWS.S3();
 
@@ -165,6 +166,8 @@ var addFriend = (userId, stage) => {
 };
 
 exports.handler = function (request) {
+  addErrorReporter(request);
+
   // const photoKey = request.body.photoKey;
 
   const stage = getStage(request.lambdaContext);

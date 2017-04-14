@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const STATUS = require('../constants').STATUS;
 const _ = require('lodash');
 const config = require('../config');
+const addErrorReporter = require('../helpers/error-reporter');
 
 AWS.config.update({
   region: config.awsRegion
@@ -54,6 +55,8 @@ const getProposals = (uuid) => {
 };
 
 exports.handler = (request) => {
+  addErrorReporter(request);
+
   stage = getStage(request.lambdaContext);
 
   // fixme - use verify with a key

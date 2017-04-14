@@ -6,6 +6,7 @@ const resize = require('../helpers/resize');
 const ACCOUNT = require('../constants').ACCOUNT;
 const CAMERA = require('../constants').CAMERA;
 const config = require('../config');
+const addErrorReporter = require('../helpers/error-reporter');
 
 AWS.config.update({
   region: config.awsRegion
@@ -125,6 +126,8 @@ function generateRegisteredKey (user) {
 }
 
 exports.handler = (request) => {
+  addErrorReporter(request);
+
   // fixme - use verify with a key
   // const userKey = jwt.decode(request.headers['x-devicekey']);
 

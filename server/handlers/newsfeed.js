@@ -3,6 +3,7 @@ const getStage = require('../helpers/get-stage');
 const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const config = require('../config');
+const addErrorReporter = require('../helpers/error-reporter');
 
 AWS.config.update({
   // Region needs to be supported by Rekognition (and match the S3 bucket)
@@ -12,6 +13,8 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = (request) => {
+  addErrorReporter(request);
+
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);
 

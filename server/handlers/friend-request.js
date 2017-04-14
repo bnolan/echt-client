@@ -4,6 +4,7 @@ const getStage = require('../helpers/get-stage');
 const STATUS = require('../constants').STATUS;
 const config = require('../config');
 const assert = require('assert');
+const addErrorReporter = require('../helpers/error-reporter');
 
 AWS.config.update({
   region: config.awsRegion
@@ -32,6 +33,8 @@ var storeFriend = (friend) => {
 // todo - post to FriendRequests table
 
 exports.handler = function (request) {
+  addErrorReporter(request);
+
   // const photoKey = request.body.photoKey;
   stage = getStage(request.lambdaContext);
 
