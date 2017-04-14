@@ -13,6 +13,8 @@ module.exports = function addErrorReporter (request) {
     return;
   }
 
+  console.log('Registering raygun handler');
+
   const raygun = require('raygun');
   const raygunClient = new raygun.Client().init({ apiKey: 't4ZsXM91R2CW+V5SfmxcrA==' });
 
@@ -21,7 +23,7 @@ module.exports = function addErrorReporter (request) {
   });
 
   // Not sure if this is the right way to do it
-  process.on('unhandledRejection', (reason, p) => {
+  process.on('unhandledRejection', function (reason, p) {
     try {
       // the synchronous code that we want to catch thrown errors on
       var err = new Error(`Possibly Unhandled Rejection at.\n\nPromise ${p}\n\nReason ${reason}`);
