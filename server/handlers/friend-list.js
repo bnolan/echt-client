@@ -92,7 +92,7 @@ exports.handler = (request) => {
       return friends.map(friend => {
         const record = _.find(users, {uuid: friend.uuid});
         if (record) {
-          friend.user = record.user;
+          friend = Object.assign(friend, record.user);
         }
         return friend;
       });

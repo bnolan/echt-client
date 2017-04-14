@@ -209,7 +209,7 @@ test('🏊  full user flow', (t) => {
         t.equal(r.friends.length, 1);
         t.equal(r.friends[0].status, STATUS.PENDING);
         t.equal(r.friends[0].uuid, ingoUuid);
-        t.ok(r.friends[0].user);
+        t.ok(r.friends[0].name);
       });
     });
 

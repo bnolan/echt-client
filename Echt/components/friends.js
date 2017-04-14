@@ -1,16 +1,14 @@
 import React from 'react';
-import { Modal, TouchableHighlight, AsyncStorage, StyleSheet, Image, Text, View } from 'react-native';
-import Settings from './settings';
+import { AsyncStorage, StyleSheet, FlatList, Text, View } from 'react-native';
+import Friend from './friend';
 import config from '../config';
-import moment from 'moment';
 
 export default class Friends extends React.Component {
   constructor () {
     super();
 
     this.state = {
-      friends: [],
-      settingsVisible: false
+      friends: []
     };
   }
 
@@ -41,25 +39,23 @@ export default class Friends extends React.Component {
       });
   }
 
-  render () {
-    const friends = this.state.friends.map((friend) => {
-      console.log('friend', friend);
-      const since = moment(friend.createdAt).format('MMMM \'YY');
-      return (
-        <View key={friend.uuid}>
-          <Image
-            style={{width: 120, height: 120}}
-            source={{uri: friend.user.photo.small.url}}
-          />
-          {friend.user.name && <Text>{friend.user.name}</Text>}
-          <Text>{since}</Text>
-        </View>
-      );
-    });
+  renderItem({item}) {
+    return (<Friend {...item} />);
+  }
 
+  keyExtractor(item) {
+    return item.uuid;
+  }
+
+  render () {
     return (
       <View>
-        {friends}
+        <FlatList
+          data={this.state.friends}
+          renderItem={this.renderItem}
+          keyExtractor={this.keyExtractor}
+          horizontal={true}
+        />
       </View>
     );
   }
