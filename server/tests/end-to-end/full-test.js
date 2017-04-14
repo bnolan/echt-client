@@ -225,12 +225,13 @@ test('🏊  full user flow', (t) => {
     var friend;
 
     t.test('view pending request', (t) => {
-      t.plan(4);
+      t.plan(5);
 
       a.get('/friends', {}, { 'x-devicekey': ingo.deviceKey }).then(r => {
         t.ok(r.success);
         t.equal(r.friends.length, 1);
-        t.equal(r.friends[0].status, STATUS.PROPOSED);
+        t.equal(r.friends[0].status, STATUS.PENDING);
+        t.equal(r.friends[0].requester, false);
         t.equal(r.friends[0].uuid, ben.user.uuid);
 
         friend = r.friends[0];

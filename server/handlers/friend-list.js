@@ -15,48 +15,21 @@ var stage;
 const getFriends = (uuid) => {
   const params = {
     TableName: `echt.${stage}.friends`,
-    FilterExpression: 'fromId = :id',
+    KeyConditionExpression: 'fromId = :fromId',
     ExpressionAttributeValues: {
-      ':id': uuid
+      ':fromId': uuid
     }
   };
 
   const docClient = new AWS.DynamoDB.DocumentClient();
 
-  return docClient.scan(params).promise().then((data) => {
-    data.Items.forEach(friend => {
+  return docClient.query(params).promise().then((data) => {
+    return data.Items.map(friend => {
       friend.uuid = friend.toId;
       delete friend.toId;
       delete friend.fromId;
+      return friend;
     });
-
-    return data.Items;
-  });
-};
-
-const getProposals = (uuid) => {
-  const params = {
-    TableName: `echt.${stage}.friends`,
-    FilterExpression: 'toId = :id',
-    ExpressionAttributeValues: {
-      ':id': uuid
-    }
-  };
-
-  const docClient = new AWS.DynamoDB.DocumentClient();
-
-  return docClient.scan(params).promise().then((data) => {
-    data.Items.forEach((friend) => {
-      if (friend.status === STATUS.PENDING) {
-        // Pending requests to us we call proposed requests
-        friend.status = STATUS.PROPOSED;
-        friend.uuid = friend.fromId;
-        delete friend.toId;
-        delete friend.fromId;
-      }
-    });
-
-    return data.Items;
   });
 };
 
@@ -67,6 +40,12 @@ const getProposals = (uuid) => {
 const getUsersForFriends = (friends) => {
   const table = `echt.${stage}.users`;
   const uuids = _.uniq(friends.map(friend => friend.uuid));
+
+  if (!uuids.length) {
+    return [];
+  }
+
+  // TODO Limit returned data about user
   const keys = uuids.map(uuid => {
     return {
       uuid: uuid,
@@ -76,7 +55,12 @@ const getUsersForFriends = (friends) => {
   const params = {
     RequestItems: {
       [table]: {
-        Keys: keys
+        Keys: keys,
+        ProjectionExpression: '#uuid,#user.name,#user.photo',
+        ExpressionAttributeNames: {
+          '#uuid': 'uuid',
+          '#user': 'user'
+        }
       }
     }
   };
@@ -98,12 +82,9 @@ exports.handler = (request) => {
   // Closed over because ... broken promises
   var friends;
 
-  const queries = [getFriends(deviceKey.userId), getProposals(deviceKey.userId)];
-
-  return Promise.all(queries)
-    .then(responses => {
-      friends = _.flatten(responses);
-      friends = _.compact(friends);
+  return getFriends(deviceKey.userId)
+    .then(_friends => {
+      friends = _friends;
       return getUsersForFriends(friends);
     })
     .then(users => {
