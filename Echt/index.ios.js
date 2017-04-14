@@ -4,6 +4,7 @@ import Swiper from 'react-native-swiper';
 import Camera from './components/camera';
 import Newsfeed from './components/newsfeed';
 import Friends from './components/friends';
+import Settings from './components/settings';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
@@ -33,6 +34,9 @@ export default class Echt extends React.Component {
         </View>
         <View style={styles.slide3}>
           <Friends />
+        </View>
+        <View style={styles.slide4}>
+          <Settings />
         </View>
       </Swiper>
     );
@@ -64,6 +68,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#97CAE5',
   },
   slide3: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#92BBD9',
+  },
+  slide4: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

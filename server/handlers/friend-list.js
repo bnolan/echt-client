@@ -56,10 +56,11 @@ const getUsersForFriends = (friends) => {
     RequestItems: {
       [table]: {
         Keys: keys,
-        ProjectionExpression: '#uuid,#user.name,#user.photo',
+        ProjectionExpression: '#uuid,#user.#name,#user.photo',
         ExpressionAttributeNames: {
           '#uuid': 'uuid',
-          '#user': 'user'
+          '#user': 'user',
+          '#name': 'name'
         }
       }
     }

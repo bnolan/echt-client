@@ -41,15 +41,6 @@ export default class Friends extends React.Component {
       });
   }
 
-  onSettingsOpen (e) {
-    this.setState({settingsVisible: true});
-  }
-
-  onSettingsClose (e) {
-    this.setState({settingsVisible: false});
-    this.reload();
-  }
-
   render () {
     const friends = this.state.friends.map((friend) => {
       console.log('friend', friend);
@@ -68,17 +59,6 @@ export default class Friends extends React.Component {
 
     return (
       <View>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={this.state.settingsVisible}>
-          <Settings onClose={(e) => this.onSettingsClose()} />
-        </Modal>
-
-        <TouchableHighlight onPress={(e) => this.onSettingsOpen()}>
-          <View style={styles.settingsButton}><Text>Settings</Text></View>
-        </TouchableHighlight>
-
         {friends}
       </View>
     );
@@ -86,9 +66,4 @@ export default class Friends extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  settingsButton: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 4
-  }
 });
