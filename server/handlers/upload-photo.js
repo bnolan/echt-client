@@ -166,7 +166,7 @@ var addFriend = (userId, stage) => {
 };
 
 exports.handler = function (request) {
-  addErrorReporter(request);
+  const errorHandlers = addErrorReporter(request);
 
   // const photoKey = request.body.photoKey;
 
@@ -320,5 +320,5 @@ exports.handler = function (request) {
       success: true,
       photo: photo
     };
-  });
+  }).catch(errorHandlers.catchPromise);
 };

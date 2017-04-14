@@ -13,7 +13,7 @@ AWS.config.update({
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = (request) => {
-  addErrorReporter(request);
+  const errorHandlers = addErrorReporter(request);
 
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);
@@ -35,5 +35,6 @@ exports.handler = (request) => {
         return 0 - new Date(i.createdAt).getTime();
       })
     };
-  });
+  })
+  .catch(errorHandlers.catchPromise);
 };

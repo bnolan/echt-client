@@ -55,7 +55,7 @@ const getProposals = (uuid) => {
 };
 
 exports.handler = (request) => {
-  addErrorReporter(request);
+  const errorHandlers = addErrorReporter(request);
 
   stage = getStage(request.lambdaContext);
 
@@ -74,5 +74,6 @@ exports.handler = (request) => {
       success: true,
       friends: friends
     };
-  });
+  })
+  .catch(errorHandlers.catchPromise);
 };

@@ -93,7 +93,7 @@ const updateRequest = (toId, fromId, status) => {
 };
 
 exports.handler = (request) => {
-  addErrorReporter(request);
+  const errorHandlers = addErrorReporter(request);
 
   stage = getStage(request.lambdaContext);
 
@@ -116,5 +116,6 @@ exports.handler = (request) => {
         success: true,
         friend: friend
       };
-    });
+    })
+    .catch(errorHandlers.catchPromise);
 };

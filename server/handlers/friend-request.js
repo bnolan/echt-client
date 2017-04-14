@@ -33,7 +33,7 @@ var storeFriend = (friend) => {
 // todo - post to FriendRequests table
 
 exports.handler = function (request) {
-  addErrorReporter(request);
+  const errorHandlers = addErrorReporter(request);
 
   // const photoKey = request.body.photoKey;
   stage = getStage(request.lambdaContext);
@@ -68,5 +68,6 @@ exports.handler = function (request) {
           status: friend.status
         }
       };
-    });
+    })
+    .catch(errorHandlers.catchPromise);
 };

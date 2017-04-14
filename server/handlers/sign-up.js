@@ -126,7 +126,7 @@ function generateRegisteredKey (user) {
 }
 
 exports.handler = (request) => {
-  addErrorReporter(request);
+  const errorHandlers = addErrorReporter(request);
 
   // fixme - use verify with a key
   // const userKey = jwt.decode(request.headers['x-devicekey']);
@@ -219,5 +219,6 @@ exports.handler = (request) => {
       deviceKey: newKey,
       user: user
     };
-  });
+  })
+  .catch(errorHandlers.catchPromise);
 };
