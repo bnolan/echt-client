@@ -55,12 +55,12 @@ export default class Friends extends React.Component {
       console.log('friend', friend);
       const since = moment(friend.createdAt).format('MMMM \'YY');
       return (
-        <View key={friend.toId}>
+        <View key={friend.uuid}>
           <Image
             style={{width: 120, height: 120}}
             source={{uri: friend.user.photo.small.url}}
           />
-          (friend.user.name && <Text>{friend.user.name}</Text>
+          {friend.user.name && <Text>{friend.user.name}</Text>}
           <Text>{since}</Text>
         </View>
       );
