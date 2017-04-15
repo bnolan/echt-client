@@ -29,6 +29,11 @@ export default class Newsfeed extends React.Component {
     });
 
     AsyncStorage.getItem('deviceKey').then((key) => {
+      // No user registered yet
+      if (!key) {
+        return Promise.resolve();
+      }
+
       fetch(`${config.endpoint.uat}/photos`, {
         headers: {
           'Accept': 'application/json, text/plain, */*',
@@ -123,33 +128,6 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     flex: 0
-  },
-  shutter: {
-    borderWidth: 4,
-    borderColor: 'white',
-    width: 64,
-    height: 64,
-    borderRadius: 64,
-    marginTop: 500
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  slide1: {
-    flex: 1,
-    backgroundColor: '#ff00aa'
-  },
-  slide2: {
-    flex: 1,
-    backgroundColor: '#97CAE5',
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
   },
   text: {
     color: '#fff',

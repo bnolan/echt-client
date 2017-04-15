@@ -12,13 +12,11 @@ export default class Settings extends React.Component {
 
     AsyncStorage.setItem('userName', name);
     AsyncStorage.setItem('deviceKey', keys[name]);
-
-    this.props.onClose();
   }
 
   render () {
     return (
-      <View style={styles.userList}>
+      <View>
         <View style={styles.userButton}>
           <TouchableHighlight underlayColor='#ccc' onPress={(e) => this.setUser('ben')}>
             <Text style={styles.userText}>Become 👨 Ben</Text>
@@ -30,28 +28,13 @@ export default class Settings extends React.Component {
             <Text style={styles.userText}>Become 👳 Ingo</Text>
           </TouchableHighlight>
         </View>
-  
+
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  userList: {
-    flexDirection: 'column',
-    flex: 1,
-    margin: 20,
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 2,
-    shadowColor: 'black',
-    shadowOffset: {
-      width: 2, height: 2
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 8
-  },
-
   userButton: {
     marginTop: 12,
     borderRadius: 4,
@@ -62,4 +45,3 @@ const styles = StyleSheet.create({
     padding: 10
   }
 });
-

@@ -71,6 +71,10 @@ const createFaces = (stage) => {
 };
 
 const createFriends = (stage) => {
+  // Each friendship is denormalised into two rows, so that you can easily
+  // query all friends for a user by fromId, regardless
+  // who initiated the friendship. This ensures efficient DynamoDB querying
+  // without duplicate provisioned throughput for a global secondary index.
   return create({
     TableName: `echt.${stage}.friends`,
     KeySchema: [

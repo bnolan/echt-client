@@ -44,30 +44,42 @@ exports.handler = function (request) {
   assert(request.body.user);
   assert(request.body.photoId);
 
-  // Allow status override for testing purposes
-  // TODO Replace with user.isAdmin permission check
-  const status = request.body._status || STATUS.PENDING;
+  const requester = deviceKey.userId;
+  const recipient = request.body.user;
 
   // Start constructing friend record
-  var friend = {
-    fromId: deviceKey.userId,
-    toId: request.body.user,
+  var base = {
     photoId: request.body.photoId,
     createdAt: new Date().toISOString(),
-    status: status
+    status: STATUS.PENDING
   };
 
-  // Todo - check friend and photo exists
+  // TODO Check friend and photo exists
+  // TODO Check if friendship already exists (avoid duplicate key error)
 
-  return storeFriend(friend, stage)
-    .then(() => {
-      return {
-        success: true,
-        friend: {
-          uuid: friend.toId,
-          status: friend.status
-        }
-      };
-    })
-    .catch(errorHandlers.catchPromise);
+  // Each friendship is denormalised into two rows, so that you can easily
+  // query all friends for a user by fromId, regardless
+  // who initiated the friendship. This ensures efficient DynamoDB querying
+  // without duplicate provisioned throughput for a global secondary index.
+  return Promise.all([
+    storeFriend(Object.assign({}, base, {
+      fromId: requester,
+      toId: recipient,
+      requester: true
+    }), stage),
+    storeFriend(Object.assign({}, base, {
+      fromId: recipient,
+      toId: requester,
+      requester: false
+    }), stage)
+  ]).then(() => {
+    return {
+      success: true,
+      friend: {
+        uuid: recipient,
+        status: STATUS.PENDING
+      }
+    };
+  })
+  .catch(errorHandlers.catchPromise);
 };

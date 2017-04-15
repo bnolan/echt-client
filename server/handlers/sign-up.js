@@ -61,9 +61,6 @@ var storePhoto = (photo, stage) => {
 var storeFace = (faceId, userId, stage) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
-  console.log('#storeFace');
-  console.log(faceId);
-
   var params = {
     TableName: `echt.${stage}.faces`,
     Item: {
@@ -96,8 +93,6 @@ var indexFace = (objectKey, stage) => {
     }
   };
   return rekognitionClient.indexFaces(params).promise().then((response) => {
-    console.log(JSON.stringify(response));
-
     // TODO Fail when more than one face detected
     // TODO Limit multi face failure to similar bounding boxes,
     // avoid failing when photo captures people in the background

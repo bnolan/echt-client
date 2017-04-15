@@ -5,14 +5,17 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "ios": "react-native run-ios",
+    "react-native": "react-native",
     "log-ios": "react-native log-ios",
     "test": "jest",
     "release-uat": "code-push release-react Echt ios",
     "release-prod": "code-push promote Echt Staging Production"
   },
   "dependencies": {
-    "react": "~15.4.1",
-    "react-native": "0.42.3",
+    "momentjs": "^2.0.0",
+    "prop-types": "^15.5.8",
+    "react": "16.0.0-alpha.6",
+    "react-native": "^0.43.3",
     "react-native-camera": "https://github.com/lwansbrough/react-native-camera.git",
     "react-native-code-push": "^2.0.1-beta",
     "react-native-fs": "^2.1.0-rc.1",

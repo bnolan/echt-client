@@ -28,7 +28,7 @@ var storePhoto = (photo) => {
 const addPhotoToNewsfeed = (userId, photoId) => {
   const params = {
     TableName: `echt.${stage}.photos`,
-    FilterExpression: '#uuid = :photoId',
+    KeyConditionExpression: '#uuid = :photoId',
     ExpressionAttributeNames: {
       '#uuid': 'uuid'
     },
@@ -39,35 +39,15 @@ const addPhotoToNewsfeed = (userId, photoId) => {
 
   const docClient = new AWS.DynamoDB.DocumentClient();
 
-  return docClient.scan(params).promise().then((data) => {
+  return docClient.query(params).promise().then((data) => {
     const item = data.Items[0];
     item.userId = userId;
     return storePhoto(item);
   });
 };
 
-const getRequest = (toId, fromId) => {
-  const params = {
-    TableName: `echt.${stage}.friends`,
-    FilterExpression: 'fromId = :fromId AND toId = :toId',
-    ExpressionAttributeValues: {
-      ':fromId': fromId,
-      ':toId': toId
-    }
-  };
-
+const updateRequest = (fromId, toId, status) => {
   const docClient = new AWS.DynamoDB.DocumentClient();
-
-  return docClient.scan(params).promise().then((data) => {
-    const item = data.Items[0];
-    item.uuid = item.fromId;
-    delete item.fromId;
-    delete item.toId;
-    return item;
-  });
-};
-
-const updateRequest = (toId, fromId, status) => {
   const params = {
     TableName: `echt.${stage}.friends`,
     Key: {
@@ -80,15 +60,12 @@ const updateRequest = (toId, fromId, status) => {
     },
     ExpressionAttributeValues: {
       ':status': status
-    }
+    },
+    ReturnValues: 'ALL_NEW'
   };
 
-  const docClient = new AWS.DynamoDB.DocumentClient();
-
-  return docClient.update(params).promise().then((data) => {
-    return getRequest(toId, fromId);
-  }).then((friend) => {
-    return friend;
+  return docClient.update(params).promise().then(data => {
+    return data.Attributes;
   });
 };
 
@@ -104,18 +81,23 @@ exports.handler = (request) => {
 
   var friend;
 
-  return updateRequest(deviceKey.userId, request.body.uuid, STATUS.ACCEPTED)
-    .then((result) => {
-      friend = result;
+  // The recipient confirms the request from the requester
+  const requester = request.body.uuid;
+  const recipient = deviceKey.userId;
 
-      // Share the selfie photo to your newsfeed
-      return addPhotoToNewsfeed(deviceKey.userId, result.photoId);
-    })
-    .then(() => {
-      return {
-        success: true,
-        friend: friend
-      };
-    })
-    .catch(errorHandlers.catchPromise);
+  return Promise.all([
+    updateRequest(requester, recipient, STATUS.ACCEPTED),
+    updateRequest(recipient, requester, STATUS.ACCEPTED)
+  ]).then((results) => {
+    friend = results[0];
+    // Share the selfie photo to your newsfeed
+    return addPhotoToNewsfeed(recipient, friend.photoId);
+  })
+  .then(() => {
+    return {
+      success: true,
+      friend: friend
+    };
+  })
+  .catch(errorHandlers.catchPromise);
 };
