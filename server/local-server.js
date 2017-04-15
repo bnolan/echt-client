@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require('body-parser');
 const Automator = require('./tests/helpers/automator');
 const yargs = require('yargs')
     .default('stage', 'uat')
@@ -10,6 +11,7 @@ global.ECHT_STAGE = yargs.stage;
 
 const a = new Automator();
 const app = express();
+app.use(bodyParser.json());
 
 app.all('/:path', function (req, res) {
   const method = req.method.toLowerCase();
