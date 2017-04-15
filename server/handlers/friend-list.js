@@ -1,7 +1,6 @@
 const AWS = require('aws-sdk');
 const getStage = require('../helpers/get-stage');
 const jwt = require('jsonwebtoken');
-const STATUS = require('../constants').STATUS;
 const _ = require('lodash');
 const config = require('../config');
 const addErrorReporter = require('../helpers/error-reporter');
