@@ -11,6 +11,7 @@ import config from '../config';
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
 export default class Camera extends React.Component {
+
   constructor () {
     super();
 
@@ -84,8 +85,6 @@ export default class Camera extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  wrapper: {
-  },
   cameraType: {
     borderWidth: 4,
     borderColor: 'red',
@@ -106,39 +105,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center'
-  },
-  slide1: {
-    flex: 1,
-    backgroundColor: '#ff00aa'
-  },
-  slide2: {
-    flex: 1,
-    backgroundColor: '#97CAE5'
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9'
-  },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold'
-  },
-  date: {
-    width: 120,
-    height: 120,
-    padding: 20,
-    backgroundColor: '#777'
-  },
-  dateText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white'
-  },
-  container: {
-    backgroundColor: '#fff',
-    flexDirection: 'column'
   }
 });

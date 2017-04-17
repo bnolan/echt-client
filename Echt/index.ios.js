@@ -1,113 +1,90 @@
 import React from 'react';
 import { AppRegistry, StyleSheet, View } from 'react-native';
-import Swiper from 'react-native-swiper';
+import { TabNavigator } from 'react-navigation';
 import Camera from './components/camera';
 import Newsfeed from './components/newsfeed';
 import Friends from './components/friends';
 import Welcome from './components/welcome';
 import Settings from './components/settings';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
-export default class Echt extends React.Component {
-  get loggedIn () {
-    return true;
-  }
-
-  render () {
-    /*
-
-      We have to have removeClippedSubviews={true} or the camera component
-      just renders as black
-
-      https://github.com/lwansbrough/react-native-camera/issues/585
-
-    */
-
-    if (!this.loggedIn) {
-      return <Welcome />;
+const Echt = TabNavigator({
+  Camera: {
+    screen: Camera,
+    path: '',
+    navigationOptions: {
+      // Workaround: https://github.com/react-community/react-navigation/pull/152#issuecomment-289256939
+      // Should be replaced by https://github.com/react-community/react-navigation/pull/984 on next release of the lib
+      tabBar: (navigation, defaultOptions) => ({
+        ...defaultOptions,
+        title: 'Camera',
+        visible: false,
+        icon: ({ tintColor, focused }) => (
+          <Ionicons
+            name={focused ? 'ios-camera' : 'ios-camera-outline'}
+            size={26}
+            style={{ color: tintColor }}
+          />
+        )
+      })
     }
-
-    return (
-      <Swiper
-        ref={(swiper) => { this.swiper = swiper; }}
-        style={styles.wrapper}
-        showsPagination={false}
-        removeClippedSubviews={true}
-        loop={false}>
-        <View style={styles.slide1}>
-          <Camera />
-        </View>
-        <View style={styles.slide2}>
-          <Newsfeed />
-        </View>
-        <View style={styles.slide3}>
-          <Friends />
-        </View>
-        <View style={styles.slide4}>
-          <Settings />
-        </View>
-      </Swiper>
-    );
+  },
+  Newsfeed: {
+    screen: Newsfeed,
+    path: 'newsfeed',
+    navigationOptions: {
+      tabBar: (navigation, defaultOptions) => ({
+        title: 'Photos',
+        icon: ({ tintColor, focused }) => (
+          <Ionicons
+            name={focused ? 'ios-photos' : 'ios-photos-outline'}
+            size={26}
+            style={{ color: tintColor }}
+          />
+        )
+      })
+    }
+  },
+  Friends: {
+    screen: Friends,
+    path: 'friends',
+    navigationOptions: {
+      tabBar: (navigation, defaultOptions) => ({
+        title: 'Friends',
+        icon: ({ tintColor, focused }) => (
+          <Ionicons
+            name={focused ? 'ios-people' : 'ios-people-outline'}
+            size={26}
+            style={{ color: tintColor }}
+          />
+        )
+      })
+    }
+  },
+  Settings: {
+    screen: Settings,
+    path: 'settings',
+    navigationOptions: {
+      tabBar: (navigation, defaultOptions) => ({
+        title: 'Settings',
+        icon: ({ tintColor, focused }) => (
+          <Ionicons
+            name={focused ? 'ios-settings' : 'ios-settings-outline'}
+            size={26}
+            style={{ color: tintColor }}
+          />
+        )
+      })
+    }
   }
-}
-
-const styles = StyleSheet.create({
-  wrapper: {
+}, {
+  tabBarOptions: {
+    showLabel: false
   },
-  shutter: {
-    borderWidth: 4,
-    borderColor: 'white',
-    width: 64,
-    height: 64,
-    borderRadius: 64,
-    marginTop: 500
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  slide1: {
-    flex: 1,
-    backgroundColor: '#ff00aa'
-  },
-  slide2: {
-    flex: 1,
-    backgroundColor: '#97CAE5',
-  },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
-  },
-  slide4: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
-  },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  date: {
-    width: 120,
-    height: 120,
-    padding: 20,
-    backgroundColor: '#777'
-  },
-  dateText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: 'white'
-  },
-  container: {
-    backgroundColor: '#fff',
-    flexDirection: 'column'
-  }
+  swipeEnabled: true,
+  animationEnabled: true
 });
 
 AppRegistry.registerComponent('Echt', () => Echt);
