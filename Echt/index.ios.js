@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppRegistry, StyleSheet, View } from 'react-native';
-import { TabNavigator } from 'react-navigation';
+import { TabNavigator, StackNavigator } from 'react-navigation';
 import Camera from './components/camera';
 import Newsfeed from './components/newsfeed';
 import Friends from './components/friends';
@@ -10,7 +10,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
-const Echt = TabNavigator({
+const TabNavigatorMain = TabNavigator({
   Camera: {
     screen: Camera,
     path: '',
@@ -87,4 +87,19 @@ const Echt = TabNavigator({
   animationEnabled: true
 });
 
-AppRegistry.registerComponent('Echt', () => Echt);
+const AppNavigator = StackNavigator({
+  Main: {
+    screen: TabNavigatorMain,
+    path: 'main'
+  },
+  Welcome: {
+    screen: Welcome,
+    path: 'welcome'
+  },
+}, {
+  initialRouteName: 'Welcome',
+  headerMode: 'none',
+  mode: 'modal'
+});
+
+AppRegistry.registerComponent('Echt', () => AppNavigator);
