@@ -4,6 +4,7 @@ import Friend from './friend';
 import config from '../config';
 
 export default class Friends extends React.Component {
+
   constructor () {
     super();
 
