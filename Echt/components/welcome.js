@@ -90,8 +90,7 @@ export default class Friends extends React.Component {
           <Text>
             Boom. Instant selfie-friend-making.
           </Text>
-
-
+        </View>
       </View>
     );
   }

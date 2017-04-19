@@ -7,6 +7,7 @@ import RNCamera from 'react-native-camera';
 import RNFS from 'react-native-fs';
 import { CAMERA } from '../constants';
 import config from '../config';
+import Shutter from './shutter';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
@@ -75,9 +76,7 @@ export default class Camera extends React.Component {
           <View style={styles.cameraType} />
         </TouchableHighlight>
 
-        <TouchableHighlight onPress={(e) => this.takePhoto()}>
-          <View style={styles.shutter} />
-        </TouchableHighlight>
+        <Shutter onPress={(e) => this.takePhoto()} />
       </RNCamera>
     );
   }
@@ -93,14 +92,6 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 64,
     marginTop: 50
-  },
-  shutter: {
-    borderWidth: 4,
-    borderColor: 'white',
-    width: 64,
-    height: 64,
-    borderRadius: 48,
-    marginTop: 400
   },
   preview: {
     flex: 1,

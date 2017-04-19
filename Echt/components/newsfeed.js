@@ -103,6 +103,9 @@ export default class Newsfeed extends React.Component {
 
     return (
       <ScrollView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Photo roll</Text>
+        </View>
         <View style={styles.wrapper}>
           <View style={styles.item}>
             <TouchableHighlight onPress={(e) => this.reload()}>
@@ -124,6 +127,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap'
   },
+  header: {
+    backgroundColor: '#ff00aa'
+  }
   item: {
     width: 120,
     height: 120,
