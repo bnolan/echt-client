@@ -1,3 +1,5 @@
+/* globals stage */
+
 const AWS = require('aws-sdk');
 const jwt = require('jsonwebtoken');
 const getStage = require('../helpers/get-stage');
@@ -9,8 +11,6 @@ const addErrorReporter = require('../helpers/error-reporter');
 AWS.config.update({
   region: config.awsRegion
 });
-
-var stage;
 
 /**
  * @param {Object} friend
@@ -36,7 +36,7 @@ exports.handler = function (request) {
   const errorHandlers = addErrorReporter(request);
 
   // const photoKey = request.body.photoKey;
-  stage = getStage(request.lambdaContext);
+  global.stage = getStage(request.lambdaContext);
 
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);

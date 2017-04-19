@@ -1,3 +1,5 @@
+/* globals stage */
+
 const AWS = require('aws-sdk');
 const uuid = require('uuid');
 const jwt = require('jsonwebtoken');
@@ -7,6 +9,8 @@ const _ = require('lodash');
 const ACTION = require('../constants').ACTION;
 const config = require('../config');
 const addErrorReporter = require('../helpers/error-reporter');
+const getFriends = require('./queries/get-friends');
+const assert = require('assert');
 
 const S3 = new AWS.S3();
 
@@ -22,10 +26,9 @@ AWS.config.update({
  * in order to keep things simple for the moment.
  *
  * @param {String} objectKey S3 object (not a URL)
- * @param {String} stage Environment stage (dev, uat, prod)
  * @return {Promise} Returning a FaceId
  */
-var detectFaces = (objectKey, stage) => {
+var detectFaces = (objectKey) => {
   var rekognitionClient = new AWS.Rekognition();
   var params = {
     Image: {
@@ -47,10 +50,9 @@ var detectFaces = (objectKey, stage) => {
  *
  * @param {Object} faceRecord
  * @param {String} buffer
- * @param {String} stage
  * @return {Promise} Returning a searchFacesByImage result
  */
-var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
+var searchFacesByCroppedImage = (faceRecord, buffer) => {
   var rekognitionClient = new AWS.Rekognition();
   return resize.cropByBoundingBox(buffer, faceRecord.BoundingBox)
     .then(croppedImageStr => {
@@ -73,10 +75,9 @@ var searchFacesByCroppedImage = (faceRecord, buffer, stage) => {
 
 /**
  * @param {Object} photo
- * @param {String} stage
  * @return {Promise}
  */
-var getUserIdsForFace = (faceId, stage) => {
+var getUserIdsForFace = (faceId) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   // console.log('#getUserIdsForFace');
@@ -102,28 +103,40 @@ var getUserIdsForFace = (faceId, stage) => {
 
 /**
  * @param {Object} photo
- * @param {String} stage
  * @return {Promise}
  */
-var storePhoto = (photo, stage) => {
-  var docClient = new AWS.DynamoDB.DocumentClient();
+var storePhoto = (photo, friendIds) => {
+  const docClient = new AWS.DynamoDB.DocumentClient();
+  const tableName = `echt.${stage}.photos`;
 
-  var params = {
-    TableName: `echt.${stage}.photos`,
-    Item: photo
-  };
+  // Iterate over friends and fan out to the photos table
+  const photos = friendIds.map((uuid) => {
+    return Object.assign({}, photo, {userId: uuid});
+  });
 
-  return docClient.put(params).promise().then((response) => {
+  const requests = photos.map((photo) => {
+    return {
+      PutRequest: {
+        Item: photo
+      }
+    };
+  });
+
+  // Tablename needs to be a key, weird API
+  const items = {};
+
+  items[tableName] = requests;
+
+  return docClient.batchWrite({RequestItems: items}).promise().then((response) => {
     return response;
   });
 };
 
 /**
  * @param {String} user id
- * @param {String} stage
  * @return {Promise => Object} user
  */
-var getUser = (userId, stage) => {
+var getUser = (userId) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   var params = {
@@ -150,8 +163,8 @@ var getUser = (userId, stage) => {
  * @return {Promise => Object} action object
  */
 
-var addFriend = (userId, stage) => {
-  return getUser(userId, stage)
+var addFriend = (userId) => {
+  return getUser(userId)
     .then((user) => {
       // console.log('addFriend', JSON.stringify(user));
 
@@ -170,7 +183,7 @@ exports.handler = function (request) {
 
   // const photoKey = request.body.photoKey;
 
-  const stage = getStage(request.lambdaContext);
+  global.stage = getStage(request.lambdaContext);
 
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);
@@ -239,7 +252,7 @@ exports.handler = function (request) {
       url: small.Location
     };
 
-    return detectFaces(original.key, stage);
+    return detectFaces(original.key);
   }).then((response) => {
     // console.log('detectFaces', JSON.stringify(response));
     photo.faceData = response;
@@ -257,7 +270,7 @@ exports.handler = function (request) {
 
     // Search for matching faces for each face
     const faceLookups = response.FaceDetails.map((faceRecord) => {
-      return searchFacesByCroppedImage(faceRecord, buffer, stage)
+      return searchFacesByCroppedImage(faceRecord, buffer)
         .then(response => {
           if (!response.FaceMatches.length) {
             return null;
@@ -270,7 +283,7 @@ exports.handler = function (request) {
           }
         }).then(faceId => {
           if (faceId) {
-            return getUserIdsForFace(faceId, stage);
+            return getUserIdsForFace(faceId);
           }
         });
     });
@@ -297,7 +310,7 @@ exports.handler = function (request) {
 
       if (me && friend) {
         console.log('FRIENDING!');
-        actions.push(addFriend(friend, stage));
+        actions.push(addFriend(friend));
       } else if (me && !friend) {
         console.log('LOL FRIEND DOESNT USE APP');
       } else if (!me && friend) {
@@ -312,11 +325,15 @@ exports.handler = function (request) {
     // Add actions
     photo.actions = photo.actions.concat(actions);
 
-    // TODO Iterate over friends and fan out to the photos
-    // table using batchPut
-    photo.userId = userId;
+    return getFriends(userId);
+  }).then((friendIds) => {
+    // I shouldn't be a friend of myself
+    assert(friendIds instanceof Array);
+    assert(!_.includes(friendIds, userId));
 
-    return storePhoto(photo, stage);
+    // Post to my newsfeed + friends
+    const uuids = friendIds.concat(userId);
+    return storePhoto(photo, uuids);
   }).then(() => {
     return {
       success: true,

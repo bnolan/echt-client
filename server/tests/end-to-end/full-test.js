@@ -15,10 +15,6 @@ const yargs = require('yargs').argv;
 const stage = yargs.stage ? yargs.stage : config.tapeTestStage;
 global.ECHT_STAGE = stage;
 
-// function skip () {
-//   test();
-// }
-
 test('🔥  empty collection', (t) => {
   rekognitionHelper.emptyCollection(stage)
     .then(() => {
@@ -281,7 +277,7 @@ test('🏊  full user flow', (t) => {
 
   t.test('👨  ben', (t) => {
     t.test('get newsfeed', (t) => {
-      t.plan(5);
+      t.plan(6);
 
       a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }).then(r => {
         t.ok(r.success);

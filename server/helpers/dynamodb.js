@@ -13,7 +13,7 @@ function create (params) {
 }
 
 function drop (params, callback) {
-  dynamodb.deleteTable(params).promise();
+  return dynamodb.deleteTable(params).promise();
 }
 
 const createUsers = (stage) => {
@@ -28,9 +28,15 @@ const createUsers = (stage) => {
       { AttributeName: 'userId', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
+      ReadCapacityUnits: 2,
       WriteCapacityUnits: 1
     }
+  });
+};
+
+const dropUsers = (stage) => {
+  return drop({
+    TableName: `echt.${stage}.users`
   });
 };
 
@@ -46,9 +52,15 @@ const createPhotos = (stage) => {
       { AttributeName: 'userId', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
+      ReadCapacityUnits: 2,
       WriteCapacityUnits: 1
     }
+  });
+};
+
+const dropPhotos = (stage) => {
+  return drop({
+    TableName: `echt.${stage}.photos`
   });
 };
 
@@ -64,9 +76,15 @@ const createFaces = (stage) => {
       { AttributeName: 'userId', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
+      ReadCapacityUnits: 2,
       WriteCapacityUnits: 1
     }
+  });
+};
+
+const dropFaces = (stage) => {
+  return drop({
+    TableName: `echt.${stage}.faces`
   });
 };
 
@@ -86,15 +104,15 @@ const createFriends = (stage) => {
       { AttributeName: 'toId', AttributeType: 'S' }
     ],
     ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
+      ReadCapacityUnits: 2,
       WriteCapacityUnits: 1
     }
   });
 };
 
-const dropFaces = (stage) => {
+const dropFriends = (stage) => {
   return drop({
-    TableName: `echt.${stage}.faces`
+    TableName: `echt.${stage}.friends`
   });
 };
 
@@ -127,5 +145,5 @@ const emptyFaces = (stage) => {
 };
 
 module.exports = {
-  createUsers, createPhotos, createFaces, createFriends, dropFaces, emptyFaces
+  createUsers, dropUsers, createPhotos, dropPhotos, createFaces, dropFaces, createFriends, dropFriends, emptyFaces
 };

@@ -1,3 +1,5 @@
+/* globals stage */
+
 var AWS = require('aws-sdk');
 const getStage = require('../helpers/get-stage');
 const jwt = require('jsonwebtoken');
@@ -18,7 +20,7 @@ exports.handler = (request) => {
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);
 
-  const stage = getStage(request.lambdaContext);
+  global.stage = getStage(request.lambdaContext);
 
   const params = {
     TableName: `echt.${stage}.photos`,

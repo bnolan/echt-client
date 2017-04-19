@@ -1,3 +1,5 @@
+/* globals stage */
+
 const AWS = require('aws-sdk');
 const getStage = require('../helpers/get-stage');
 const jwt = require('jsonwebtoken');
@@ -8,8 +10,6 @@ const addErrorReporter = require('../helpers/error-reporter');
 AWS.config.update({
   region: config.awsRegion
 });
-
-var stage;
 
 const getFriends = (uuid) => {
   const params = {
@@ -74,7 +74,7 @@ const getUsersForFriends = (friends) => {
 exports.handler = (request) => {
   const errorHandlers = addErrorReporter(request);
 
-  stage = getStage(request.lambdaContext);
+  global.stage = getStage(request.lambdaContext);
 
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);

@@ -1,3 +1,5 @@
+/* globals stage */
+
 const AWS = require('aws-sdk');
 const getStage = require('../helpers/get-stage');
 const jwt = require('jsonwebtoken');
@@ -9,8 +11,6 @@ const addErrorReporter = require('../helpers/error-reporter');
 AWS.config.update({
   region: config.awsRegion
 });
-
-var stage;
 
 var storePhoto = (photo) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
@@ -72,7 +72,7 @@ const updateRequest = (fromId, toId, status) => {
 exports.handler = (request) => {
   const errorHandlers = addErrorReporter(request);
 
-  stage = getStage(request.lambdaContext);
+  global.stage = getStage(request.lambdaContext);
 
   // fixme - use verify with a key
   const deviceKey = jwt.decode(request.headers['x-devicekey']);

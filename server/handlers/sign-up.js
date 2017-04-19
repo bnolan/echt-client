@@ -1,3 +1,5 @@
+/* globals stage */
+
 const uuid = require('uuid/v4');
 const jwt = require('jsonwebtoken');
 const AWS = require('aws-sdk');
@@ -16,10 +18,9 @@ const S3 = new AWS.S3();
 
 /**
  * @param {Object} user
- * @param {String} stage
  * @return {Promise}
  */
-var storeUser = (user, stage) => {
+var storeUser = (user) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   var params = {
@@ -38,10 +39,9 @@ var storeUser = (user, stage) => {
 
 /**
  * @param {Object} photo
- * @param {String} stage
  * @return {Promise}
  */
-var storePhoto = (photo, stage) => {
+var storePhoto = (photo) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   var params = {
@@ -55,10 +55,9 @@ var storePhoto = (photo, stage) => {
 /**
  * @param {String} faceId
  * @param {String} userId
- * @param {String} stage
  * @return {Promise}
  */
-var storeFace = (faceId, userId, stage) => {
+var storeFace = (faceId, userId) => {
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   var params = {
@@ -77,10 +76,9 @@ var storeFace = (faceId, userId, stage) => {
  * to a defined S3 bucket by the same user.
  *
  * @param {String} objectKey S3 object (not a URL)
- * @param {String} stage Environment stage (dev, uat, prod)
  * @return {Promise} Returning a FaceId
  */
-var indexFace = (objectKey, stage) => {
+var indexFace = (objectKey) => {
   var rekognitionClient = new AWS.Rekognition();
   var params = {
     CollectionId: `echt.${stage}`,
@@ -132,7 +130,7 @@ exports.handler = (request) => {
     status: ACCOUNT.REGISTERED
   };
 
-  const stage = getStage(request.lambdaContext);
+  global.stage = getStage(request.lambdaContext);
 
   var buffer = new Buffer(request.body.image, 'base64');
 
@@ -177,11 +175,11 @@ exports.handler = (request) => {
     // Index the face, in order to detect users in further selfies,
     // as well as to correlate friends for friendship requests
     var original = values[0];
-    return indexFace(original.key, stage);
+    return indexFace(original.key);
   }).then((faceId) => {
     return Promise.all([
-      storeUser(user, stage),
-      storeFace(faceId, user.uuid, stage)
+      storeUser(user),
+      storeFace(faceId, user.uuid)
     ]);
   }).then(() => {
     const photo = {
@@ -205,7 +203,7 @@ exports.handler = (request) => {
     photo.userId = user.uuid;
     user.photo.uuid = photo.uuid;
 
-    return storePhoto(photo, stage);
+    return storePhoto(photo);
   }).then(() => {
     const newKey = generateRegisteredKey(user);
 
