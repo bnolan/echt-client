@@ -264,7 +264,7 @@ test('🏊  full user flow', (t) => {
 
     // Ingo takes a photo of hashigo zake
 
-    t.test('take selfie', (t) => {
+    t.test('take photo of hashigo', (t) => {
       t.plan(2);
 
       const image = fs.readFileSync(path.join(__dirname, '../fixtures/hashigo.jpg'));
@@ -273,6 +273,26 @@ test('🏊  full user flow', (t) => {
       a.post('/photos', { image: b64, camera: CAMERA.FRONT_FACING }, { 'x-devicekey': ingo.deviceKey }).then(r => {
         t.ok(r.success);
         t.ok(r.photo);
+      });
+    });
+
+    t.end();
+  });
+
+  t.test('👨  ben', (t) => {
+    t.test('get newsfeed', (t) => {
+      t.plan(5);
+
+      a.get('/photos', {}, { 'x-devicekey': ben.deviceKey }).then(r => {
+        t.ok(r.success);
+        t.equal(r.items.length, 4);
+
+        // Should see bens signup selfie, selfie, ingo and ben selfie,
+        // and ingos hashigo photo
+        t.equal(r.items[0].author.uuid, ingo.user.uuid);
+        t.equal(r.items[1].author.uuid, ben.user.uuid);
+        t.equal(r.items[2].author.uuid, ben.user.uuid);
+        t.equal(r.items[3].author.uuid, ben.user.uuid);
       });
     });
 
