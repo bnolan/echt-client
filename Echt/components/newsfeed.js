@@ -1,93 +1,25 @@
-/* globals fetch */
-
 import React from 'react';
-import { Dimensions, ScrollView, AsyncStorage, TouchableHighlight, StyleSheet, Image, Text, View } from 'react-native';
+import { Dimensions, ScrollView, StyleSheet, Image, View } from 'react-native';
+import { observer } from 'mobx-react/native'
+
 // Lightbox is ganky and out of date but shows the idea
 import Lightbox from 'react-native-lightbox';
-import RNFS from 'react-native-fs';
-import { CAMERA } from '../constants';
-import config from '../config';
 
-const {height, width} = Dimensions.get('window');
+// import RNFS from 'react-native-fs';
+import store from './store';
+
+const { width } = Dimensions.get('window');
 const itemDimension = width / 3;
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
-export default class Newsfeed extends React.Component {
-
-  constructor () {
-    super();
-
-    this.state = {
-      photos: []
-    };
-  }
-
-  componentDidMount () {
-    this.reload();
-  }
-
+@observer
+class PhotoList extends React.Component {
   reload () {
-    this.setState({
-      photos: []
-    });
-
-    AsyncStorage.getItem('deviceKey').then((key) => {
-      // No user registered yet
-      if (!key) {
-        return Promise.resolve();
-      }
-
-      fetch(`${config.endpoint.uat}/photos`, {
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'x-devicekey': key
-        }
-      }).then(
-        (response) => response.json()
-      ).then((r) => {
-        this.setState({
-          photos: r.items || []
-        });
-      });
-    });
-  }
-
-  takePhoto () {
-    const options = {};
-    var key;
-
-    AsyncStorage.getItem('deviceKey').then((k) => {
-      key = k;
-
-      return this.camera.capture({metadata: options});
-    }).then((data) => {
-      return RNFS.readFile(data.path, 'base64');
-    }).then((data) => {
-      const request = {
-        image: data,
-        camera: CAMERA.FRONT_FACING
-      };
-
-      return fetch(`${config.endpoint.uat}/photos`, {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'x-devicekey': key
-        },
-        body: JSON.stringify(request)
-      });
-    }).then(
-      (response) => response.json()
-    ).then((json) => {
-      console.log(JSON.stringify(json));
-    }).catch(err => console.error(err));
   }
 
   render () {
-    const photos = this.state.photos.map((photo) => {
+    const photos = this.props.photos.map((photo) => {
       return (
         <View style={styles.item} key={photo.uuid}>
           <Lightbox
@@ -98,7 +30,7 @@ export default class Newsfeed extends React.Component {
             }}>
             <Image
               style={{width: itemDimension, height: itemDimension}}
-              source={{uri: photo.small.url}}
+              source={{uri: photo.inline ? photo.inline.url : photo.small.url}}
             />
           </Lightbox>
         </View>
@@ -106,18 +38,19 @@ export default class Newsfeed extends React.Component {
     });
 
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.wrapper}>
-          <View style={styles.item}>
-            <TouchableHighlight onPress={(e) => this.reload()}>
-              <View style={styles.date}>
-                <Text style={styles.dateText}>03.03</Text>
-              </View>
-            </TouchableHighlight>
-          </View>
+      <View style={styles.wrapper}>
+        {photos}
+      </View>
+    );
+  }
+}
 
-          {photos}
-        </View>
+@observer
+export default class Newsfeed extends React.Component {
+  render () {
+    return (
+      <ScrollView style={styles.container}>
+        <PhotoList photos={store.photos} />
       </ScrollView>
     );
   }
