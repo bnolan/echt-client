@@ -1,12 +1,15 @@
 /* globals fetch */
 
 import React from 'react';
-import { ScrollView, AsyncStorage, TouchableHighlight, StyleSheet, Image, Text, View } from 'react-native';
+import { Dimensions, ScrollView, AsyncStorage, TouchableHighlight, StyleSheet, Image, Text, View } from 'react-native';
 // Lightbox is ganky and out of date but shows the idea
 import Lightbox from 'react-native-lightbox';
 import RNFS from 'react-native-fs';
 import { CAMERA } from '../constants';
 import config from '../config';
+
+const {height, width} = Dimensions.get('window');
+const itemDimension = width / 3;
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
@@ -94,7 +97,7 @@ export default class Newsfeed extends React.Component {
               source: {uri: photo.original.url}
             }}>
             <Image
-              style={{width: 120, height: 120}}
+              style={{width: itemDimension, height: itemDimension}}
               source={{uri: photo.small.url}}
             />
           </Lightbox>
@@ -104,9 +107,6 @@ export default class Newsfeed extends React.Component {
 
     return (
       <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Photo roll</Text>
-        </View>
         <View style={styles.wrapper}>
           <View style={styles.item}>
             <TouchableHighlight onPress={(e) => this.reload()}>
@@ -130,16 +130,16 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: '#ff00aa'
-  }
+  },
   item: {
-    width: 120,
-    height: 120,
+    width: itemDimension,
+    height: itemDimension,
     flex: 0
   },
   text: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   date: {
     width: 120,

@@ -8,6 +8,7 @@ import RNFS from 'react-native-fs';
 import { CAMERA } from '../constants';
 import config from '../config';
 import Shutter from './shutter';
+import { Icon } from 'react-native-elements';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
@@ -69,13 +70,18 @@ export default class Camera extends React.Component {
         ref={(cam) => { this.camera = cam; }}
         style={styles.preview}
         captureTarget={RNCamera.constants.CaptureTarget.disk}
-        captureQuality={RNCamera.constants.CaptureQuality.medium}
+        captureQuality={RNCamera.constants.CaptureQuality.high}
         type={this.state.cameraType}
         aspect={RNCamera.constants.Aspect.fill}>
 
-        <TouchableHighlight onPress={(e) => this.toggleType()}>
-          <View style={styles.cameraType} />
-        </TouchableHighlight>
+        <View style={styles.toolbar}>
+          <Icon
+            onPress={(e) => this.toggleType()}
+            name='sync'
+            size={24}
+            reverse
+            color='#FF00AA' />
+        </View>
 
         <Shutter onPress={(e) => this.takePhoto()} />
       </RNCamera>
@@ -91,6 +97,13 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 64,
     marginTop: 50
+  },
+  toolbar:{
+    position: 'absolute',
+    top: 20,
+    left: 0,
+    right: 0,
+    alignItems: 'center'
   },
   preview: {
     flex: 1,
