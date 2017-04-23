@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, TouchableHighlight, StyleSheet, Image, Text, View, Button } from 'react-native';
 import Settings from './settings';
-// import Shutter from './shutter';
+import Shutter from './shutter';
 // import Pincode from './pincode';
 
 export default class Welcome extends React.Component {
@@ -56,11 +56,10 @@ export default class Welcome extends React.Component {
           <Text>Styling!</Text>
 
           <Text>
-            Okay, that's your face. Now enter a 4-digit pincode in case you 
+            Hey, nice face! Now enter a 4-digit pincode in case you 
             get locked out or buy a new phone.
           </Text>
 
-          <Pincode />
         </View>
 
         <View>
@@ -81,8 +80,6 @@ export default class Welcome extends React.Component {
             To add a friend, switch to the 🔁 front face camera
             and take a selfie with your friend.
           </Text>
-
-          <Image src={ingoAndBen} />
 
           <Text>
             When you take the photo, Echt will recognize your friend 

@@ -91,13 +91,9 @@ const AppNavigator = StackNavigator({
   Main: {
     screen: TabNavigatorMain,
     path: 'main'
-  },
-  Welcome: {
-    screen: Welcome,
-    path: 'welcome'
-  },
+  }
 }, {
-  initialRouteName: 'Welcome',
+  initialRouteName: 'Main',
   headerMode: 'none',
   mode: 'modal'
 });

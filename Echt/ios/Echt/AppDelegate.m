@@ -19,20 +19,11 @@
 {
   NSURL *jsCodeLocation;
 
-  
-#ifdef DEBUG
-    jsCodeLocation = [NSURL URLWithString:@"http://10.0.0.136:8081/index.ios.bundle?platform=ios&dev=true"];
-    // jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
-#else
-#endif
+  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
 
-  jsCodeLocation = [CodePush bundleURL];
+  jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.5:8081/index.ios.bundle"];
+  // jsCodeLocation = [CodePush bundleURL];
 
-  
-
-  // jsCodeLocation = [NSURL URLWithString:@"https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/main.jsbundle"];
-  
-  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Echt"
                                                initialProperties:nil

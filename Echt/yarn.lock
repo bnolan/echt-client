@@ -3117,6 +3117,16 @@ react-native-lightbox@^0.6.0:
   dependencies:
     react-timer-mixin "^0.13.3"
 
+react-native-photo-browser@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-photo-browser/-/react-native-photo-browser-0.3.1.tgz#4adfebf3ec090d10ca36ae497b1633f6d437bb35"
+  dependencies:
+    react-native-progress "^3.2.0"
+
+react-native-progress@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-3.2.0.tgz#86d756be5537c09936ac3d3c4e23710da590743c"
+
 react-native-tab-view@^0.0.57:
   version "0.0.57"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.57.tgz#715e2ea4100fa50168e134df3947dd76ebd55743"
