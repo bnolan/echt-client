@@ -1,14 +1,17 @@
 import React from 'react';
-import { Dimensions, TouchableHighlight, StyleSheet, Image, Text, View } from 'react-native';
-
-const {height, width} = Dimensions.get('window');
+import { Dimensions, TouchableOpacity, StyleSheet, View } from 'react-native';
 
 export default class Shutter extends React.Component {
+  onPress () {
+    console.log('Shutter clicked');
+    this.props.onPress();
+  }
+
   render () {
     return (
-      <TouchableHighlight onPress={this.props.onPress}>
+      <TouchableOpacity activeOpacity={0.5} onPress={this.onPress.bind(this)}>
         <View style={styles.shutter} />
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 }

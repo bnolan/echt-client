@@ -19,6 +19,9 @@ class PhotoList extends React.Component {
   }
 
   render () {
+    // Todo - render loading image:
+    //  source={{uri: photo.inline ? photo.inline.url : photo.small.url}}
+
     const photos = this.props.photos.map((photo) => {
       return (
         <View style={styles.item} key={photo.uuid}>
@@ -30,7 +33,7 @@ class PhotoList extends React.Component {
             }}>
             <Image
               style={{width: itemDimension, height: itemDimension}}
-              source={{uri: photo.inline ? photo.inline.url : photo.small.url}}
+              source={{uri: photo.small.url}}
             />
           </Lightbox>
         </View>

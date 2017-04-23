@@ -4,11 +4,11 @@ import React from 'react';
 import { AsyncStorage, TouchableHighlight, StyleSheet, Image, Text, View } from 'react-native';
 // Lightbox is ganky and out of date but shows the idea
 import RNCamera from 'react-native-camera';
-import RNFS from 'react-native-fs';
+
 import { CAMERA } from '../constants';
-import config from '../config';
 import Shutter from './shutter';
 import { Icon } from 'react-native-elements';
+import store from './store';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
@@ -33,35 +33,15 @@ export default class Camera extends React.Component {
 
   takePhoto () {
     const options = {};
-    var key;
 
-    AsyncStorage.getItem('deviceKey').then((k) => {
-      key = k;
-
-      return this.camera.capture({metadata: options});
-    }).then((data) => {
-      console.log(data.path);
-      return RNFS.readFile(data.path, 'base64');
-    }).then((data) => {
-      const request = {
-        image: data,
-        camera: CAMERA.FRONT_FACING
-      };
-
-      return fetch(`${config.endpoint.uat}/photos`, {
-        method: 'post',
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          'x-devicekey': key
-        },
-        body: JSON.stringify(request)
+    console.log('takePhoto clicked');
+    
+    return this.camera.capture({metadata: options})
+      .then((data) => {
+        return store.takePhoto(data, {
+          camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
+        });
       });
-    }).then(
-      (response) => response.json()
-    ).then((json) => {
-      console.log(JSON.stringify(json));
-    }).catch(err => console.error(err));
   }
 
   render () {
