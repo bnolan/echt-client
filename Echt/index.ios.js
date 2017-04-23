@@ -81,7 +81,11 @@ const TabNavigatorMain = TabNavigator({
   }
 }, {
   tabBarOptions: {
-    showLabel: false
+    showLabel: false,
+    activeTintColor: '#ff00aa',
+    activeBackgroundColor: '#ffffff',
+    inactiveBackgroundColor: '#ffffff',
+    inactiveTintColor: '#333333'
   },
   swipeEnabled: true,
   animationEnabled: true
