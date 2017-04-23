@@ -98,7 +98,7 @@ test('🏊  full user flow', (t) => {
         t.ok(r.photo);
         t.ok(r.photo.uuid);
         t.ok(r.photo.createdAt);
-        t.equal(t.photo.status, PHOTO_STATUS.UPLOADED);
+        t.equal(r.photo.status, PHOTO_STATUS.UPLOADED);
 
         t.ok(r.photo.info);
         t.equal(r.photo.info.camera, CAMERA.FRONT_FACING);
