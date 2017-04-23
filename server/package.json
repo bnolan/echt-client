@@ -13,7 +13,8 @@
     "test-unit": "tape -r ./tests/bootstrap tests/unit/*-test.js",
     "test-end-to-end": "tape -r ./tests/bootstrap tests/end-to-end/*-test.js",
     "lint": "semistandard",
-    "logs": "open https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logEventViewer:group=/aws/lambda/echt"
+    "logs": "open https://us-west-2.console.aws.amazon.com/cloudwatch/home?region=us-west-2#logEventViewer:group=/aws/lambda/echt",
+    "aws-console": "open https://942514019561.signin.aws.amazon.com/console"
   },
   "repository": {
     "type": "git",
