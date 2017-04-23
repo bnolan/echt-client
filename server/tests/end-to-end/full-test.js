@@ -5,6 +5,7 @@ const test = require('tape-catch');
 const CAMERA = require('../../constants').CAMERA;
 const ACTION = require('../../constants').ACTION;
 const STATUS = require('../../constants').STATUS;
+const PHOTO_STATUS = require('../../constants').PHOTO_STATUS;
 // const exec = require('child_process').exec;
 const dynamodbHelper = require('../../helpers/dynamodb');
 const rekognitionHelper = require('../../helpers/rekognition');
@@ -87,7 +88,7 @@ test('🏊  full user flow', (t) => {
     });
 
     t.test('take selfie', (t) => {
-      t.plan(13);
+      t.plan(14);
 
       const image = fs.readFileSync(path.join(__dirname, '../fixtures/ben-2.jpg'));
       const b64 = new Buffer(image).toString('base64');
@@ -97,6 +98,7 @@ test('🏊  full user flow', (t) => {
         t.ok(r.photo);
         t.ok(r.photo.uuid);
         t.ok(r.photo.createdAt);
+        t.equal(t.photo.status, PHOTO_STATUS.UPLOADED);
 
         t.ok(r.photo.info);
         t.equal(r.photo.info.camera, CAMERA.FRONT_FACING);

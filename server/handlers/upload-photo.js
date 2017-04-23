@@ -7,6 +7,7 @@ const getStage = require('../helpers/get-stage');
 const resize = require('../helpers/resize');
 const _ = require('lodash');
 const ACTION = require('../constants').ACTION;
+const STATUS = require('../../constants').PHOTO_STATUS;
 const config = require('../config');
 const addErrorReporter = require('../helpers/error-reporter');
 const getFriends = require('./queries/get-friends');
@@ -201,6 +202,7 @@ exports.handler = function (request) {
     info: {
       camera: request.body.camera
     },
+    status: STATUS.UPLOADED,
     actions: []
   };
 
