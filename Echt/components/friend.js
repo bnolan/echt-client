@@ -1,20 +1,17 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, View } from 'react-native';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 export default class Friend extends React.Component {
   render () {
     const props = this.props;
-    const since = moment(props.createdAt).format('MMMM \'YY');
     return (
       <View>
         <Image
           style={{width: 120, height: 120}}
           source={{uri: props.photo.small.url}}
+          resizeMode={'cover'}
         />
-        {props.name && <Text>{props.name}</Text>}
-        <Text>{since}</Text>
       </View>
     );
   }
