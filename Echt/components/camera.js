@@ -8,7 +8,7 @@ import RNCamera from 'react-native-camera';
 import { CAMERA } from '../constants';
 import Shutter from './shutter';
 import { Icon } from 'react-native-elements';
-import store from './store';
+import store from '../state/store';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
@@ -35,7 +35,7 @@ export default class Camera extends React.Component {
     const options = {};
 
     console.log('takePhoto clicked');
-    
+
     return this.camera.capture({metadata: options})
       .then((data) => {
         return store.takePhoto(data, {

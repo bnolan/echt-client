@@ -6,7 +6,7 @@ import { observer } from 'mobx-react/native'
 import Lightbox from 'react-native-lightbox';
 
 // import RNFS from 'react-native-fs';
-import store from './store';
+import store from '../state/store';
 
 const { width } = Dimensions.get('window');
 const itemDimension = width / 3;
