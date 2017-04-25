@@ -6,12 +6,12 @@ dependencies:
     - yarn
 test:
   override:
-    - yarn test
+    - yarn test:
         pwd:
           server
-    - yarn lint
+    - yarn lint:
         pwd:
           server
-    - yarn lint
+    - yarn lint:
         pwd:
           Echt
