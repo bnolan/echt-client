@@ -2,43 +2,9 @@ import React from 'react';
 import { AsyncStorage, StyleSheet, FlatList, Text, View } from 'react-native';
 import Friend from './friend';
 import config from '../config';
+import store from '../state/store';
 
 export default class Friends extends React.Component {
-
-  constructor () {
-    super();
-
-    this.state = {
-      friends: []
-    };
-  }
-
-  componentDidMount () {
-    this.reload();
-  }
-
-  reload () {
-    AsyncStorage.getItem('deviceKey')
-      .then((key) => {
-        // No user registered yet
-        if (!key) {
-          return Promise.resolve();
-        }
-
-        return fetch(`${config.endpoint.uat}/friends`, {
-          headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'x-devicekey': key
-          }
-        }).then(
-          (response) => response.json()
-        ).then((r) => {
-          this.setState({
-            friends: r.friends || []
-          });
-        });
-      });
-  }
 
   renderItem({item}) {
     return (<Friend {...item} />);
@@ -52,7 +18,7 @@ export default class Friends extends React.Component {
     return (
       <View>
         <FlatList
-          data={this.state.friends}
+          data={store.friends}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           horizontal={true}

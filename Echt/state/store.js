@@ -9,6 +9,8 @@ import uuid from 'uuid';
 class EchtStore {
   @observable photos = [];
 
+  @observable friends = [];
+
   @observable user = {
     key: null
   };
@@ -82,20 +84,42 @@ class EchtStore {
     }).then(
       (response) => response.json()
     ).then((r) => {
-      this.mergePhotos(r.items);
+      this.photos = this.merge(this.photos, r.items);
       this.save();
     });
   }
 
-  mergePhotos (items) {
+  refreshFriends () {
+    assert(this.loggedIn);
+
+    fetch(`${config.endpoint.uat}/friends`, {
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'x-devicekey': this.deviceKey
+      }
+    }).then(
+      (response) => response.json()
+    ).then((r) => {
+      this.friends = this.merge(this.friends, r.friends);
+      this.save();
+    });
+  }
+
+  /**
+   * @param {Array} Items already in store
+   * @param {Array} Items to be merged in (can contain duplicates)
+   * @return {Array} Merged items
+   */
+  merge (storedItems = [], receivedItems = []) {
     var added = 0;
     var merged = 0;
 
-    items.forEach((i) => {
+    receivedItems.forEach((i) => {
       var existing;
 
       if (i.uuid) {
-        existing = this.photos.find((p) => p.uuid === i.uuid);
+        existing = storedItems.find((p) => p.uuid === i.uuid);
       } else {
         existing = false;
       }
@@ -106,16 +130,18 @@ class EchtStore {
         merged++;
       } else {
         // Add to front of the photos
-        this.photos.unshift(i);
+        storedItems.unshift(i);
         added++;
       }
     });
 
-    console.log(`Added ${added} and merged ${merged} photos into collection`);
-    console.log(`Photos collection has ${this.photos.length} items in it`);
+    console.log(`Added ${added} and merged ${merged} items into collection`);
+    console.log(`Collection has ${storedItems.length} items in it`);
+
+    return storedItems;
   }
 
-  load () { 
+  load () {
     AsyncStorage.getItem('deviceKey').then((key) => {
       this.user.key = key;
     });
@@ -130,10 +156,26 @@ class EchtStore {
       }
 
       if (items) {
-        this.mergePhotos(items);
+        this.photos = this.merge(this.photos, items);
       }
 
       this.refreshPhotos();
+    });
+
+    AsyncStorage.getItem('friends').then((result) => {
+      var items;
+
+      try {
+        items = JSON.parse(result).reverse();
+      } catch (e) {
+        items = [];
+      }
+
+      if (items) {
+        this.friends = this.merge(this.friends, items);
+      }
+
+      this.refreshFriends();
     });
   }
 
@@ -142,6 +184,9 @@ class EchtStore {
 
     const photos = this.photos.filter((p) => p.status !== PHOTO_STATUS.UPLOADING);
     AsyncStorage.setItem('photos', JSON.stringify(photos));
+
+    const friends = this.friends;
+    AsyncStorage.setItem('friends', JSON.stringify(friends));
   }
 }
 
