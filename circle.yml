@@ -1,12 +1,17 @@
 machine:
   node:
     version: v6.1.0
-general:
-  build_dir: server
 dependencies:
   override:
     - yarn
 test:
   override:
     - yarn test
+        pwd:
+          server
     - yarn lint
+        pwd:
+          server
+    - yarn lint
+        pwd:
+          Echt
