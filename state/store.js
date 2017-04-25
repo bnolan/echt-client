@@ -77,7 +77,7 @@ class EchtStore {
     assert(this.loggedIn);
 
     // todo - send ?since=timestamp
-    fetch(`${config.endpoint.uat}/photos`, {
+    return fetch(`${config.endpoint.uat}/photos`, {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ class EchtStore {
   refreshFriends () {
     assert(this.loggedIn);
 
-    fetch(`${config.endpoint.uat}/friends`, {
+    return fetch(`${config.endpoint.uat}/friends`, {
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json',

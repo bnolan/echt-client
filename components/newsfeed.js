@@ -10,11 +10,28 @@ import store from '../state/store';
 
 @observer
 export default class Newsfeed extends React.Component {
+  state = {
+    refreshing: false
+  };
+
   constructor () {
     super();
 
     this.renderItem = this.renderItem.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
   }
+
+  handleRefresh () {
+    this.setState({refreshing: true});
+    store.refreshPhotos()
+      .then(() => {
+        this.setState({refreshing: false});
+      })
+      .catch(() => {
+        this.setState({refreshing: false});
+      });
+  }
+
   renderItem ({item}) {
     const { itemsPerRow } = this.props;
     const screenWidth = Dimensions.get('window').width;
@@ -45,6 +62,7 @@ export default class Newsfeed extends React.Component {
   render () {
     const photos = store.photos;
     const { itemsPerRow } = this.props;
+    const refreshing = this.state.refreshing;
     return (
       <View style={styles.container}>
         <FlatList
@@ -53,6 +71,8 @@ export default class Newsfeed extends React.Component {
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           removeClippedSubviews={false}
+          onRefresh={this.handleRefresh}
+          refreshing={refreshing}
         />
       </View>
     );

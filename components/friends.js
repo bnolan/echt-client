@@ -6,10 +6,26 @@ import Lightbox from 'react-native-lightbox';
 import store from '../state/store';
 
 export default class Friends extends React.Component {
+  state = {
+    refreshing: false
+  };
+
   constructor () {
     super();
 
     this.renderItem = this.renderItem.bind(this);
+    this.handleRefresh = this.handleRefresh.bind(this);
+  }
+
+  handleRefresh () {
+    this.setState({refreshing: true});
+    store.refreshFriends()
+      .then(() => {
+        this.setState({refreshing: false});
+      })
+      .catch(() => {
+        this.setState({refreshing: false});
+      });
   }
 
   renderItem ({item}) {
@@ -42,6 +58,7 @@ export default class Friends extends React.Component {
   render () {
     const friends = store.friends;
     const { itemsPerRow } = this.props;
+    const refreshing = this.state.refreshing;
     return (
       <View style={styles.container}>
         <FlatList
@@ -50,6 +67,8 @@ export default class Friends extends React.Component {
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
           removeClippedSubviews={false}
+          onRefresh={this.handleRefresh}
+          refreshing={refreshing}
         />
       </View>
     );
