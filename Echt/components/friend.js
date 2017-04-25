@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
@@ -18,10 +18,7 @@ export default class Friend extends React.Component {
       </View>
     );
   }
-};
-
-const styles = StyleSheet.create({
-});
+}
 
 Friend.propTypes = {
   uuid: PropTypes.string,

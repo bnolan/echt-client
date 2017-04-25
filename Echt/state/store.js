@@ -1,3 +1,5 @@
+/* global fetch */
+
 import { AsyncStorage } from 'react-native';
 import { observable } from 'mobx';
 import { PHOTO_STATUS } from '../constants';
@@ -38,7 +40,7 @@ class EchtStore {
       original: { url: `file://${data.path}` },
       small: { url: `file://${data.path}` },
       createdAt: new Date().toISOString()
-    }
+    };
 
     this.mergePhotos([temporaryPhoto]);
 
@@ -68,7 +70,7 @@ class EchtStore {
 
         // Save the collection with the new photo
         this.save();
-      })
+      });
   }
 
   refreshPhotos () {
@@ -190,7 +192,7 @@ class EchtStore {
   }
 }
 
-const echtStore = new EchtStore()
+const echtStore = new EchtStore();
 echtStore.load();
 
-export default echtStore
+export default echtStore;

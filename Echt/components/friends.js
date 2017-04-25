@@ -1,16 +1,14 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, FlatList, Text, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import Friend from './friend';
-import config from '../config';
 import store from '../state/store';
 
 export default class Friends extends React.Component {
-
-  renderItem({item}) {
+  renderItem ({item}) {
     return (<Friend {...item} />);
   }
 
-  keyExtractor(item) {
+  keyExtractor (item) {
     return item.uuid;
   }
 
@@ -21,12 +19,9 @@ export default class Friends extends React.Component {
           data={store.friends}
           renderItem={this.renderItem}
           keyExtractor={this.keyExtractor}
-          horizontal={true}
+          horizontal
         />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-});

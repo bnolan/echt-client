@@ -1,10 +1,10 @@
 import React from 'react';
-import { AppRegistry, StyleSheet, View } from 'react-native';
+import { AppRegistry } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import Camera from './components/camera';
 import Newsfeed from './components/newsfeed';
 import Friends from './components/friends';
-import Welcome from './components/welcome';
+// import Welcome from './components/welcome';
 import Settings from './components/settings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 

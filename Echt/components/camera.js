@@ -1,7 +1,5 @@
-/* globals fetch */
-
 import React from 'react';
-import { AsyncStorage, TouchableHighlight, StyleSheet, Image, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 // Lightbox is ganky and out of date but shows the idea
 import RNCamera from 'react-native-camera';
 
@@ -13,7 +11,6 @@ import store from '../state/store';
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
 export default class Camera extends React.Component {
-
   constructor () {
     super();
 
@@ -78,7 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 64,
     marginTop: 50
   },
-  toolbar:{
+  toolbar: {
     position: 'absolute',
     top: 20,
     left: 0,

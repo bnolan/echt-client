@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, ScrollView, StyleSheet, Image, View } from 'react-native';
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react/native';
 
 // Lightbox is ganky and out of date but shows the idea
 import Lightbox from 'react-native-lightbox';

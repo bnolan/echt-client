@@ -1,6 +1,5 @@
 import React from 'react';
-import { Modal, TouchableHighlight, StyleSheet, Image, Text, View, Button } from 'react-native';
-import Settings from './settings';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import Shutter from './shutter';
 // import Pincode from './pincode';
 
@@ -27,8 +26,8 @@ export default class Welcome extends React.Component {
       <View>
         <View>
           <Text>Welcome</Text>
-  
-          <Button title="Get started" onPress={this.handleClose} />
+
+          <Button title='Get started' onPress={this.handleClose} />
 
           <p>The friendly little shared photo roll app.</p>
 
@@ -56,7 +55,7 @@ export default class Welcome extends React.Component {
           <Text>Styling!</Text>
 
           <Text>
-            Hey, nice face! Now enter a 4-digit pincode in case you 
+            Hey, nice face! Now enter a 4-digit pincode in case you
             get locked out or buy a new phone.
           </Text>
 
@@ -82,7 +81,7 @@ export default class Welcome extends React.Component {
           </Text>
 
           <Text>
-            When you take the photo, Echt will recognize your friend 
+            When you take the photo, Echt will recognize your friend
             and send them a friend invite.
           </Text>
 
@@ -177,7 +176,7 @@ export default class Welcome extends React.Component {
     //   </View>
     // );
   }
-};
+}
 
 const styles = StyleSheet.create({
   settingsButton: {

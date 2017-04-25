@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, TouchableOpacity, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, View } from 'react-native';
 
 export default class Shutter extends React.Component {
   onPress () {
@@ -27,4 +27,3 @@ const styles = StyleSheet.create({
     marginBottom: 20
   }
 });
-
