@@ -6,7 +6,7 @@ dependencies:
     - yarn:
         pwd:
           server
-    - yarn:
+    - yarn -v:
         pwd:
           Echt
 test:
