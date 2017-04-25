@@ -1,5 +1,8 @@
 # Echt Client
 
+[![CircleCI](https://circleci.com/gh/bnolan/echt-client.svg?style=svg&circle-token=c21a0d12bacd0d145ec76336424d901e163d7123)](https://circleci.com/gh/bnolan/echt-client)
+
+
 Selfie app with face recognition.
 Relies on https://github.com/bnolan/echt-server
 
