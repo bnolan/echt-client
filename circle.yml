@@ -3,7 +3,12 @@ machine:
     version: v6.1.0
 dependencies:
   override:
-    - yarn
+    - yarn:
+        pwd:
+          server
+    - yarn:
+        pwd:
+          Echt
 test:
   override:
     - yarn test:
