@@ -46,6 +46,7 @@
 		938F6B0A0F084D57AB508D8D /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA8FF89AA9B0462689F27EAE /* Octicons.ttf */; };
 		9C3AB2FE24AA4F46A209654E /* libCodePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0616887D0FD54446BF7BA3D8 /* libCodePush.a */; };
 		A6118B6D54B042638A9A5ED5 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B6A7C394C5F40559C969A89 /* SimpleLineIcons.ttf */; };
+		B5CDEB5F1EB462D800070D31 /* e-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = B5CDEB5E1EB462D800070D31 /* e-logo.png */; };
 		B621EC81252345C09CB30318 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 540946489D5D433FBCAAE27A /* libz.tbd */; };
 		D64ECBF932CF4A2699B4086A /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 75886BE132E345CC857FCA96 /* libRCTCamera.a */; };
 		E6D54D91D69E48F988D72C4E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78D55FB7DBE245C2BCC17F37 /* Foundation.ttf */; };
@@ -314,6 +315,7 @@
 		78D55FB7DBE245C2BCC17F37 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		99AB4A0E979F40ACA4A6A3C2 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		B5CDEB5E1EB462D800070D31 /* e-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "e-logo.png"; path = "../../../Desktop/e-logo.png"; sourceTree = "<group>"; };
 		BA8FF89AA9B0462689F27EAE /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		F35E02054D35431FBA2B95CE /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		F3604D009E134F81A48E5A3E /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
@@ -460,6 +462,7 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				B5CDEB5E1EB462D800070D31 /* e-logo.png */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -694,7 +697,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 610;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -703,6 +706,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = DWB7DKRZ7D;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1023,6 +1027,7 @@
 				F9F1489F5EA940AB9E308387 /* FontAwesome.ttf in Resources */,
 				E6D54D91D69E48F988D72C4E /* Foundation.ttf in Resources */,
 				0D66FB42667C4797BE990564 /* Ionicons.ttf in Resources */,
+				B5CDEB5F1EB462D800070D31 /* e-logo.png in Resources */,
 				1B8120961A7E49F3A288EEDD /* MaterialCommunityIcons.ttf in Resources */,
 				6155A6DC8E584D75B98CF1A7 /* MaterialIcons.ttf in Resources */,
 				938F6B0A0F084D57AB508D8D /* Octicons.ttf in Resources */,
@@ -1171,6 +1176,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Echt.app/Echt";
 			};
@@ -1202,6 +1208,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Echt.app/Echt";
 			};
@@ -1211,6 +1218,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Ben Nolan (B2ZQCAN8NB)";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = DWB7DKRZ7D;
@@ -1222,6 +1230,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 				);
 				INFOPLIST_FILE = Echt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1230,6 +1239,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.echt.Echt;
 				PRODUCT_NAME = Echt;
+				PROVISIONING_PROFILE = "c9cea779-2466-4189-a859-dc211f6d9629";
+				PROVISIONING_PROFILE_SPECIFIER = "Echt Development";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1238,6 +1249,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Ben Nolan (DWB7DKRZ7D)";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DWB7DKRZ7D;
 				HEADER_SEARCH_PATHS = (
@@ -1248,6 +1260,7 @@
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 				);
 				INFOPLIST_FILE = Echt/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1256,6 +1269,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.echt.Echt;
 				PRODUCT_NAME = Echt;
+				PROVISIONING_PROFILE = "5585196d-8a4c-466f-92f3-a18176c8917a";
+				PROVISIONING_PROFILE_SPECIFIER = "Echt app store";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -1409,15 +1424,19 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -1450,8 +1469,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1459,6 +1480,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
