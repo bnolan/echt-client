@@ -1,11 +1,11 @@
 import React from 'react';
 import { AppRegistry } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
-import Camera from './components/camera';
-import Newsfeed from './components/newsfeed';
-import Friends from './components/friends';
-// import Welcome from './components/welcome';
-import Settings from './components/settings';
+import Camera from './components/Camera';
+import Newsfeed from './components/Newsfeed';
+import Friends from './components/Friends';
+// import Welcome from './components/Welcome';
+import Settings from './components/Settings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos

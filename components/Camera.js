@@ -5,7 +5,7 @@ import RNCamera from 'react-native-camera';
 import { observer } from 'mobx-react/native';
 
 import { CAMERA } from '../constants';
-import Shutter from './shutter';
+import Shutter from './Shutter';
 import Upload from './upload';
 import { Icon } from 'react-native-elements';
 import store from '../state/store';

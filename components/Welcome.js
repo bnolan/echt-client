@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import Shutter from './shutter';
+import Shutter from './Shutter';
 // import Pincode from './pincode';
 
 export default class Welcome extends React.Component {
