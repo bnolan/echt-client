@@ -18,7 +18,7 @@ export default class Upload extends React.Component {
     let icon = null;
 
     if (this.props.photo.actions) {
-      icon =  
+      icon =
         <View style={styles.iconView}>
           <Icon
             onPress={(e) => this.toggleType()}
@@ -35,9 +35,9 @@ export default class Upload extends React.Component {
           { icon }
 
           <ActivityIndicator
-            animating={true}
+            animating
             style={[styles.activity, {height: height - padding}]}
-            size="large"
+            size='large'
           />
 
           <Image
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: padding,
+    padding: padding
   },
   border: {
     borderWidth: 1,

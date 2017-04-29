@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, VirtualizedList, StyleSheet, Image, View } from 'react-native';
+import { Dimensions, FlatList, StyleSheet, Image, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import PropTypes from 'prop-types';
 // Lightbox is ganky and out of date but shows the idea
