@@ -2,20 +2,20 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 // Lightbox is ganky and out of date but shows the idea
 import RNCamera from 'react-native-camera';
+import { observer } from 'mobx-react/native';
 
 import { CAMERA } from '../constants';
 import Shutter from './shutter';
+import Upload from './upload';
 import { Icon } from 'react-native-elements';
 import store from '../state/store';
 
-// curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
-
+@observer
 export default class Camera extends React.Component {
   constructor () {
     super();
 
     this.state = {
-      photos: [],
       cameraType: RNCamera.constants.Type.front
     };
   }
@@ -42,6 +42,10 @@ export default class Camera extends React.Component {
   }
 
   render () {
+    const uploads = store.uploads.map((u) => {
+      return <Upload key={u.uuid} photo={u} onPress={() => 'lol'} />;
+    });
+
     return (
       <RNCamera
         ref={(cam) => { this.camera = cam; }}
@@ -50,6 +54,10 @@ export default class Camera extends React.Component {
         captureQuality={RNCamera.constants.CaptureQuality.high}
         type={this.state.cameraType}
         aspect={RNCamera.constants.Aspect.fill}>
+
+        <View style={styles.uploads}>
+          {uploads}
+        </View>
 
         <View style={styles.toolbar}>
           <Icon
@@ -74,6 +82,11 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 64,
     marginTop: 50
+  },
+  uploads: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20
   },
   toolbar: {
     position: 'absolute',

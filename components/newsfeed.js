@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, StyleSheet, Image, View } from 'react-native';
+import { Dimensions, FlatList, VirtualizedList, StyleSheet, Image, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import PropTypes from 'prop-types';
 // Lightbox is ganky and out of date but shows the idea
@@ -60,9 +60,13 @@ export default class Newsfeed extends React.Component {
   }
 
   render () {
-    const photos = store.photos;
+    // Prevent stupid flatlist getting photos[n+1]
+    // and mobx goes waaah.
+    const photos = store.photos.slice();
+
     const { itemsPerRow } = this.props;
     const refreshing = this.state.refreshing;
+
     return (
       <View style={styles.container}>
         <FlatList

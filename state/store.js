@@ -9,6 +9,8 @@ import RNFS from 'react-native-fs';
 import uuid from 'uuid';
 
 class EchtStore {
+  @observable uploads = [];
+
   @observable photos = [];
 
   @observable friends = [];
@@ -42,7 +44,16 @@ class EchtStore {
       createdAt: new Date().toISOString()
     };
 
-    this.mergePhotos([temporaryPhoto]);
+    var upload = {
+      uuid: uuid(),
+      url: `file://${data.path}`
+    };
+
+    // Add to newsfeed
+    this.merge(this.photos, [temporaryPhoto]);
+
+    // Display uploading photo
+    this.merge(this.uploads, [upload]);
 
     return RNFS.readFile(data.path, 'base64')
       .then((data) => {
@@ -67,6 +78,14 @@ class EchtStore {
 
         // Upload the photo
         Object.assign(temporaryPhoto, r.photo);
+
+        if (r.photo.actions.length > 0) {
+          // Photos with actions stay on the homescreen
+          upload.actions = r.photo.actions;
+        } else {
+          // Otherwise they get deleted
+          this.remove(this.uploads, [upload]);
+        }
 
         // Save the collection with the new photo
         this.save();
@@ -106,6 +125,30 @@ class EchtStore {
       this.friends = this.merge(this.friends, r.friends);
       this.save();
     });
+  }
+
+  /**
+   * @param {Array} Items to be modified
+   * @param {Array} Items to be removed by uuid
+   * @return {Array} Items removed
+   */
+  remove (storedItems = [], removedItems = []) {
+    var result = [];
+
+    console.log(storedItems, removedItems);
+
+    removedItems.forEach((i) => {
+      var index = storedItems.findIndex((p) => p.uuid === i.uuid);
+
+      console.log(index);
+
+      if (index > -1) {
+        storedItems.splice(index, 1);
+        result.push(i);
+      }
+    });
+
+    return result;
   }
 
   /**
