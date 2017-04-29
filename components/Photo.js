@@ -13,6 +13,7 @@ export default class Photo extends React.Component {
       return null;
     }
 
+    const { navigation: {goBack} } = this.props;
     const screenWidth = Dimensions.get('window').width;
     const photo = store.getPhoto(uuid);
 
@@ -24,6 +25,7 @@ export default class Photo extends React.Component {
           minimumZoomScale={1}
           maximumZoomScale={3}
           style={{width: screenWidth, height: screenWidth}}
+          onTap={() => goBack()}
         />
       </View>
     );

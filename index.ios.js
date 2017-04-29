@@ -124,8 +124,7 @@ const TabNavigatorMain = TabNavigator({
     inactiveBackgroundColor: '#ffffff',
     inactiveTintColor: '#333333'
   },
-  // TODO Enable once you can close a stack detail view properly
-  swipeEnabled: false,
+  swipeEnabled: true,
   animationEnabled: true
 });
 

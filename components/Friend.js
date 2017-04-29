@@ -13,6 +13,7 @@ export default class Friend extends React.Component {
       return null;
     }
 
+    const { navigation: {goBack} } = this.props;
     const screenWidth = Dimensions.get('window').width;
     const friend = store.getFriend(uuid);
 
@@ -24,6 +25,7 @@ export default class Friend extends React.Component {
           minimumZoomScale={1}
           maximumZoomScale={3}
           style={{width: screenWidth, height: screenWidth}}
+          onTap={() => goBack()}
         />
       </View>
     );
