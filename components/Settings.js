@@ -1,6 +1,9 @@
 import React from 'react';
-import { AsyncStorage, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
+import { TouchableHighlight, StyleSheet, Text, View } from 'react-native';
+import { observer } from 'mobx-react/native';
+import store from '../state/store';
 
+@observer
 export default class Settings extends React.Component {
   setUser (name) {
     const keys = {
@@ -10,8 +13,7 @@ export default class Settings extends React.Component {
       ingo: 'eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzNTBiYjkxMi0xMWM0LTQxNGQtOGJkNy00NDZmYmQ4MGQ0NzUiLCJkZXZpY2VJZCI6ImNhOWRiYTY1LWU2YjItNDk4Zi05YzhhLTczOTJiZDc4ZTI5MiIsImlhdCI6MTQ5MDEwOTE0NH0.'
     };
 
-    AsyncStorage.setItem('userName', name);
-    AsyncStorage.setItem('deviceKey', keys[name]);
+    store.setDeviceKey(keys[name]);
   }
 
   render () {

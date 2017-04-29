@@ -19,6 +19,18 @@ class EchtStore {
     key: null
   };
 
+  /**
+   * CAUTION: Use for debugging purposes only
+   */
+  setDeviceKey (key) {
+    this.user.key = key;
+    this.photos = [];
+    this.friends = [];
+    this.save();
+    this.refreshFriends();
+    this.refreshPhotos();
+  }
+
   get deviceKey () {
     return this.user.key;
   }
