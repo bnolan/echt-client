@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-// Lightbox is ganky and out of date but shows the idea
 import RNCamera from 'react-native-camera';
 import { observer } from 'mobx-react/native';
 

@@ -1,8 +1,6 @@
 import React from 'react';
-import { FlatList, View, Image, Dimensions, StyleSheet } from 'react-native';
+import { FlatList, TouchableHighlight, View, Image, Dimensions, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-// Lightbox is ganky and out of date but shows the idea
-import Lightbox from 'react-native-lightbox';
 import store from '../state/store';
 
 export default class Friends extends React.Component {
@@ -29,24 +27,19 @@ export default class Friends extends React.Component {
   }
 
   renderItem ({item}) {
-    const { itemsPerRow } = this.props;
+    const { itemsPerRow, navigation: {navigate} } = this.props;
     const screenWidth = Dimensions.get('window').width;
     const width = (screenWidth / itemsPerRow);
     const height = width;
 
     return (
       <View style={styles.item} key={item.uuid}>
-        <Lightbox
-          activeProps={{
-            width: 400,
-            height: 400,
-            source: {uri: item.photo.original.url}
-          }}>
+        <TouchableHighlight onPress={() => navigate('Friend', {uuid: item.uuid})}>
           <Image
             style={{width: width, height: height}}
             source={{uri: item.photo.small.url}}
           />
-        </Lightbox>
+        </TouchableHighlight>
       </View>
     );
   }

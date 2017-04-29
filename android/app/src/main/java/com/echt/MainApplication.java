@@ -3,6 +3,7 @@ package com.echt;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.photoview.PhotoViewPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rnfs.RNFSPackage;
 import com.microsoft.codepush.react.CodePush;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new PhotoViewPackage(),
             new VectorIconsPackage(),
             new RNFSPackage(),
             new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),

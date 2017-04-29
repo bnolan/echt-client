@@ -7,7 +7,6 @@ const iconSize = 16;
 
 export default class Upload extends React.Component {
   onPress () {
-    console.log('lol go to photo');
     this.props.onPress();
   }
 

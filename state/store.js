@@ -39,6 +39,14 @@ class EchtStore {
     return !!this.user.key;
   }
 
+  getPhoto (uuid) {
+    return this.photos.find(p => p.uuid === uuid);
+  }
+
+  getFriend (uuid) {
+    return this.friends.find(p => p.uuid === uuid);
+  }
+
   takePhoto (data, details) {
     assert(this.loggedIn);
 

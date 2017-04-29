@@ -6,7 +6,7 @@ import PhotoView from 'react-native-photo-view';
 import store from '../state/store';
 
 @observer
-export default class Friend extends React.Component {
+export default class Photo extends React.Component {
   render () {
     const uuid = this.props.navigation.state.params.uuid;
     if (!uuid) {
@@ -14,13 +14,13 @@ export default class Friend extends React.Component {
     }
 
     const screenWidth = Dimensions.get('window').width;
-    const friend = store.getFriend(uuid);
+    const photo = store.getPhoto(uuid);
 
     // TODO Proper dimension calc
     return (
       <View style={styles.container}>
         <PhotoView
-          source={{uri: friend.photo.original.url}}
+          source={{uri: photo.original.url}}
           minimumZoomScale={1}
           maximumZoomScale={3}
           style={{width: screenWidth, height: screenWidth}}
@@ -30,7 +30,7 @@ export default class Friend extends React.Component {
   }
 }
 
-Friend.propTypes = {
+Photo.propTypes = {
   navigation: PropTypes.shape({
     state: PropTypes.shape({
       params: PropTypes.shape({
