@@ -112,6 +112,24 @@ class EchtStore {
       });
   }
 
+  deletePhoto (photoId) {
+    assert(this.loggedIn);
+    assert(photoId);
+
+    return fetch(`${config.endpoint.uat}/photos`, {
+      method: 'DELETE',
+      body: JSON.stringify({uuid: photoId}),
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'x-devicekey': this.deviceKey
+      }
+    }).then(r => {
+      this.photos = this.photos.filter(photo => photo.uuid !== photoId);
+      this.save();
+    });
+  }
+
   refreshPhotos () {
     assert(this.loggedIn);
 
