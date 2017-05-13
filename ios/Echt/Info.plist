@@ -41,6 +41,8 @@
 	<string>Use the camera to take selfies and groupies</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to photos as it's the core app experience</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

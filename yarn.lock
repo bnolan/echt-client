@@ -3563,7 +3563,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.8:
+prop-types@*, prop-types@^15.5.8:
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
   dependencies:
@@ -3672,9 +3672,9 @@ react-native-elements@^0.11.1:
     react-native-side-menu "^0.20.1"
     react-native-tab-navigator "^0.3.3"
 
-react-native-fs@^2.1.0-rc.1:
-  version v2.1.0-rc.1
-  resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.1.0-rc.1.tgz#f6078891005478648738db396e822ec0aefc4b95"
+react-native-fs@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.3.2.tgz#49c6fd3413ae863427d91de4272dbf57248bc5dd"
   dependencies:
     base-64 "^0.1.0"
     utf8 "^2.1.1"
@@ -3802,6 +3802,12 @@ react-navigation@^1.0.0-beta.9:
     prop-types "^15.5.8"
     react-native-drawer-layout-polyfill "1.2.0"
     react-native-tab-view "^0.0.61"
+
+react-proptypes@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-proptypes/-/react-proptypes-1.0.0.tgz#88e9cf5cc61b18844a5f57a06c839ae39fe9a57f"
+  dependencies:
+    prop-types "*"
 
 react-proxy@^1.1.7:
   version "1.1.8"

@@ -98,14 +98,14 @@ class EchtStore {
         camera: details.camera
       },
       status: PHOTO_STATUS.UPLOADING,
-      original: { url: `file://${data.path}` },
-      small: { url: `file://${data.path}` },
+      original: { url: data.path },
+      small: { url: data.path },
       createdAt: new Date().toISOString()
     };
 
     var upload = {
       uuid: photo.uuid,
-      url: `file://${data.path}`
+      url: data.path
     };
 
     // Add to newsfeed

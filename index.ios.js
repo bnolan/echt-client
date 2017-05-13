@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { AppRegistry } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import Camera from './components/Camera';
@@ -147,4 +148,20 @@ const AppNavigator = StackNavigator({
   mode: 'modal'
 });
 
-AppRegistry.registerComponent('Echt', () => AppNavigator);
+class App extends React.Component {
+  // TODO Doesn't pass through
+  // getChildContext () {
+  //   return {
+  //     isSimulator: .isSimulator
+  //   };
+  // }
+  render () {
+    // https://github.com/react-community/react-navigation/issues/876
+    return <AppNavigator screenProps={{isSimulator: this.props.isSimulator}} />;
+  }
+}
+// App.childContextTypes = {
+//   isSimulator: PropTypes.boolean
+// };
+
+AppRegistry.registerComponent('Echt', () => App);

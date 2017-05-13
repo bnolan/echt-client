@@ -23,10 +23,16 @@
 
   // jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.5:8081/index.ios.bundle"];
   jsCodeLocation = [CodePush bundleURL];
+  // Determine simulator mode so we can use an image picker rather than the cam
+  // See http://stackoverflow.com/a/34732015/920574
+  BOOL isSimulator = NO;
+  #if TARGET_IPHONE_SIMULATOR
+    isSimulator = YES;
+  #endif
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Echt"
-                                               initialProperties:nil
+                                               initialProperties:@{@"isSimulator": @(isSimulator)}
                                                    launchOptions:launchOptions];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
