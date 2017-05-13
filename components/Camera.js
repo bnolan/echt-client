@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyleSheet, View, ImagePickerIOS } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import RNCamera from 'react-native-camera';
 import { observer } from 'mobx-react/native';
-import RNFS from 'react-native-fs';
 
 import { CAMERA } from '../constants';
 import Shutter from './Shutter';
 import Upload from './Upload';
 import { Icon } from 'react-native-elements';
 import store from '../state/store';
+import simulatorUpload from '../helpers/simulator-upload';
 
 @observer
 export default class Camera extends React.Component {
@@ -30,40 +30,23 @@ export default class Camera extends React.Component {
 
   takePhoto () {
     const options = {};
+    var p;
 
     // Simulator doesn't support cam
     if (this.props.screenProps.isSimulator) {
-      return new Promise((resolve, reject) => {
-        ImagePickerIOS.openSelectDialog(
-          {},
-          imageUri => {
-            const tmpFilePath = `${RNFS.TemporaryDirectoryPath}/tmp.jpg`;
-            RNFS.copyAssetsFileIOS(imageUri, tmpFilePath, 1024, 1024).then(() => {
-              return store.takePhoto({
-                path: tmpFilePath
-              }, {
-                camera: CAMERA.FRONT_FACING
-              }).then(response => {
-                return resolve(response);
-              });
-            });
-          },
-          error => {
-            console.log(error);
-            reject(error);
-          }
-        );
-      });
+      p = simulatorUpload();
     } else {
-      return this.camera.capture({metadata: options})
-        .then((data) => {
-          // Normalise data
-          data.path = `file://${data.path}`;
-          return store.takePhoto(data, {
-            camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
-          });
-        });
+      p = this.camera.capture({metadata: options});
     }
+
+    return p.then((data) => {
+      // Normalise data
+      data.path = `file://${data.path}`;
+      
+      return store.takePhoto(data, {
+        camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
+      });
+    });
   }
 
   render () {

@@ -60,7 +60,7 @@ class EchtStore {
     return this.friends.find(p => p.uuid === uuid);
   }
 
-  signup (path, pincode) {
+  signup (path) {
     return fetch(`${this.endpoint}/sign-up`)
       .then((r) => r.json())
       .then((body) => {
@@ -71,8 +71,7 @@ class EchtStore {
       })
       .then((b64) => {
         const request = {
-          image: b64,
-          pincode: pincode
+          image: b64
         };
 
         return fetch(`${this.endpoint}/sign-up`, {
@@ -84,11 +83,15 @@ class EchtStore {
       .then((r) => r.json())
       .then((body) => {
         this.user.key = body.deviceKey;
+
+        return body;
       });
   }
 
   takePhoto (data, details) {
-    assert(this.loggedIn);
+    if (!this.loggedIn) {
+      return false;
+    }
 
     // UUID is generated client side and is accepted and persisted by the server
     // (unless the UUID already exists)
@@ -148,7 +151,10 @@ class EchtStore {
   }
 
   deletePhoto (photoId) {
-    assert(this.loggedIn);
+    if (!this.loggedIn) {
+      return false;
+    }
+
     assert(photoId);
 
     return fetch(`${this.endpoint}/photos`, {
@@ -162,7 +168,9 @@ class EchtStore {
   }
 
   refreshPhotos () {
-    assert(this.loggedIn);
+    if (!this.loggedIn) {
+      return false;
+    }
 
     // todo - send ?since=timestamp
     return fetch(`${this.endpoint}/photos`, {
@@ -176,7 +184,9 @@ class EchtStore {
   }
 
   refreshFriends () {
-    assert(this.loggedIn);
+    if (!this.loggedIn) {
+      return false;
+    }
 
     return fetch(`${this.endpoint}/friends`, {
       headers: this.headers
