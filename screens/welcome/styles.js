@@ -13,13 +13,13 @@ export default StyleSheet.create({
     flex: 1
   },
   welcomeHeader: {
-    color: '#ffffff',
+    color: '#000000',
     fontSize: 24,
     fontWeight: 'bold',
     margin: 24
   },
   welcomeText: {
-    color: '#ffffff',
+    color: '#000000',
     margin: 24,
     fontSize: 18
   },

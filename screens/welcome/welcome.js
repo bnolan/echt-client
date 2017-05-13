@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Icon, Button } from 'react-native-elements';
 import styles from './styles';
 
 class Welcome extends React.Component {
@@ -12,9 +12,18 @@ class Welcome extends React.Component {
 
     return (
       <View style={styles.welcomeScreen}>
-        <Text style={styles.welcomeHeader}>Welcome</Text>
-        <Text style={styles.welcomeText}>The friendly little shared photo roll app.</Text>
-        <Text style={styles.welcomeText}>Nice to meet you! 😍</Text>
+        <Text style={styles.welcomeHeader}>
+          Willkommen!
+        </Text>
+
+        <Text style={styles.welcomeText}>
+          Welcome to Echt, the photo sharing app
+          for genuine friends. Echt is different
+          because you have to take selfies with people
+          to add them as a friend.
+        </Text>
+
+        <Icon name='face' size={64} />
 
         <Button
           raised

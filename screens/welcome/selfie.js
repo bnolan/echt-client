@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import styles from './styles';
 import Shutter from '../../components/Shutter';
 
@@ -13,7 +14,7 @@ export default class Selfie extends React.Component {
 
         <Text style={styles.selfieText}>Take a selfie</Text>
 
-        <Icon name='face' />
+        <Icon name='camera-alt' size={64} />
 
         <View style={styles.selfieCamera}>
           <Shutter onPress={() => navigate('Pincode')} />
