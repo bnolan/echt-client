@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableHighlight, StyleSheet, Text, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import store from '../state/store';
+import { Button } from 'react-native-elements';
 
 @observer
 export default class Settings extends React.Component {
@@ -14,6 +15,14 @@ export default class Settings extends React.Component {
     };
 
     store.setDeviceKey(keys[name]);
+  }
+
+  clearUser () {
+    const { navigation: { navigate } } = this.props;
+
+    store.clear().then(() => {
+      navigate('Loading');
+    });
   }
 
   render () {
@@ -29,6 +38,16 @@ export default class Settings extends React.Component {
           <TouchableHighlight underlayColor='#ccc' onPress={(e) => this.setUser('ingo')}>
             <Text style={styles.userText}>Become 👳 Ingo</Text>
           </TouchableHighlight>
+        </View>
+
+        <View>
+          <Button
+            raised
+            backgroundColor='#ff00aa'
+            color='#ffffff'
+            onPress={() => this.clearUser()}
+            iconName='delete'
+            title='Sign out' />
         </View>
 
       </View>

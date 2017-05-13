@@ -271,11 +271,18 @@ class EchtStore {
     AsyncStorage.setItem('friends', JSON.stringify(friends));
   }
 
-  /**
-   * DEBUG ONLY
-   */
   clear () {
-    AsyncStorage.clear();
+    // Clear everything
+    this.uploads.clear();
+    this.photos.clear();
+    this.friends.clear();
+
+    // Start over
+    this.user = {
+      key: null
+    };
+
+    return AsyncStorage.clear();
   }
 }
 

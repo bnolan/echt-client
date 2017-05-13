@@ -22,7 +22,7 @@ class Welcome extends React.Component {
           color='#ffffff'
           onPress={() => navigate('Selfie')}
           icon={{name: 'cached'}}
-          title='Ready? Begin' />
+          title='Continue' />
       </View>
     );
   }
