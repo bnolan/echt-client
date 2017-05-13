@@ -14,8 +14,6 @@ export default class Selfie extends React.Component {
 
         <Text style={styles.selfieText}>Take a selfie</Text>
 
-        <Icon name='camera-alt' size={64} />
-
         <View style={styles.selfieCamera}>
           <Shutter onPress={() => navigate('Pincode')} />
         </View>

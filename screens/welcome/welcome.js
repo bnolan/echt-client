@@ -35,6 +35,6 @@ class Welcome extends React.Component {
       </View>
     );
   }
-};
+}
 
 export default Welcome;

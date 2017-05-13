@@ -24,7 +24,7 @@ const WelcomeNavigator = StackNavigator({
   }
 }, {
   mode: 'modal',
-  headerMode: 'none',
+  headerMode: 'none'
 });
 
 export default WelcomeNavigator;

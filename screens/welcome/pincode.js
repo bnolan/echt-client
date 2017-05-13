@@ -47,6 +47,7 @@ export default class PincodeScreen extends React.Component {
   }
 
   render () {
+    const { navigation: { navigate } } = this.props;
     const pins = [];
 
     for (let id = 0; id < 4; id++) {
@@ -84,7 +85,7 @@ export default class PincodeScreen extends React.Component {
             raised
             backgroundColor='#8795E8'
             color='#ffffff'
-            onPress={() => navigate('Selfie')}
+            onPress={() => navigate('Instructions')}
             icon={{name: 'lock-outline'}}
             title='Continue' />}
       </View>

@@ -1,5 +1,8 @@
 import { StyleSheet } from 'react-native';
 
+// http://www.colourlovers.com/palette/3636765/seapunk_vaporwave
+// http://www.colourlovers.com/palette/3887337/Pale_Glitter
+
 export default StyleSheet.create({
   settingsButton: {
     backgroundColor: 'white',
@@ -90,6 +93,27 @@ export default StyleSheet.create({
     },
     shadowRadius: 5,
     shadowOpacity: 0.4
+  },
+
+  instructionView: {
+    backgroundColor: '#32006C',
+    flex: 1
+  },
+  instructionHeader: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+    margin: 24
+  },
+  instructionText: {
+    color: '#FFFFFF',
+    margin: 24,
+    marginBottom: 24,
+    marginTop: 0,
+    fontSize: 16
+  },
+  instructionButton: {
+
   }
 
 });
