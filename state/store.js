@@ -31,6 +31,19 @@ class EchtStore {
     this.refreshPhotos();
   }
 
+  get endpoint () {
+    return config.endpoint.uat;
+  }
+
+  // Headers for loggedIn users
+  get headers () {
+    return {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      'x-devicekey': this.deviceKey
+    };
+  }
+
   get deviceKey () {
     return this.user.key;
   }
@@ -45,6 +58,33 @@ class EchtStore {
 
   getFriend (uuid) {
     return this.friends.find(p => p.uuid === uuid);
+  }
+
+  signup (path, pincode) {
+    return fetch(`${this.endpoint}/sign-up`)
+      .then((r) => r.json())
+      .then((body) => {
+        this.user.key = body.deviceKey;
+      })
+      .then(() => {
+        return RNFS.readFile(path, 'base64');
+      })
+      .then((b64) => {
+        const request = {
+          image: b64,
+          pincode: pincode
+        };
+
+        return fetch(`${this.endpoint}/sign-up`, {
+          method: 'post',
+          headers: this.headers,
+          body: JSON.stringify(request)
+        });
+      })
+      .then((r) => r.json())
+      .then((body) => {
+        this.user.key = body.deviceKey;
+      });
   }
 
   takePhoto (data, details) {
@@ -81,13 +121,9 @@ class EchtStore {
           camera: details.camera
         };
 
-        return fetch(`${config.endpoint.uat}/photos`, {
+        return fetch(`${this.endpoint}/photos`, {
           method: 'post',
-          headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-            'x-devicekey': this.deviceKey
-          },
+          headers: this.headers,
           body: JSON.stringify(request)
         });
       }).then(
@@ -115,14 +151,10 @@ class EchtStore {
     assert(this.loggedIn);
     assert(photoId);
 
-    return fetch(`${config.endpoint.uat}/photos`, {
+    return fetch(`${this.endpoint}/photos`, {
       method: 'DELETE',
       body: JSON.stringify({uuid: photoId}),
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        'x-devicekey': this.deviceKey
-      }
+      headers: this.headers
     }).then(r => {
       this.photos = this.photos.filter(photo => photo.uuid !== photoId);
       this.save();
@@ -133,12 +165,8 @@ class EchtStore {
     assert(this.loggedIn);
 
     // todo - send ?since=timestamp
-    return fetch(`${config.endpoint.uat}/photos`, {
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        'x-devicekey': this.deviceKey
-      }
+    return fetch(`${this.endpoint}/photos`, {
+      headers: this.headers
     }).then(
       (response) => response.json()
     ).then((r) => {
@@ -150,12 +178,8 @@ class EchtStore {
   refreshFriends () {
     assert(this.loggedIn);
 
-    return fetch(`${config.endpoint.uat}/friends`, {
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        'x-devicekey': this.deviceKey
-      }
+    return fetch(`${this.endpoint}/friends`, {
+      headers: this.headers
     }).then(
       (response) => response.json()
     ).then((r) => {
