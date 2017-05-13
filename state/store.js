@@ -6,7 +6,7 @@ import { PHOTO_STATUS } from '../constants';
 import config from '../config';
 import assert from 'assert';
 import RNFS from 'react-native-fs';
-import uuid from 'uuid';
+import uuid from 'uuid/v4';
 
 class EchtStore {
   @observable uploads = [];
@@ -50,10 +50,9 @@ class EchtStore {
   takePhoto (data, details) {
     assert(this.loggedIn);
 
-    // UUID is temporary and is rewritten when the photo has been uploaded, might
-    // be nice to have a persistent client uuid so that we could persist UPLOADING
-    // photos to the AsyncStorage.
-    var temporaryPhoto = {
+    // UUID is generated client side and is accepted and persisted by the server
+    // (unless the UUID already exists)
+    var photo = {
       uuid: uuid(),
       info: {
         camera: details.camera
@@ -70,7 +69,7 @@ class EchtStore {
     };
 
     // Add to newsfeed
-    this.merge(this.photos, [temporaryPhoto]);
+    this.merge(this.photos, [photo]);
 
     // Display uploading photo
     this.merge(this.uploads, [upload]);
@@ -97,7 +96,7 @@ class EchtStore {
         assert(r.success);
 
         // Upload the photo
-        Object.assign(temporaryPhoto, r.photo);
+        Object.assign(photo, r.photo);
 
         if (r.photo.actions.length > 0) {
           // Photos with actions stay on the homescreen
