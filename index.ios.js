@@ -6,11 +6,10 @@ import Newsfeed from './components/Newsfeed';
 import Friends from './components/Friends';
 import Photo from './components/Photo';
 import Friend from './components/Friend';
-// import Welcome from './components/Welcome';
+import WelcomeNavigator from './navigators/welcome';
 import Settings from './components/Settings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
-// curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
+import store from './state/store';
 
 const StackNavigatorNewsfeed = StackNavigator({
   Main: {
@@ -132,9 +131,13 @@ const AppNavigator = StackNavigator({
   Main: {
     screen: TabNavigatorMain,
     path: 'main'
+  },
+  Welcome: {
+    screen: WelcomeNavigator,
+    path: 'welcome/welcome'
   }
 }, {
-  initialRouteName: 'Main',
+  initialRouteName: false ? 'Main' : 'Welcome',
   headerMode: 'none',
   mode: 'modal'
 });
