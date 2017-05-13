@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Image, ActivityIndicator, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { ACTION } from '../constants';
 
 const padding = 8;
 const iconSize = 16;
@@ -15,13 +16,23 @@ export default class Upload extends React.Component {
     const height = 64;
 
     let icon = null;
+    let iconName = null;
 
     if (this.props.photo.actions) {
+      const type = this.props.photo.actions[0].type;
+
+      if (type === ACTION.ADD_FRIEND) {
+        iconName = 'person-add';
+      } else if (type === ACTION.GROUPIE) {
+        // couldn't find a better icon, come at me bro
+        iconName = 'hot-tub';
+      }
+
       icon =
         <View style={styles.iconView}>
           <Icon
             onPress={(e) => this.toggleType()}
-            name='person-add'
+            name={iconName}
             size={iconSize}
             reverse
             color='#FF00AA' />

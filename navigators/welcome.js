@@ -6,14 +6,14 @@ import Instructions from '../screens/welcome/instructions';
 
 // 🍆💦💦🍑
 const WelcomeNavigator = StackNavigator({
-  // Welcome: {
-  //   screen: Welcome,
-  //   path: 'welcome/welcome'
-  // },
-  // Selfie: {
-  //   screen: Selfie,
-  //   path: 'welcome/selfie'
-  // },
+  Welcome: {
+    screen: Welcome,
+    path: 'welcome/welcome'
+  },
+  Selfie: {
+    screen: Selfie,
+    path: 'welcome/selfie'
+  },
   Pincode: {
     screen: Pincode,
     path: 'welcome/pincode'

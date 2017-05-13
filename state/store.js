@@ -64,7 +64,7 @@ class EchtStore {
     };
 
     var upload = {
-      uuid: uuid(),
+      uuid: photo.uuid,
       url: `file://${data.path}`
     };
 

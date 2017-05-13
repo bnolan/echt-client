@@ -6,10 +6,10 @@ import Newsfeed from './components/Newsfeed';
 import Friends from './components/Friends';
 import Photo from './components/Photo';
 import Friend from './components/Friend';
+import Loading from './components/Loading';
 import WelcomeNavigator from './navigators/welcome';
 import Settings from './components/Settings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import store from './state/store';
 
 const StackNavigatorNewsfeed = StackNavigator({
   Main: {
@@ -128,6 +128,9 @@ const TabNavigatorMain = TabNavigator({
 });
 
 const AppNavigator = StackNavigator({
+  Loading: {
+    screen: Loading
+  },
   Main: {
     screen: TabNavigatorMain,
     path: 'main'
@@ -137,7 +140,9 @@ const AppNavigator = StackNavigator({
     path: 'welcome/welcome'
   }
 }, {
-  initialRouteName: false ? 'Main' : 'Welcome',
+  // The loading screen checks if we are signed in and then redirects, I'd
+  // rather do it all here but can't work out how to do it
+  initialRouteName: 'Loading',
   headerMode: 'none',
   mode: 'modal'
 });
