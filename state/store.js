@@ -270,9 +270,19 @@ class EchtStore {
     const friends = this.friends;
     AsyncStorage.setItem('friends', JSON.stringify(friends));
   }
+
+  /**
+   * DEBUG ONLY
+   */
+  clear () {
+    AsyncStorage.clear();
+  }
 }
 
 const echtStore = new EchtStore();
 echtStore.load();
+
+// DEBUGGING ONLY - see https://corbt.com/posts/2015/12/19/debugging-with-global-variables-in-react-native.html
+global.__store = echtStore;
 
 export default echtStore;
