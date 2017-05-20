@@ -1,6 +1,6 @@
 import React from 'react';
 import RNCamera from 'react-native-camera';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
 import styles from './styles';
 import Shutter from '../../components/Shutter';
 import store from '../../state/store';
@@ -8,7 +8,7 @@ import simulatorUpload from '../../helpers/simulator-upload';
 
 export default class Selfie extends React.Component {
   constructor () {
-    super()
+    super();
 
     this.state = {
       submitting: false
@@ -53,7 +53,7 @@ export default class Selfie extends React.Component {
         <View style={styles.selfieCamera}>
           <RNCamera
             ref={(cam) => { this.camera = cam; }}
-            style={{ flex: 1 }}
+            style={styles.selfieCameraPreview}
             captureTarget={RNCamera.constants.CaptureTarget.disk}
             captureQuality={RNCamera.constants.CaptureQuality.high}
             type={RNCamera.constants.Type.front}

@@ -37,6 +37,11 @@ export default StyleSheet.create({
     backgroundColor: '#777777',
     margin: 24,
   },
+  selfieCameraPreview: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
   selfieHeader: {
     color: '#ffffff',
     fontSize: 24,
