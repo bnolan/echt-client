@@ -1,7 +1,7 @@
 import { StackNavigator } from 'react-navigation';
 import Welcome from '../screens/welcome/welcome';
 import Selfie from '../screens/welcome/selfie';
-import Pincode from '../screens/welcome/pincode';
+// import Pincode from '../screens/welcome/pincode';
 import Instructions from '../screens/welcome/instructions';
 
 // 🍆💦💦🍑
@@ -14,10 +14,11 @@ const WelcomeNavigator = StackNavigator({
     screen: Selfie,
     path: 'welcome/selfie'
   },
-  Pincode: {
-    screen: Pincode,
-    path: 'welcome/pincode'
-  },
+  // TODO Use PIN screen once it can be made optional
+  // Pincode: {
+  //   screen: Pincode,
+  //   path: 'welcome/pincode'
+  // },
   Instructions: {
     screen: Instructions,
     path: 'welcome/instructions'

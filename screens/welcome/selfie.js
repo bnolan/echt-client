@@ -22,7 +22,9 @@ export default class Selfie extends React.Component {
       this.setState({ submitting: false });
 
       if (r.success) {
-        navigate('Pincode');
+        navigate('Instructions');
+        // TODO Use PIN screen once it can be made optional
+        // navigate('Pincode');
       }
     });
   }
