@@ -25,3 +25,11 @@ the app building (it's hardcoded to Ben's).
 
   LC_ALL=C find ios/Echt.xcodeproj/* -type f -exec sed -i "" "s/DWB7DKRZ7D/Y9AF3JTNBU/g" {} \;
   LC_ALL=C find ios/Echt/AppDelegate.m -type f -exec sed -i "" "s/10.0.0.136/192.168.1.14/g" {} \;
+
+## Debugging
+
+The app uses local storage on the device/simulator, e.g. to
+remember the current user between reloads. In order to reset store
+data, you need to open the debugger, switch to the `debuggerWorker.js` process,
+and call `__store.clear()`
+([instructions](https://corbt.com/posts/2015/12/19/debugging-with-global-variables-in-react-native.html)).
