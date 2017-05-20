@@ -84,6 +84,9 @@ class EchtStore {
       .then((body) => {
         this.user.key = body.deviceKey;
 
+        // Store current user
+        this.save();
+
         return body;
       });
   }
