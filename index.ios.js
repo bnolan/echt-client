@@ -8,7 +8,7 @@ import Friends from './components/Friends';
 import Photo from './components/Photo';
 import Friend from './components/Friend';
 import Loading from './components/Loading';
-import WelcomeNavigator from './navigators/welcome';
+import WelcomeNavigator from './navigators/Welcome';
 import Settings from './components/Settings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
