@@ -16,7 +16,7 @@ export default class Camera extends React.Component {
     super();
 
     this.state = {
-      cameraType: RNCamera.constants.Type.front
+      cameraType: RNCamera.constants.Type.back
     };
   }
 
