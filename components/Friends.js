@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, TouchableHighlight, View, Image, Dimensions, StyleSheet } from 'react-native';
+import { FlatList, Text, TouchableHighlight, View, Image, Dimensions, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import store from '../state/store';
 
@@ -48,10 +48,37 @@ export default class Friends extends React.Component {
     return item.uuid;
   }
 
+  get noFriends () {
+    return store.friends.length === 0;
+  }
+
+  renderEmptyState () {
+    return (
+      <View style={styles.noFriends}>
+        <Text style={styles.paragraph}>You have no friends yet</Text>
+        
+        <Text style={styles.bigEmoji}>😨</Text>
+
+        <Text style={styles.paragraph}>
+          <Text style={styles.bold}>To add a friend:</Text>
+
+          Take a selfie with a friend (both of you in the photo
+          at the same time) on the front facing camera and we
+          will send them a friend request.
+        </Text>
+      </View>
+    );
+  }
+
   render () {
     const friends = store.friends;
     const { itemsPerRow } = this.props;
     const refreshing = this.state.refreshing;
+
+    if (this.noFriends) {
+      return this.renderEmptyState();
+    }
+
     return (
       <View style={styles.container}>
         <FlatList
@@ -79,5 +106,24 @@ Friends.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  noFriends: {
+    padding: 20,
+    flex: 1,
+    backgroundColor: 'white'
+  },
+  bigEmoji: {
+    fontSize: 48,
+    margin: 20,
+    height: 60,
+    textAlign: 'center'
+  },
+  paragraph: {
+    textAlign: 'center',
+    fontSize: 24,
+    color: '#555',
+  },
+  bold: {
+    fontWeight: 'bold'
   }
 });
