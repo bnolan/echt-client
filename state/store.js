@@ -1,4 +1,4 @@
-/* global fetch */
+/* global fetch, __DEV__ */
 
 import { AsyncStorage } from 'react-native';
 import { observable } from 'mobx';
@@ -32,7 +32,7 @@ class EchtStore {
   }
 
   get endpoint () {
-    return config.endpoint.uat;
+    return __DEV__ ? config.endpoint.uat : config.endpoint.prod;
   }
 
   // Headers for loggedIn users
