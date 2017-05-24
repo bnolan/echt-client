@@ -18,7 +18,7 @@ class Welcome extends React.Component {
 
         <Text style={styles.welcomeText}>
           Welcome to Echt, the photo sharing app
-          for genuine friends. Echt is different
+          for friends. Echt is different
           because you have to take selfies with people
           to add them as a friend.
         </Text>
