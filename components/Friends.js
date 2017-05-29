@@ -55,13 +55,9 @@ export default class Friends extends React.Component {
   renderEmptyState () {
     return (
       <View style={styles.noFriends}>
-        <Text style={styles.paragraph}>You have no friends yet</Text>
+        <Text style={styles.header}>You have no friends.</Text>
         
-        <Text style={styles.bigEmoji}>😨</Text>
-
         <Text style={styles.paragraph}>
-          <Text style={styles.bold}>To add a friend:</Text>
-
           Take a selfie with a friend (both of you in the photo
           at the same time) on the front facing camera and we
           will send them a friend request.
@@ -107,6 +103,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  header: {
+    color: '#666666',
+    fontSize: 28,
+    fontWeight: 'bold',
+    letterSpacing: -1,
+    margin: 20
+  },
   noFriends: {
     padding: 20,
     flex: 1,
@@ -119,11 +122,16 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   paragraph: {
-    textAlign: 'center',
-    fontSize: 24,
-    color: '#555',
+    fontSize: 16,
+    lineHeight: 24,
+    margin: 20,
+    color: '#777'
   },
   bold: {
-    fontWeight: 'bold'
+    fontSize: 16,
+    color: '#777',
+    fontWeight: 'bold',
+    margin: 20,
+    marginBottom: 0    
   }
 });

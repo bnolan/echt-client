@@ -1,11 +1,11 @@
+import Debug from './Debug';
 import React from 'react';
-import { TouchableHighlight, StyleSheet, Text, View } from 'react-native';
-import { observer } from 'mobx-react/native';
 import store from '../state/store';
 import { Button } from 'react-native-elements';
+import { observer } from 'mobx-react/native';
+import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
 
-@observer
-export default class Settings extends React.Component {
+@observer export default class Settings extends React.Component {
   setUser (name) {
     const keys = {
       // userId: 302f590b-7932-490b-a4e2-5fd6f1c7df59
@@ -25,41 +25,103 @@ export default class Settings extends React.Component {
     });
   }
 
+  onClearUser () {
+    Alert.alert(
+      'Log out',
+      'Do you want to log out? You will lose access to this account.',
+      [
+        { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        {
+          text: 'Yes', 
+          onPress: () => {
+            console.log('Yes Pressed');
+            this.clearUser();
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  }
+
+  deleteUser () {
+    const { navigation: { navigate } } = this.props;
+
+    store.deleteUser().then(() => {
+      navigate('Loading');
+    });
+  }
+
+  onDeleteAccount () {
+    Alert.alert(
+      'Delete Account',
+      'Do you want to delete your account?',
+      [
+        { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        {
+          text: 'Yes',
+          onPress: () => {
+            console.log('Yes Pressed');
+            this.deleteUser();
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  }
+
   render () {
+    // { store.isDevMode && <Debug /> }
+
     return (
-      <View>
-        <View style={styles.userButton}>
-          <TouchableHighlight underlayColor='#ccc' onPress={(e) => this.setUser('ben')}>
-            <Text style={styles.userText}>Become 👨 Ben</Text>
-          </TouchableHighlight>
-        </View>
+      <View style={styles.settings}>
+        <Text style={styles.header}>Settings.</Text>
 
-        <View style={styles.userButton}>
-          <TouchableHighlight underlayColor='#ccc' onPress={(e) => this.setUser('ingo')}>
-            <Text style={styles.userText}>Become 👳 Ingo</Text>
-          </TouchableHighlight>
-        </View>
-
-        <View>
+        <View style={styles.actionContainer}>
           <Button
             raised
-            backgroundColor='#ff00aa'
-            color='#ffffff'
-            onPress={() => this.clearUser()}
-            iconName='delete'
-            title='Sign out' />
+            backgroundColor='#999'
+            color='#fff'
+            onPress={() => this.onClearUser()}
+            icon={{name: 'lock-outline'}}
+            title='Log out' />
         </View>
 
+        <View style={styles.actionContainer}>
+          <Button
+            raised
+            backgroundColor='#bbb'
+            color='#ddd'
+            onPress={() => this.onDeleteAccount()}
+            icon={{name: 'report'}}
+            title='Delete Account' />
+          </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  settings: {
+    padding: 20
+  },
+
+  header: {
+    color: '#666666',
+    fontSize: 28,
+    fontWeight: 'bold',
+    letterSpacing: -1,
+    margin: 20,
+  },
+
   userButton: {
     marginTop: 12,
     borderRadius: 4,
     backgroundColor: '#eee'
+  },
+
+  actionContainer: {
+    width: 220,
+    marginTop: 20
   },
 
   userText: {

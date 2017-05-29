@@ -31,6 +31,10 @@ class EchtStore {
     this.refreshPhotos();
   }
 
+  get isDevMode () {
+    return !!__DEV__;
+  }
+
   get endpoint () {
     return __DEV__ ? config.endpoint.uat : config.endpoint.prod;
   }
@@ -89,6 +93,19 @@ class EchtStore {
 
         return body;
       });
+  }
+
+  deleteUser () {
+    if (!this.loggedIn) {
+      return false;
+    }
+
+    return fetch(`${this.endpoint}/sign-up`, {
+      method: 'delete',
+      headers: this.headers
+    }).then(() => {
+      return this.clear();
+    });
   }
 
   takePhoto (data, details) {
