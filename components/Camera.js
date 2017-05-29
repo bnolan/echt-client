@@ -8,15 +8,25 @@ import Upload from './Upload';
 import { CAMERA } from '../constants';
 import { Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { StyleSheet, View } from 'react-native';
+import { Animated, Easing, StyleSheet, View } from 'react-native';
+
+const uploadHeight = 64 + 20;
 
 @observer export default class Camera extends React.Component {
   constructor () {
     super();
 
     this.state = {
-      cameraType: RNCamera.constants.Type.back
+      cameraType: RNCamera.constants.Type.back,
+      slideAnim: new Animated.Value(-uploadHeight)
     };
+  }
+
+  componentDidMount () {
+    store.uploads.observe(() => {
+      console.log('#uploads observe');
+      this.addUpload();
+    });
   }
 
   toggleType () {
@@ -27,10 +37,22 @@ import { StyleSheet, View } from 'react-native';
     }
   }
 
-  takePhoto () {
-    var upload = store.generateUpload();
+  addUpload () {
+    this.state.slideAnim.setValue(-uploadHeight);
 
+    Animated.timing(
+      this.state.slideAnim, { 
+        fromValue: -uploadHeight,
+        toValue: 1,
+        easing: Easing.linear,
+        duration: 1000 / 60 * 10
+      }
+    ).start();
+  }
+
+  takePhoto () {
     const options = {};
+    const upload = store.generateUpload();
     var p;
 
     // Simulator doesn't support cam
@@ -66,9 +88,9 @@ import { StyleSheet, View } from 'react-native';
         type={this.state.cameraType}
         aspect={RNCamera.constants.Aspect.fill}>
 
-        <View style={styles.uploads}>
+        <Animated.View style={{ ...uploadStyle, top: this.state.slideAnim }}>
           {uploads}
-        </View>
+        </Animated.View>
 
         <View style={styles.toolbar}>
           <Icon
@@ -84,6 +106,11 @@ import { StyleSheet, View } from 'react-native';
     );
   }
 }
+
+const uploadStyle = {
+  position: 'absolute',
+  right: 20
+};
 
 const styles = StyleSheet.create({
   cameraType: {
