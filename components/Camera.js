@@ -1,17 +1,16 @@
+import mobx from 'mobx';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
 import RNCamera from 'react-native-camera';
-import { observer } from 'mobx-react/native';
-
-import { CAMERA } from '../constants';
 import Shutter from './Shutter';
-import Upload from './Upload';
-import { Icon } from 'react-native-elements';
-import store from '../state/store';
 import simulatorUpload from '../helpers/simulator-upload';
+import store from '../state/store';
+import Upload from './Upload';
+import { CAMERA } from '../constants';
+import { Icon } from 'react-native-elements';
+import { observer } from 'mobx-react/native';
+import { StyleSheet, View } from 'react-native';
 
-@observer
-export default class Camera extends React.Component {
+@observer export default class Camera extends React.Component {
   constructor () {
     super();
 
@@ -29,6 +28,8 @@ export default class Camera extends React.Component {
   }
 
   takePhoto () {
+    var upload = store.generateUpload();
+
     const options = {};
     var p;
 
@@ -43,16 +44,18 @@ export default class Camera extends React.Component {
       // Normalise data
       data.path = `file://${data.path}`;
       
-      return store.takePhoto(data, {
+      return store.takePhoto(data, upload, {
         camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
       });
     });
   }
 
   render () {
-    const uploads = store.uploads.map((u) => {
-      return <Upload key={u.uuid} photo={u} onPress={() => 'lol'} />;
+    const uploads = mobx.toJS(store.uploads).map((u) => {
+      return <Upload key={u.uuid} upload={u} onPress={() => 'lol'} />;
     });
+
+    console.log('Camera#render');
 
     return (
       <RNCamera
@@ -93,7 +96,7 @@ const styles = StyleSheet.create({
   },
   uploads: {
     position: 'absolute',
-    bottom: 20,
+    top: 0,
     right: 20
   },
   toolbar: {
