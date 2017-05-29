@@ -99,6 +99,7 @@ class EchtStore {
     };
 
     console.log('#upload');
+    this.merge(this.uploads, [upload]);
 
     // Return uploading photo
     return upload;
