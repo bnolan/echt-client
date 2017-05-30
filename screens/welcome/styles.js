@@ -51,6 +51,7 @@ export default StyleSheet.create({
   selfieText: {
     color: '#ffffff',
     margin: 24,
+    marginTop: 0,
     fontSize: 18
   },
   selfieTextSmall: {
