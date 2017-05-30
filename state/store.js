@@ -122,6 +122,11 @@ class EchtStore {
     });
   }
 
+  /**
+   * @param {Object} Camera data, incl. the 'path' to a temporary file
+   * @param {Object} A placeholder object with a temporary uuid.
+   * @param {Object} Metadata about the taken photo
+   */
   takePhoto (data, upload, details) {
     if (!this.loggedIn) {
       return false;
