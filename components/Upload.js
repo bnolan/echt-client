@@ -2,24 +2,24 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet, Image, ActivityIndicator, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { ACTION } from '../constants';
+import { observer } from 'mobx-react/native';
 
 const padding = 8;
 const iconSize = 16;
+const width = 64;
+const height = 64;
 
-export default class Upload extends React.Component {
+@observer export default class Upload extends React.Component {
   onPress () {
     this.props.onPress();
   }
 
   render () {
-    const width = 64;
-    const height = 64;
-
     let icon = null;
     let iconName = null;
 
-    if (this.props.photo.actions) {
-      const type = this.props.photo.actions[0].type;
+    if (this.props.upload.actions) {
+      const type = this.props.upload.actions[0].type;
 
       if (type === ACTION.ADD_FRIEND) {
         iconName = 'person-add';
@@ -39,6 +39,8 @@ export default class Upload extends React.Component {
         </View>;
     }
 
+    console.log('Icon#render');
+
     return (
       <TouchableOpacity activeOpacity={0.5} onPress={this.onPress.bind(this)}>
         <View style={styles.border}>
@@ -52,7 +54,7 @@ export default class Upload extends React.Component {
 
           <Image
             style={{width: width, height: height}}
-            source={{uri: this.props.photo.url}}
+            source={{uri: this.props.upload.url}}
           />
         </View>
       </TouchableOpacity>
@@ -73,17 +75,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 90,
     left: 0,
-    top: 0,
+    top: 5,
     right: 0,
     bottom: 0,
+    width: width,
+    height: height,
     alignItems: 'center',
     justifyContent: 'center',
     padding: padding
   },
   border: {
     borderWidth: 1,
-    borderColor: '#333333',
+    borderColor: '#999999',
     borderRadius: 2,
-    marginTop: 20
+    marginTop: 20,
+    backgroundColor: '#333333'
   }
 });

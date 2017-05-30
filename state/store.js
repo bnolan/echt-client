@@ -7,6 +7,8 @@ import config from '../config';
 import assert from 'assert';
 import RNFS from 'react-native-fs';
 import uuid from 'uuid/v4';
+import _ from 'lodash';
+import mobx from 'mobx';
 
 class EchtStore {
   @observable uploads = [];
@@ -95,6 +97,18 @@ class EchtStore {
       });
   }
 
+  generateUpload () {
+    const upload = {
+      uuid: uuid()
+    };
+
+    console.log('#upload');
+    this.merge(this.uploads, [upload]);
+
+    // Return uploading photo
+    return upload;
+  }
+
   deleteUser () {
     if (!this.loggedIn) {
       return false;
@@ -108,7 +122,7 @@ class EchtStore {
     });
   }
 
-  takePhoto (data, details) {
+  takePhoto (data, upload, details) {
     if (!this.loggedIn) {
       return false;
     }
@@ -116,7 +130,7 @@ class EchtStore {
     // UUID is generated client side and is accepted and persisted by the server
     // (unless the UUID already exists)
     var photo = {
-      uuid: uuid(),
+      uuid: upload.uuid,
       info: {
         camera: details.camera
       },
@@ -126,15 +140,14 @@ class EchtStore {
       createdAt: new Date().toISOString()
     };
 
-    var upload = {
-      uuid: photo.uuid,
-      url: data.path
-    };
+    // Set thumbnail
+    upload.url = data.path;
+
+    console.log('#photo', photo);
+    console.log('#upload', upload);
 
     // Add to newsfeed
     this.merge(this.photos, [photo]);
-
-    // Display uploading photo
     this.merge(this.uploads, [upload]);
 
     return RNFS.readFile(data.path, 'base64')
@@ -219,19 +232,15 @@ class EchtStore {
   }
 
   /**
-   * @param {Array} Items to be modified
-   * @param {Array} Items to be removed by uuid
-   * @return {Array} Items removed
+   * @param {Array<mobx.map>} Items to be modified
+   * @param {Array<object>} Items to be removed by uuid
+   * @return {Array<object>} Items removed
    */
   remove (storedItems = [], removedItems = []) {
     var result = [];
 
-    console.log(storedItems, removedItems);
-
     removedItems.forEach((i) => {
-      var index = storedItems.findIndex((p) => p.uuid === i.uuid);
-
-      console.log(index);
+      var index = storedItems.findIndex((p) => p.get('uuid') === i.uuid);
 
       if (index > -1) {
         storedItems.splice(index, 1);
@@ -243,36 +252,38 @@ class EchtStore {
   }
 
   /**
-   * @param {Array} Items already in store
-   * @param {Array} Items to be merged in (can contain duplicates)
-   * @return {Array} Merged items
+   * @param {Array<mobx.map>} Items already in store
+   * @param {Array<object>} Items to be merged in (can contain duplicates)
+   * @return {Array<mobx.map>} Merged items
    */
   merge (storedItems = [], receivedItems = []) {
     var added = 0;
     var merged = 0;
 
+    // We assume that the storedItems is an array of mobx observable.maps,
+    // not an array of objects.
     receivedItems.forEach((i) => {
       var existing;
 
       if (i.uuid) {
-        existing = storedItems.find((p) => p.uuid === i.uuid);
+        existing = storedItems.find((p) => p.get('uuid') === i.uuid);
       } else {
         existing = false;
       }
 
       if (existing) {
-        // We merge because they might be updated
-        Object.assign(existing, i);
+        // We merge into the observable.map
+        existing.merge(i);
         merged++;
       } else {
-        // Add to front of the photos
-        storedItems.unshift(i);
+        // Add to front of the array
+        storedItems.unshift(observable.map(i));
         added++;
       }
     });
 
     console.log(`Added ${added} and merged ${merged} items into collection`);
-    console.log(`Collection has ${storedItems.length} items in it`);
+    // console.log(`Collection has ${storedItems.length} items in it`);
 
     return storedItems;
   }

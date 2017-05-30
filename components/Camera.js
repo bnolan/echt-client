@@ -1,23 +1,32 @@
+import mobx from 'mobx';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
 import RNCamera from 'react-native-camera';
-import { observer } from 'mobx-react/native';
-
-import { CAMERA } from '../constants';
 import Shutter from './Shutter';
-import Upload from './Upload';
-import { Icon } from 'react-native-elements';
-import store from '../state/store';
 import simulatorUpload from '../helpers/simulator-upload';
+import store from '../state/store';
+import Upload from './Upload';
+import { CAMERA } from '../constants';
+import { Icon } from 'react-native-elements';
+import { observer } from 'mobx-react/native';
+import { Animated, Easing, StyleSheet, View } from 'react-native';
 
-@observer
-export default class Camera extends React.Component {
+const uploadHeight = 64 + 20;
+
+@observer export default class Camera extends React.Component {
   constructor () {
     super();
 
     this.state = {
-      cameraType: RNCamera.constants.Type.back
+      cameraType: RNCamera.constants.Type.back,
+      slideAnim: new Animated.Value(-uploadHeight)
     };
+  }
+
+  componentDidMount () {
+    store.uploads.observe(() => {
+      console.log('#uploads observe');
+      this.addUpload();
+    });
   }
 
   toggleType () {
@@ -28,8 +37,22 @@ export default class Camera extends React.Component {
     }
   }
 
+  addUpload () {
+    this.state.slideAnim.setValue(-uploadHeight);
+
+    Animated.timing(
+      this.state.slideAnim, { 
+        fromValue: -uploadHeight,
+        toValue: 1,
+        easing: Easing.linear,
+        duration: 1000 / 60 * 10
+      }
+    ).start();
+  }
+
   takePhoto () {
     const options = {};
+    const upload = store.generateUpload();
     var p;
 
     // Simulator doesn't support cam
@@ -43,16 +66,18 @@ export default class Camera extends React.Component {
       // Normalise data
       data.path = `file://${data.path}`;
       
-      return store.takePhoto(data, {
+      return store.takePhoto(data, upload, {
         camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
       });
     });
   }
 
   render () {
-    const uploads = store.uploads.map((u) => {
-      return <Upload key={u.uuid} photo={u} onPress={() => 'lol'} />;
+    const uploads = mobx.toJS(store.uploads).map((u) => {
+      return <Upload key={u.uuid} upload={u} onPress={() => 'lol'} />;
     });
+
+    console.log('Camera#render');
 
     return (
       <RNCamera
@@ -63,9 +88,9 @@ export default class Camera extends React.Component {
         type={this.state.cameraType}
         aspect={RNCamera.constants.Aspect.fill}>
 
-        <View style={styles.uploads}>
+        <Animated.View style={{ ...uploadStyle, top: this.state.slideAnim }}>
           {uploads}
-        </View>
+        </Animated.View>
 
         <View style={styles.toolbar}>
           <Icon
@@ -82,6 +107,11 @@ export default class Camera extends React.Component {
   }
 }
 
+const uploadStyle = {
+  position: 'absolute',
+  right: 20
+};
+
 const styles = StyleSheet.create({
   cameraType: {
     borderWidth: 4,
@@ -93,7 +123,7 @@ const styles = StyleSheet.create({
   },
   uploads: {
     position: 'absolute',
-    bottom: 20,
+    top: 0,
     right: 20
   },
   toolbar: {
