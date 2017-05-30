@@ -1,10 +1,10 @@
 import mobx from 'mobx';
 import React from 'react';
 import RNCamera from 'react-native-camera';
-import Shutter from './Shutter';
+import Shutter from '../components/Shutter';
 import simulatorUpload from '../helpers/simulator-upload';
 import store from '../state/store';
-import Upload from './Upload';
+import Upload from '../components/Upload';
 import { CAMERA } from '../constants';
 import { Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
@@ -41,7 +41,7 @@ const uploadHeight = 64 + 20;
     this.state.slideAnim.setValue(-uploadHeight);
 
     Animated.timing(
-      this.state.slideAnim, { 
+      this.state.slideAnim, {
         fromValue: -uploadHeight,
         toValue: 1,
         easing: Easing.linear,
@@ -65,7 +65,7 @@ const uploadHeight = 64 + 20;
     return p.then((data) => {
       // Normalise data
       data.path = `file://${data.path}`;
-      
+
       return store.takePhoto(data, upload, {
         camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
       });

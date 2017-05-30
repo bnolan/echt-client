@@ -4,8 +4,7 @@ import SelfieScreen from '../screens/welcome/Selfie';
 // import PincodeScreen from '../screens/welcome/Pincode';
 import InstructionsScreen from '../screens/welcome/Instructions';
 
-// 🍆💦💦🍑
-const Welcome = StackNavigator({
+export default StackNavigator({
   Welcome: {
     screen: WelcomeScreen,
     path: 'welcome/welcome'
@@ -27,5 +26,3 @@ const Welcome = StackNavigator({
   mode: 'modal',
   headerMode: 'none'
 });
-
-export default Welcome;
