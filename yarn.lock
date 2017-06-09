@@ -3635,6 +3635,10 @@ react-devtools-core@^2.0.8:
     cross-env "^3.1.4"
     ws "^2.0.3"
 
+react-native-background-upload@^3.0.0-beta:
+  version "3.0.0-beta"
+  resolved "https://registry.yarnpkg.com/react-native-background-upload/-/react-native-background-upload-3.0.0-beta.tgz#2696a23ed9890ba40aae568c2abdbe10d96b0e86"
+
 "react-native-camera@https://github.com/lwansbrough/react-native-camera.git":
   version "0.6.0"
   resolved "https://github.com/lwansbrough/react-native-camera.git#98de15cf9a250dd667e7459f5378e4dfe6a60f3c"

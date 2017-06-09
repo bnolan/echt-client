@@ -1,4 +1,6 @@
 rootProject.name = 'Echt'
+include ':react-native-background-upload'
+project(':react-native-background-upload').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-background-upload/android')
 include ':react-native-photo-view'
 project(':react-native-photo-view').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-photo-view/android')
 include ':react-native-vector-icons'
