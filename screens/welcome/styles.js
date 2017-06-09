@@ -36,6 +36,8 @@ export default StyleSheet.create({
     height: 320,
     backgroundColor: '#777777',
     margin: 24,
+    borderColor: '#ff00aa',
+    borderWidth: 1
   },
   selfieCameraPreview: {
     flex: 1,

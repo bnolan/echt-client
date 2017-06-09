@@ -53,14 +53,14 @@ export default class Selfie extends React.Component {
         <View style={styles.selfieCamera}>
           <RNCamera
             ref={(cam) => { this.camera = cam; }}
-            style={styles.selfieCameraPreview}
+            style={{ flex: 1, position: 'relative', zIndex: 100 }}
             captureTarget={RNCamera.constants.CaptureTarget.disk}
             captureQuality={RNCamera.constants.CaptureQuality.high}
             type={RNCamera.constants.Type.front}
             aspect={RNCamera.constants.Aspect.fill}>
-
-            <Shutter onPress={(e) => this.takePhoto()} />
           </RNCamera>
+
+          <Shutter onPress={(e) => this.takePhoto()} />
         </View>
 
         <Text style={styles.selfieTextSmall}>
