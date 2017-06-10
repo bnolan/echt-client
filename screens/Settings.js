@@ -3,7 +3,7 @@ import React from 'react';
 import store from '../state/store';
 import { Button } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 
 @observer export default class Settings extends React.Component {
   setUser (name) {
@@ -18,11 +18,7 @@ import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native'
   }
 
   clearUser () {
-    const { navigation: { navigate } } = this.props;
-
-    store.clear().then(() => {
-      navigate('Loading');
-    });
+    store.clear();
   }
 
   onClearUser () {
@@ -32,7 +28,7 @@ import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native'
       [
         { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
         {
-          text: 'Yes', 
+          text: 'Yes',
           onPress: () => {
             console.log('Yes Pressed');
             this.clearUser();
@@ -44,11 +40,7 @@ import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native'
   }
 
   deleteUser () {
-    const { navigation: { navigate } } = this.props;
-
-    store.deleteUser().then(() => {
-      navigate('Loading');
-    });
+    store.deleteUser();
   }
 
   onDeleteAccount () {
