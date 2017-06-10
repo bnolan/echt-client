@@ -56,7 +56,6 @@ export default class Friends extends React.Component {
     return (
       <View style={styles.noFriends}>
         <Text style={styles.header}>You have no friends.</Text>
-        
         <Text style={styles.paragraph}>
           Take a selfie with a friend (both of you in the photo
           at the same time) on the front facing camera and we
@@ -132,6 +131,6 @@ const styles = StyleSheet.create({
     color: '#777',
     fontWeight: 'bold',
     margin: 20,
-    marginBottom: 0    
+    marginBottom: 0
   }
 });

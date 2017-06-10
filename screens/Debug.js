@@ -1,6 +1,5 @@
 import React from 'react';
 import store from '../state/store';
-import { Button } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
 import { TouchableHighlight, StyleSheet, Text, View } from 'react-native';
 

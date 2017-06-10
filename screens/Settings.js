@@ -1,9 +1,8 @@
-import Debug from './Debug';
 import React from 'react';
 import store from '../state/store';
 import { Button } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 
 @observer export default class Settings extends React.Component {
   setUser (name) {
@@ -32,7 +31,7 @@ import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native'
       [
         { text: 'No', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
         {
-          text: 'Yes', 
+          text: 'Yes',
           onPress: () => {
             console.log('Yes Pressed');
             this.clearUser();
@@ -94,7 +93,7 @@ import { Alert, TouchableHighlight, StyleSheet, Text, View } from 'react-native'
             onPress={() => this.onDeleteAccount()}
             icon={{name: 'report'}}
             title='Delete Account' />
-          </View>
+        </View>
       </View>
     );
   }
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     letterSpacing: -1,
-    margin: 20,
+    margin: 20
   },
 
   userButton: {

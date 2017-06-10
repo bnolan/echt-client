@@ -56,8 +56,7 @@ export default class Selfie extends React.Component {
             captureTarget={RNCamera.constants.CaptureTarget.disk}
             captureQuality={RNCamera.constants.CaptureQuality.high}
             type={RNCamera.constants.Type.front}
-            aspect={RNCamera.constants.Aspect.fill}>
-          </RNCamera>
+            aspect={RNCamera.constants.Aspect.fill} />
 
           <Shutter onPress={(e) => this.takePhoto()} />
         </View>

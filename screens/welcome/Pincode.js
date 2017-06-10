@@ -45,6 +45,10 @@ export default class PincodeScreen extends React.Component {
     }
   }
 
+  setInputRef (id, ref) {
+    this.textInputsRefs[id] = ref;
+  }
+
   render () {
     const { navigation: { navigate } } = this.props;
     const pins = [];
@@ -53,8 +57,8 @@ export default class PincodeScreen extends React.Component {
       pins.push(
         <TextInput
           key={id}
-          ref={(ref) => this.textInputsRefs[id] = ref}
-          clearTextOnFocus={true}
+          ref={(ref) => this.setInputRef(id, ref)}
+          clearTextOnFocus
           onChangeText={(text) => this.handleEdit(text, id)}
           onFocus={() => this.setState({focussed: id})}
           value={this.state.code[id] ? this.state.code[id].toString() : ''}

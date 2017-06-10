@@ -7,8 +7,6 @@ import config from '../config';
 import assert from 'assert';
 import RNFS from 'react-native-fs';
 import uuid from 'uuid/v4';
-import _ from 'lodash';
-import mobx from 'mobx';
 
 class EchtStore {
   @observable uploads = [];
