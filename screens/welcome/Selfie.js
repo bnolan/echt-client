@@ -1,6 +1,6 @@
 import React from 'react';
 import RNCamera from 'react-native-camera';
-import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
+import { StyleSheet, ActivityIndicator, Text, View, Image } from 'react-native';
 import Shutter from '../../components/Shutter';
 import store from '../../state/store';
 import simulatorUpload from '../../helpers/simulator-upload';
@@ -9,23 +9,44 @@ export default class Selfie extends React.Component {
   constructor () {
     super();
 
-    this.state = {
-      submitting: false
+    this.initialState = {
+      submitting: false,
+      previewPath: null,
+      success: null,
+      message: null
     };
+
+    this.state = {...this.initialState};
   }
 
   submit (path) {
     const { navigation: { navigate } } = this.props;
 
-    store.signup(path).then((r) => {
-      this.setState({ submitting: false });
+    this.setState({ submitting: true, previewPath: path });
+    store.signup(path)
+      .then(r => {
+        this.setState(this.initialState);
 
-      if (r.success) {
-        navigate('Instructions');
-        // TODO Use PIN screen once it can be made optional
-        // navigate('Pincode');
-      }
-    });
+        if (r.success) {
+          navigate('Instructions');
+          // TODO Use PIN screen once it can be made optional
+          // navigate('Pincode');
+        } else {
+          this.setState({
+            ...this.initialState,
+            success: r.success,
+            message: r.message
+          });
+        }
+      })
+      .catch(e => {
+        console.log('e', e);
+        this.setState(this.initialState);
+      });
+  }
+
+  retake () {
+    this.setState(this.initialState);
   }
 
   takePhoto () {
@@ -43,12 +64,19 @@ export default class Selfie extends React.Component {
   }
 
   render () {
+    const { submitting, previewPath } = this.state;
+
     return (
       <View style={styles.container}>
         <Text style={styles.header}>How's your hair?</Text>
 
         <Text style={styles.text}>Take a selfie</Text>
 
+        {submitting &&
+        <Image style={styles.camera} source={{uri: previewPath}} />
+        }
+
+        {!submitting &&
         <View style={styles.camera}>
           <RNCamera
             ref={(cam) => { this.camera = cam; }}
@@ -57,9 +85,9 @@ export default class Selfie extends React.Component {
             captureQuality={RNCamera.constants.CaptureQuality.high}
             type={RNCamera.constants.Type.front}
             aspect={RNCamera.constants.Aspect.fill} />
-
           <Shutter onPress={(e) => this.takePhoto()} />
         </View>
+        }
 
         <Text style={styles.textSmall}>
           Echt remembers your face to recognize you, so you don't have
@@ -77,6 +105,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#8795E8'
   },
+  preview: {
+    flex: 1,
+    position: 'relative',
+    zIndex: 100
+  },
   camera: {
     width: 320,
     height: 320,
@@ -84,11 +117,6 @@ const styles = StyleSheet.create({
     margin: 24,
     borderColor: '#ff00aa',
     borderWidth: 1
-  },
-  preview: {
-    flex: 1,
-    position: 'relative',
-    zIndex: 100
   },
   header: {
     color: '#ffffff',

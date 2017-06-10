@@ -84,8 +84,12 @@ class EchtStore {
           body: JSON.stringify(request)
         });
       })
-      .then((r) => r.json())
-      .then((body) => {
+      .then((r) => {
+        console.log('r', r);
+        return r.json();
+      }).then((body) => {
+        // TODO Figure out why it doesn't reject on non-2xx HTTP responses
+        console.log('body', body);
         this.user.key = body.deviceKey;
 
         // Store current user
