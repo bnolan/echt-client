@@ -52,7 +52,7 @@ export default class Selfie extends React.Component {
         <View style={styles.camera}>
           <RNCamera
             ref={(cam) => { this.camera = cam; }}
-            style={{ flex: 1, position: 'relative', zIndex: 100 }}
+            style={styles.preview}
             captureTarget={RNCamera.constants.CaptureTarget.disk}
             captureQuality={RNCamera.constants.CaptureQuality.high}
             type={RNCamera.constants.Type.front}
@@ -74,8 +74,8 @@ export default class Selfie extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#8795E8',
-    flex: 1
+    flex: 1,
+    backgroundColor: '#8795E8'
   },
   camera: {
     width: 320,
@@ -85,10 +85,10 @@ const styles = StyleSheet.create({
     borderColor: '#ff00aa',
     borderWidth: 1
   },
-  cameraPreview: {
+  preview: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    position: 'relative',
+    zIndex: 100
   },
   header: {
     color: '#ffffff',

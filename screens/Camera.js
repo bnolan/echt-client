@@ -88,7 +88,7 @@ const uploadHeight = 64 + 20;
         type={this.state.cameraType}
         aspect={RNCamera.constants.Aspect.fill}>
 
-        <Animated.View style={{ ...uploadStyle, top: this.state.slideAnim }}>
+        <Animated.View style={[styles.uploads, { top: this.state.slideAnim }]}>
           {uploads}
         </Animated.View>
 
@@ -107,11 +107,6 @@ const uploadHeight = 64 + 20;
   }
 }
 
-const uploadStyle = {
-  position: 'absolute',
-  right: 20
-};
-
 const styles = StyleSheet.create({
   cameraType: {
     borderWidth: 4,
@@ -123,7 +118,6 @@ const styles = StyleSheet.create({
   },
   uploads: {
     position: 'absolute',
-    top: 0,
     right: 20
   },
   toolbar: {
