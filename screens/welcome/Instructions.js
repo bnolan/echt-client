@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import styles from './styles';
+import { Text, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements';
 
 export default class Instructions extends React.Component {
@@ -8,33 +7,33 @@ export default class Instructions extends React.Component {
     const { navigation: { navigate } } = this.props;
 
     return (
-      <View style={styles.instructionView}>
-        <Text style={styles.instructionHeader}>
+      <View style={styles.container}>
+        <Text style={styles.header}>
           Turn a selfie into a friend
         </Text>
 
-        <Text style={styles.instructionText}>
+        <Text style={styles.text}>
           Your friends see
           photos you take in Echt.
         </Text>
 
-        <Text style={styles.instructionText}>
+        <Text style={styles.text}>
           To add a friend, switch to the front facing camera
           and take a selfie with your friend.
         </Text>
 
-        <Text style={styles.instructionText}>
+        <Text style={styles.text}>
           Echt will recognize your friend
           and send them a friend request.
         </Text>
 
-        <Text style={styles.instructionText}>
+        <Text style={styles.text}>
           If your friend doesn't use Echt, you send
           them an invitation, and when they sign up, we'll
           add them.
         </Text>
 
-        <View style={styles.instructionButton}>
+        <View style={styles.button}>
           <Button
             raised
             backgroundColor='#ffffff'
@@ -47,3 +46,30 @@ export default class Instructions extends React.Component {
     );
   }
 }
+
+// http://www.colourlovers.com/palette/3636765/seapunk_vaporwave
+// http://www.colourlovers.com/palette/3887337/Pale_Glitter
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#32006C',
+    flex: 1
+  },
+  header: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: 'bold',
+    margin: 24
+  },
+  text: {
+    color: '#FFFFFF',
+    margin: 24,
+    marginBottom: 24,
+    marginTop: 0,
+    fontSize: 16
+  },
+  button: {
+
+  }
+
+});
