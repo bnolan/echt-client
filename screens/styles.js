@@ -7,7 +7,8 @@ export const colors = {
   bgDarker: '#000',
   bgLight: '#fff',
   bgMedium: '#777',
-  bgDark: '#333'
+  bgDark: '#333',
+  bgPink: '#ff00aa'
 };
 
 export default StyleSheet.create({
@@ -182,7 +183,8 @@ export default StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.4,
     borderWidth: 1,
-    borderColor: '#aaaaaa'
+    borderColor: '#aaaaaa',
+    marginBottom: 0
   },
   friendItemDetail: {
     flex: 0.7,
