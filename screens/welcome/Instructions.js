@@ -5,15 +5,12 @@ import styles from '../styles';
 import store from '../../state/store';
 
 export default class Instructions extends React.Component {
-
   finishSignup () {
     // Automatically navigates to main screen
     store.user.loggedIn = true;
   }
 
   render () {
-    const { navigation: { navigate } } = this.props;
-
     return (
       <View style={[styles.container, styles.instructionsScreen]}>
         <Text style={styles.header}>
