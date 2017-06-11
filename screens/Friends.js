@@ -63,18 +63,20 @@ export default class Friends extends React.Component {
               buttonStyle={styles.friendButton}
               icon={{name: 'check-circle'}}
               title='Accept' />
-
-            <Button
-              fontSize={12}
-              backgroundColor={styles.bgMedium}
-              color={styles.textLight}
-              buttonStyle={styles.friendButton}
-              icon={{name: 'clear'}}
-              title='Deny' />
           </View>
         </View>
       </View>
     );
+
+/*
+  <Button
+    fontSize={12}
+    backgroundColor={styles.bgMedium}
+    color={styles.textLight}
+    buttonStyle={styles.friendButton}
+    icon={{name: 'clear'}}
+    title='Deny' />
+*/
 
 //  <TouchableHighlight onPress={() => navigate('Friend', {uuid: item.uuid})}>
 //  </TouchableHighlight>

@@ -2,7 +2,7 @@
 
 import { AsyncStorage } from 'react-native';
 import { observable, computed } from 'mobx';
-import { PHOTO_STATUS } from '../constants';
+import { STATUS, PHOTO_STATUS } from '../constants';
 import config from '../config';
 import assert from 'assert';
 import RNFS from 'react-native-fs';
@@ -64,6 +64,26 @@ class EchtStore {
 
   getFriend (uuid) {
     return this.friends.find(p => p.uuid === uuid);
+  }
+
+  acceptFriendRequest (uuid) {
+    const request = { uuid: uuid, status: STATUS.ACCEPTED };
+
+    return fetch(`${this.endpoint}/friends`, {
+      method: 'put',
+      headers: this.headers,
+      body: JSON.stringify(request)
+    }).then((r) => r.json());
+  }
+
+  sendFriendRequest (friendId, photoId) {
+    const request = { user: friendId, photoId: photoId };
+
+    return fetch(`${this.endpoint}/friends`, {
+      method: 'post',
+      headers: this.headers,
+      body: JSON.stringify(request)
+    }).then((r) => r.json());
   }
 
   signup (path) {
