@@ -29,7 +29,7 @@ class Welcome extends React.Component {
             backgroundColor='#ffffff'
             color='#333333'
             onPress={() => navigate('Selfie')}
-            icon={{name: 'cached', color: '#333333'}}
+            icon={{name: 'keyboard-arrow-right', color: '#333333'}}
             style={{width: 240}}
             title='Continue' />
         </View>
