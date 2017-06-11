@@ -67,23 +67,43 @@ export class EchtStore {
   }
 
   acceptFriendRequest (uuid) {
+    let response;
     const request = { uuid: uuid, status: STATUS.ACCEPTED };
+
+    this.remove(this.friends, { uuid: uuid });
 
     return fetch(`${this.endpoint}/friends`, {
       method: 'put',
       headers: this.headers,
       body: JSON.stringify(request)
-    }).then((r) => r.json());
+    })
+    .then((r) => r.json())
+    .then((r) => {
+      // fixme don't do this ganky shit with response
+      response = r;
+      return this.refreshFriends();
+    }).then(() => {
+      return response;
+    });
   }
 
   sendFriendRequest (friendId, photoId) {
+    let response;
     const request = { user: friendId, photoId: photoId };
 
     return fetch(`${this.endpoint}/friends`, {
       method: 'post',
       headers: this.headers,
       body: JSON.stringify(request)
-    }).then((r) => r.json());
+    })
+    .then((r) => r.json())
+    .then((r) => {
+      // fixme don't do this ganky shit with response
+      response = r;
+      return this.refreshFriends();
+    }).then(() => {
+      return response;
+    });
   }
 
   signup (path) {
