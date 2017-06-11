@@ -17,11 +17,7 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
   }
 
   clearUser () {
-    const { navigation: { navigate } } = this.props;
-
-    store.clear().then(() => {
-      navigate('Loading');
-    });
+    store.clear();
   }
 
   onClearUser () {
@@ -43,11 +39,7 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
   }
 
   deleteUser () {
-    const { navigation: { navigate } } = this.props;
-
-    store.deleteUser().then(() => {
-      navigate('Loading');
-    });
+    store.deleteUser();
   }
 
   onDeleteAccount () {

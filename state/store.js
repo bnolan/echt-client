@@ -1,7 +1,7 @@
 /* global fetch, __DEV__ */
 
 import { AsyncStorage } from 'react-native';
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { PHOTO_STATUS } from '../constants';
 import config from '../config';
 import assert from 'assert';
@@ -18,6 +18,8 @@ class EchtStore {
   @observable user = {
     key: null
   };
+
+  @observable loaded = false;
 
   /**
    * CAUTION: Use for debugging purposes only
@@ -40,7 +42,7 @@ class EchtStore {
   }
 
   // Headers for loggedIn users
-  get headers () {
+  @computed get headers () {
     return {
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
@@ -48,11 +50,11 @@ class EchtStore {
     };
   }
 
-  get deviceKey () {
+  @computed get deviceKey () {
     return this.user.key;
   }
 
-  get loggedIn () {
+  @computed get loggedIn () {
     return !!this.user.key;
   }
 
@@ -294,11 +296,11 @@ class EchtStore {
   }
 
   load () {
-    AsyncStorage.getItem('deviceKey').then((key) => {
+    const getDeviceKey = AsyncStorage.getItem('deviceKey').then((key) => {
       this.user.key = key;
     });
 
-    AsyncStorage.getItem('photos').then((result) => {
+    const getPhotos = AsyncStorage.getItem('photos').then((result) => {
       var items;
 
       try {
@@ -314,7 +316,7 @@ class EchtStore {
       this.refreshPhotos();
     });
 
-    AsyncStorage.getItem('friends').then((result) => {
+    const getFriends = AsyncStorage.getItem('friends').then((result) => {
       var items;
 
       try {
@@ -328,6 +330,14 @@ class EchtStore {
       }
 
       this.refreshFriends();
+    });
+
+    Promise.all([
+      getDeviceKey,
+      getPhotos,
+      getFriends
+    ]).then(() => {
+      this.loaded = true;
     });
   }
 
