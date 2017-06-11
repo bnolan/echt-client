@@ -54,6 +54,10 @@ export default StyleSheet.create({
     color: '#eeeeee',
     margin: 24
   },
+  selfieError: {
+    color: '#ff0000',
+    fontSize: 24
+  },
 
   pincodeScreen: {
     backgroundColor: '#8795E8',
