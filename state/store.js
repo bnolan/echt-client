@@ -16,7 +16,8 @@ export class EchtStore {
   @observable friends = [];
 
   @observable user = {
-    key: null
+    key: null,
+    loggedIn: false // used to mark finalisation of welcome screens
   };
 
   @observable loaded = false;
@@ -55,7 +56,7 @@ export class EchtStore {
   }
 
   @computed get loggedIn () {
-    return !!this.user.key;
+    return !!this.user.key && this.user.loggedIn;
   }
 
   getPhoto (uuid) {
@@ -126,9 +127,7 @@ export class EchtStore {
           body: JSON.stringify(request)
         });
       })
-      .then((r) => {
-        return r.json();
-      })
+      .then((r) => r.json())
       .then((body) => {
         if (body.success) {
           this.user.key = body.deviceKey;
