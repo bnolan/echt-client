@@ -10,9 +10,9 @@ class Welcome extends React.Component {
     const { navigation: { navigate } } = this.props;
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.header}>
-          Willkommen!
+      <View style={styles.welcomeScreen}>
+        <Text style={styles.welcomeHeader}>
+          Welcome!
         </Text>
 
         <Text style={styles.text}>

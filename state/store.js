@@ -84,12 +84,14 @@ class EchtStore {
           body: JSON.stringify(request)
         });
       })
-      .then((r) => r.json())
+      .then((r) => {
+        return r.json()
+      })
       .then((body) => {
-        this.user.key = body.deviceKey;
-
-        // Store current user
-        this.save();
+        if (body.success) {
+          this.user.key = body.deviceKey;
+          this.save();
+        }
 
         return body;
       });

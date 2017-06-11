@@ -4,6 +4,7 @@ import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
 import Shutter from '../../components/Shutter';
 import store from '../../state/store';
 import simulatorUpload from '../../helpers/simulator-upload';
+import { Icon } from 'react-native-elements';
 
 export default class Selfie extends React.Component {
   constructor () {
@@ -19,17 +20,17 @@ export default class Selfie extends React.Component {
     const { navigation: { navigate } } = this.props;
 
     store.signup(path).then((r) => {
-      // this.setState({ submitting: false });
+      this.setState({ submitting: false });
 
-      // if (r.success) {
-      //   navigate('Instructions');
-      //   // TODO Use PIN screen once it can be made optional
-      //   // navigate('Pincode');
-      // } else {
-      //   this.setState({
-      //     error: r.message
-      //   });
-      // }
+      if (r.success) {
+        navigate('Instructions');
+        // TODO Use PIN screen once it can be made optional
+        // navigate('Pincode');
+      } else {
+        this.setState({
+          error: r.message
+        });
+      }
     });
   }
 
@@ -37,7 +38,7 @@ export default class Selfie extends React.Component {
     const options = {};
     var p;
 
-    this.setState({ submitting: true });
+    this.setState({ submitting: true, error: null });
 
     // Simulator doesn't support cam
     if (this.props.screenProps.isSimulator) {
@@ -50,6 +51,18 @@ export default class Selfie extends React.Component {
   }
 
   render () {
+    var icon;
+
+    if (this.state.error) {
+      if (this.state.error.match(/too many/i)) {
+        icon = 'group';
+      } else if (this.state.error.match(/no face/i)) {
+        icon = 'person-outline';
+      } else {
+        icon = 'error';
+      }
+    }
+
     return (
       <View style={styles.container}>
         <Text style={styles.header}>How's your hair?</Text>
@@ -75,7 +88,12 @@ export default class Selfie extends React.Component {
           { this.state.submitting || <Shutter onPress={(e) => this.takePhoto()} /> }
         </View>
 
-        { this.state.error && <Text style={styles.selfieError}>{this.state.error}</Text>}
+        { this.state.error && <View style={styles.selfieErrorBox}>
+          <Icon
+            name={icon}
+            color='#ff00aa' />
+          <Text style={styles.selfieError}>{this.state.error}</Text>
+        </View>}
 
         <Text style={styles.textSmall}>
           Echt remembers your face to recognize you, so you don't have

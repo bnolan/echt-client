@@ -55,10 +55,26 @@ export default StyleSheet.create({
     margin: 24
   },
   selfieError: {
-    color: '#ff0000',
-    fontSize: 24
+    color: '#ff00aa',
+    lineHeight: 24,
+    paddingLeft: 16
   },
-
+  selfieErrorBox: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 4,
+    margin: 30,
+    marginTop: 8,
+    marginBottom: 8,
+    flexDirection: 'row',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 1,
+      height: 1
+    },
+    shadowRadius: 5,
+    shadowOpacity: 0.4
+  },
   pincodeScreen: {
     backgroundColor: '#8795E8',
     flex: 1
