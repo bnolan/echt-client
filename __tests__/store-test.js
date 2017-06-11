@@ -1,4 +1,4 @@
-/* globals describe, it, expect, jest */
+/* globals describe, beforeEach, it, expect, jest */
 
 import {EchtStore} from '../state/store';
 import {observe, useStrict} from 'mobx';
@@ -10,7 +10,7 @@ describe('store', () => {
 
   beforeEach(() => {
     useStrict(false);
-    store = new EchtStore()
+    store = new EchtStore();
     store.clear();
   });
 
@@ -43,7 +43,8 @@ describe('store', () => {
 
   it('should dispatch on merge', () => {
     let isObserved = false;
-    const observation = observe(store.friends, (changes) => {
+
+    observe(store.friends, (changes) => {
       isObserved = true;
       expect(changes.type).toEqual('splice');
     });
