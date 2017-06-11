@@ -12,19 +12,25 @@ export default StyleSheet.create({
 
   // Pink and white
   welcomeScreen: {
-    backgroundColor: '#FF6AD5',
+    backgroundColor: '#333333',
     flex: 1
   },
   welcomeHeader: {
-    color: '#000000',
-    fontSize: 24,
+    color: '#00aaff',
+    fontSize: 48,
     fontWeight: 'bold',
-    margin: 24
+    margin: 24,
+    marginTop: 48,
+    textAlign: 'center',
+    fontFamily: 'arial rounded mt bold'
   },
   welcomeText: {
-    color: '#000000',
-    margin: 24,
-    fontSize: 18
+    color: '#eeeeee',
+    margin: 24
+  },
+  welcomeButton: {
+    marginTop: 24,
+    alignItems: 'center'
   },
 
   selfieScreen: {

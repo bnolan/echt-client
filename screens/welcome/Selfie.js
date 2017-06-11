@@ -1,10 +1,11 @@
 import React from 'react';
 import RNCamera from 'react-native-camera';
-import { StyleSheet, ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import Shutter from '../../components/Shutter';
 import store from '../../state/store';
 import simulatorUpload from '../../helpers/simulator-upload';
 import { Icon } from 'react-native-elements';
+import styles from './styles';
 
 export default class Selfie extends React.Component {
   constructor () {
@@ -103,39 +104,3 @@ export default class Selfie extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#8795E8',
-    flex: 1
-  },
-  camera: {
-    width: 320,
-    height: 320,
-    backgroundColor: '#777777',
-    margin: 24,
-    borderColor: '#ff00aa',
-    borderWidth: 1
-  },
-  cameraPreview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
-  },
-  header: {
-    color: '#ffffff',
-    fontSize: 24,
-    fontWeight: 'bold',
-    margin: 24
-  },
-  text: {
-    color: '#ffffff',
-    margin: 24,
-    marginTop: 0,
-    fontSize: 18
-  },
-  textSmall: {
-    color: '#eeeeee',
-    margin: 24
-  }
-});
