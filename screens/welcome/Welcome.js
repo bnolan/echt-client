@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
-import styles from '../styles';
+import styles, {colors} from '../styles';
 
 class Welcome extends React.Component {
   nextScreen () {
@@ -23,14 +23,14 @@ class Welcome extends React.Component {
           to add them.
         </Text>
 
-        <View style={styles.welcomeButton}>
+        <View style={styles.viewCentered}>
           <Button
             raised
-            backgroundColor='#ffffff'
-            color='#333333'
             onPress={() => navigate('Selfie')}
-            icon={{name: 'keyboard-arrow-right', color: '#333333'}}
-            style={{width: 240}}
+            color={colors.textDark}
+            backgroundColor={colors.bgLight}
+            icon={{name: 'keyboard-arrow-right', color: colors.textDark}}
+            style={styles.welcomeButton}
             title='Continue' />
         </View>
       </View>

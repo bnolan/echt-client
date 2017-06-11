@@ -1,12 +1,21 @@
 import { StyleSheet } from 'react-native';
 
+export const colors = {
+  textLight: '#ddd',
+  textDark: '#666',
+  bgDarker: '#000',
+  bgLight: '#fff',
+  bgMedium: '#777',
+  bgDark: '#333'
+};
+
 export default StyleSheet.create({
   // Common
   container: {
     flex: 1
   },
   header: {
-    color: '#dddddd',
+    color: colors.textLight,
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'arial rounded mt bold',
@@ -15,10 +24,10 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   dark: {
-    color: '#666666'
+    color: colors.textDark
   },
   text: {
-    color: '#dddddd',
+    color: colors.textLight,
     margin: 24
   },
   bigEmoji: {
@@ -28,41 +37,37 @@ export default StyleSheet.create({
     textAlign: 'center'
   },
   paragraph: {
+    color: colors.textLight,
     fontSize: 16,
     lineHeight: 24,
-    margin: 20,
-    color: '#777'
+    margin: 20
   },
-  bold: {
-    fontSize: 16,
-    color: '#777',
-    fontWeight: 'bold',
-    margin: 20,
-    marginBottom: 0
+  viewCentered: {
+    alignItems: 'center'
   },
 
   // Screens
   welcomeScreen: {
-    backgroundColor: '#333333'
+    backgroundColor: colors.bgDark
   },
   welcomeButton: {
     marginTop: 24,
-    alignItems: 'center'
+    width: 240
   },
   selfieScreen: {
-    backgroundColor: '#333333'
+    backgroundColor: colors.bgDark
   },
   selfieCamera: {
     width: 320,
     height: 320,
-    backgroundColor: '#777777',
+    backgroundColor: colors.bgMedium,
     margin: 24,
     borderColor: '#aaaaaa',
     borderWidth: 1,
     borderRadius: 2
   },
   selfieError: {
-    color: '#000000',
+    color: colors.bgDarker,
     lineHeight: 24,
     paddingLeft: 16
   },
@@ -74,7 +79,7 @@ export default StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     flexDirection: 'row',
-    shadowColor: '#000000',
+    shadowColor: colors.bgDarker,
     shadowOffset: {
       width: 1,
       height: 1
@@ -83,7 +88,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.4
   },
   pincodeScreen: {
-    backgroundColor: '#333333'
+    backgroundColor: colors.bgDark
   },
   pinView: {
     flexDirection: 'row',
@@ -101,7 +106,7 @@ export default StyleSheet.create({
     height: 50,
     width: 40,
     borderRadius: 5,
-    shadowColor: '#000000',
+    shadowColor: colors.bgDark,
     shadowOffset: {
       width: 1,
       height: 1
@@ -110,14 +115,14 @@ export default StyleSheet.create({
     shadowOpacity: 0.4
   },
   instructionsScreen: {
-    backgroundColor: '#333333'
+    backgroundColor: colors.bgDark
   },
   instructionsButton: {
     marginTop: 24,
     alignItems: 'center'
   },
   friendScreen: {
-    backgroundColor: 'black'
+    backgroundColor: colors.bgDarker
   },
   friendsScreen: {
     padding: 20,
@@ -136,7 +141,7 @@ export default StyleSheet.create({
     right: 0,
     padding: 10,
     paddingRight: 20,
-    backgroundColor: 'black',
+    backgroundColor: colors.bgDarker,
     opacity: 0.7
   },
   photoActionsBottom: {
@@ -148,7 +153,7 @@ export default StyleSheet.create({
     right: 0,
     padding: 10,
     paddingRight: 20,
-    backgroundColor: 'black',
+    backgroundColor: colors.bgDarker,
     opacity: 0.7
   },
   photoIcon: {
