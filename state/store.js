@@ -8,7 +8,7 @@ import assert from 'assert';
 import RNFS from 'react-native-fs';
 import uuid from 'uuid/v4';
 
-class EchtStore {
+export class EchtStore {
   @observable uploads = [];
 
   @observable photos = [];
@@ -124,7 +124,6 @@ class EchtStore {
       uuid: uuid()
     };
 
-    console.log('#upload');
     this.merge(this.uploads, [upload]);
 
     // Return uploading photo
@@ -169,9 +168,6 @@ class EchtStore {
 
     // Set thumbnail
     upload.url = data.path;
-
-    console.log('#photo', photo);
-    console.log('#upload', upload);
 
     // Add to newsfeed
     this.merge(this.photos, [photo]);
@@ -247,8 +243,6 @@ class EchtStore {
     if (!this.loggedIn) {
       return false;
     }
-
-    console.log('#refreshFriends');
 
     return fetch(`${this.endpoint}/friends`, {
       headers: this.headers
@@ -341,9 +335,6 @@ class EchtStore {
    * @return {Array<mobx.map>} Merged items
    */
   merge (storedItems = [], receivedItems = []) {
-    var added = 0;
-    var merged = 0;
-
     // We assume that the storedItems is an array of mobx observable.maps,
     // not an array of objects.
     receivedItems.forEach((i) => {
@@ -358,16 +349,11 @@ class EchtStore {
       if (existing) {
         // We merge into the observable.map
         existing.merge(i);
-        merged++;
       } else {
         // Add to front of the array
         storedItems.unshift(observable.map(i));
-        added++;
       }
     });
-
-    console.log(`Added ${added} and merged ${merged} items into collection`);
-    // console.log(`Collection has ${storedItems.length} items in it`);
 
     return storedItems;
   }
