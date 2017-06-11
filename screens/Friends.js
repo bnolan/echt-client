@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
 import styles from './styles';
-import timeago from 'timeago-words'
+import timeago from 'timeago-words';
 import { Button } from 'react-native-elements';
-import { FlatList, Text, TouchableHighlight, View, Image, Dimensions, StyleSheet } from 'react-native';
+import { FlatList, Text, View, Image } from 'react-native';
 
 export default class Friends extends React.Component {
   state = {
@@ -31,8 +31,8 @@ export default class Friends extends React.Component {
   }
 
   renderItem ({item}) {
-    const { itemsPerRow, navigation: {navigate} } = this.props;
-    const screenWidth = Dimensions.get('window').width;
+    // const { navigation: { navigate } } = this.props;
+    // const screenWidth = Dimensions.get('window').width;
     const width = 128;
     const height = 128;
 
@@ -56,7 +56,7 @@ export default class Friends extends React.Component {
           </Text>
 
           <View style={styles.friendButtons}>
-            <Button 
+            <Button
               fontSize={12}
               backgroundColor='#555'
               color='#fff'
@@ -64,7 +64,7 @@ export default class Friends extends React.Component {
               icon={{name: 'check-circle'}}
               title='Accept' />
 
-            <Button 
+            <Button
               fontSize={12}
               backgroundColor='#999'
               color='#ccc'
@@ -76,8 +76,8 @@ export default class Friends extends React.Component {
       </View>
     );
 
-//        <TouchableHighlight onPress={() => navigate('Friend', {uuid: item.uuid})}>
-        //</TouchableHighlight>
+//  <TouchableHighlight onPress={() => navigate('Friend', {uuid: item.uuid})}>
+//  </TouchableHighlight>
   }
 
   keyExtractor (item) {

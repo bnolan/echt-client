@@ -175,7 +175,7 @@ export default StyleSheet.create({
     padding: 20,
     flex: 1,
     backgroundColor: 'white'
-  },  
+  },
 
   loadingScreen: {
     alignItems: 'center',

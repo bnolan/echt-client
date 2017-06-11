@@ -87,7 +87,7 @@ class EchtStore {
         });
       })
       .then((r) => {
-        return r.json()
+        return r.json();
       })
       .then((body) => {
         if (body.success) {
@@ -236,59 +236,59 @@ class EchtStore {
       (response) => response.json()
     ).then((r) => {
       // FIXME DONT COMMIT
-      r = {
-        "friends": [
-          {
-            "createdAt": "2017-06-11T02:17:27.235Z",
-            "photo": {
-              "original": {
-                "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-              },
-              "small": {
-                "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
-              },
-              "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-            },
-            "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
-            "requester": false,
-            "status": "PENDING",
-            "uuid": "95d6cf88-1728-4876-a1ff-1a48e4c6d460"
-          },
-          {
-            "createdAt": "2017-06-11T02:17:27.235Z",
-            "photo": {
-              "original": {
-                "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-              },
-              "small": {
-                "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
-              },
-              "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-            },
-            "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
-            "requester": false,
-            "status": "PENDING",
-            "uuid": "a5d6cf88-1728-4876-a1ff-1a48e4c6d460"
-          },
-          {
-            "createdAt": "2017-06-11T02:17:27.235Z",
-            "photo": {
-              "original": {
-                "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-              },
-              "small": {
-                "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
-              },
-              "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-            },
-            "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
-            "requester": false,
-            "status": "PENDING",
-            "uuid": "b5d6cf88-1728-4876-a1ff-1a48e4c6d460"
-          }          
-        ],
-        "success": true
-      }
+      // r = {
+      //   "friends": [
+      //     {
+      //       "createdAt": "2017-06-11T02:17:27.235Z",
+      //       "photo": {
+      //         "original": {
+      //           "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
+      //         },
+      //         "small": {
+      //           "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
+      //         },
+      //         "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
+      //       },
+      //       "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
+      //       "requester": false,
+      //       "status": "PENDING",
+      //       "uuid": "95d6cf88-1728-4876-a1ff-1a48e4c6d460"
+      //     },
+      //     {
+      //       "createdAt": "2017-06-11T02:17:27.235Z",
+      //       "photo": {
+      //         "original": {
+      //           "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
+      //         },
+      //         "small": {
+      //           "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
+      //         },
+      //         "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
+      //       },
+      //       "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
+      //       "requester": false,
+      //       "status": "PENDING",
+      //       "uuid": "a5d6cf88-1728-4876-a1ff-1a48e4c6d460"
+      //     },
+      //     {
+      //       "createdAt": "2017-06-11T02:17:27.235Z",
+      //       "photo": {
+      //         "original": {
+      //           "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
+      //         },
+      //         "small": {
+      //           "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
+      //         },
+      //         "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
+      //       },
+      //       "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
+      //       "requester": false,
+      //       "status": "PENDING",
+      //       "uuid": "b5d6cf88-1728-4876-a1ff-1a48e4c6d460"
+      //     }
+      //   ],
+      //   "success": true
+      // }
 
       this.friends = this.merge(this.friends, r.friends);
       this.save();
