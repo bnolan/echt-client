@@ -2,10 +2,12 @@ import mobx from 'mobx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
-import styles, {colors} from './styles';
+import strftime from 'strftime';
+import styles, { colors } from './styles';
 import timeago from 'timeago-words';
 import { Button } from 'react-native-elements';
 import { FlatList, Text, View, Image } from 'react-native';
+import { STATUS } from '../constants';
 
 export default class Friends extends React.Component {
   state = {
@@ -39,6 +41,28 @@ export default class Friends extends React.Component {
     // FIXMEL compute date so that it updates every minute (less than a minute ago,
     // a minute ago, 2 minutes ago, etc...)
 
+    var title;
+
+    if (item.status === STATUS.ACCEPTED) {
+      title = 'Friend';
+    } else if (item.status === STATUS.PENDING) {
+      title = 'Friend request';
+    } else if (item.status === STATUS.PROPOSED) {
+      title = 'Friend request sent';
+    }
+
+    var sinceText;
+
+    const createdAt = new Date(item.updatedAt || item.createdAt);
+
+    if (item.status === STATUS.ACCEPTED) {
+      sinceText = `Since ${strftime('%B %d', createdAt)}`;
+    } else if (item.status === STATUS.PENDING) {
+      sinceText = `Recieved ${timeago(createdAt)}`;
+    } else if (item.status === STATUS.PROPOSED) {
+      sinceText = `Sent ${timeago(createdAt)}`;
+    }
+
     return (
       <View style={styles.friendItem} key={item.uuid}>
         <Image
@@ -48,21 +72,21 @@ export default class Friends extends React.Component {
 
         <View style={styles.friendItemDetail}>
           <Text style={styles.headerSmall}>
-            Friend Request
+            { title }
           </Text>
 
           <Text style={styles.friendItemText}>
-            {timeago(new Date(item.createdAt))}.
+            { sinceText } .
           </Text>
 
           <View style={styles.friendButtons}>
-            <Button
+            { item.status === STATUS.PENDING && <Button
               fontSize={12}
-              backgroundColor={styles.bgDark}
-              color={styles.textWhite}
+              backgroundColor={colors.bgDark}
+              color={colors.textWhite}
               buttonStyle={styles.friendButton}
               icon={{name: 'check-circle'}}
-              title='Accept' />
+              title='Accept' /> }
           </View>
         </View>
       </View>
