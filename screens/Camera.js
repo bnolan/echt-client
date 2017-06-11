@@ -66,9 +66,13 @@ const uploadHeight = 64 + 20;
       // Normalise data
       data.path = `file://${data.path}`;
 
+      console.log('Uploading...', data);
+
       return store.takePhoto(data, upload, {
         camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
       });
+    }).then(() => {
+      console.log('Done uploading...');
     });
   }
 

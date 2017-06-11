@@ -56,7 +56,7 @@ export class EchtStore {
   }
 
   @computed get loggedIn () {
-    return !!this.user.key && this.user.loggedIn;
+    return (!!this.user.key) && (this.user.loggedIn);
   }
 
   getPhoto (uuid) {
@@ -172,6 +172,8 @@ export class EchtStore {
       return false;
     }
 
+    console.log('#takePhoto', data, upload, details);
+
     // UUID is generated client side and is accepted and persisted by the server
     // (unless the UUID already exists)
     var photo = {
@@ -196,8 +198,11 @@ export class EchtStore {
       .then((data) => {
         const request = {
           image: data,
-          camera: details.camera
+          camera: details.camera,
+          uuid: photo.uuid
         };
+
+        console.log('#uploading...');
 
         return fetch(`${this.endpoint}/photos`, {
           method: 'post',
@@ -207,6 +212,7 @@ export class EchtStore {
       }).then(
         (response) => response.json()
       ).then((r) => {
+        console.log('Upload complete', r.success);
         assert(r.success);
 
         // Upload the photo
@@ -215,13 +221,19 @@ export class EchtStore {
         if (r.photo.actions.length > 0) {
           // Photos with actions stay on the homescreen
           upload.actions = r.photo.actions;
+          console.log('Upload has actions');
         } else {
           // Otherwise they get deleted
           this.remove(this.uploads, [upload]);
+          console.log('Upload has no actions');
         }
 
         // Save the collection with the new photo
         this.save();
+      })
+      .catch((e) => {
+        console.error('Error uploading...');
+        console.error(e);
       });
   }
 
@@ -382,6 +394,10 @@ export class EchtStore {
       this.user.key = key;
     });
 
+    const getLoggedIn = AsyncStorage.getItem('loggedIn').then((value) => {
+      this.user.loggedIn = value === 'true';
+    });
+
     const getPhotos = AsyncStorage.getItem('photos').then((result) => {
       var items;
 
@@ -416,6 +432,7 @@ export class EchtStore {
 
     Promise.all([
       getDeviceKey,
+      getLoggedIn,
       getPhotos,
       getFriends
     ]).then(() => {
@@ -425,6 +442,7 @@ export class EchtStore {
 
   save () {
     AsyncStorage.setItem('deviceKey', this.user.key);
+    AsyncStorage.setItem('loggedIn', this.user.loggedIn ? 'true' : 'false');
 
     const photos = this.photos.filter((p) => p.status !== PHOTO_STATUS.UPLOADING);
     AsyncStorage.setItem('photos', JSON.stringify(photos));

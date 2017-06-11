@@ -39,8 +39,6 @@ const height = 64;
         </View>;
     }
 
-    console.log('Icon#render');
-
     return (
       <TouchableOpacity activeOpacity={0.5} onPress={this.onPress.bind(this)}>
         <View style={styles.border}>

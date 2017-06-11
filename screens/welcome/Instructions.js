@@ -8,6 +8,7 @@ export default class Instructions extends React.Component {
   finishSignup () {
     // Automatically navigates to main screen
     store.user.loggedIn = true;
+    store.save();
   }
 
   render () {
