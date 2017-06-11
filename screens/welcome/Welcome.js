@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Icon, Button } from 'react-native-elements';
 import styles, {colors} from '../styles';
+import { Button } from 'react-native-elements';
+import { Icon, Button } from 'react-native-elements';
+import { Text, View } from 'react-native';
 
 class Welcome extends React.Component {
   nextScreen () {

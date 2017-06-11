@@ -74,12 +74,12 @@ export default class Selfie extends React.Component {
         </Text>
 
         <View style={styles.selfieCamera}>
-          { this.state.submitting ?
-            <ActivityIndicator
+          { this.state.submitting
+            ? <ActivityIndicator
               animating
               size='large'
-              style={{width: 320, height: 320}} /> :
-            <RNCamera
+              style={{width: 320, height: 320}} />
+            : <RNCamera
               ref={(cam) => { this.camera = cam; }}
               style={{ flex: 1, position: 'relative', zIndex: 100 }}
               captureTarget={RNCamera.constants.CaptureTarget.disk}

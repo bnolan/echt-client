@@ -23,6 +23,13 @@ export default StyleSheet.create({
     marginTop: 48,
     textAlign: 'center'
   },
+  headerSmall: {
+    color: '#666666',
+    fontWeight: 'bold',
+    fontFamily: 'arial rounded mt bold',
+    margin: 12,
+    marginBottom: 0
+  },
   dark: {
     color: colors.textDark
   },
@@ -121,6 +128,8 @@ export default StyleSheet.create({
     marginTop: 24,
     alignItems: 'center'
   },
+
+  /* Friend list and friend invitation */
   friendScreen: {
     backgroundColor: colors.bgDarker
   },
@@ -128,6 +137,46 @@ export default StyleSheet.create({
     padding: 20,
     backgroundColor: 'white'
   },
+  friendItem: {
+    flexDirection: 'row',
+    height: 128,
+    margin: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 4,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 1,
+      height: 1
+    },
+    shadowRadius: 5,
+    shadowOpacity: 0.4,
+    borderWidth: 1,
+    borderColor: '#aaaaaa'
+  },
+  friendItemDetail: {
+    flex: 0.7,
+    flexDirection: 'column'
+  },
+  friendItemText: {
+    margin: 12,
+    marginBottom: 0
+  },
+  friendButtons: {
+    flexDirection: 'row',
+    marginTop: 8,
+    marginBottom: 8
+  },
+  friendButton: {
+    margin: 0,
+    padding: 8,
+    borderRadius: 2
+  },
+  noFriends: {
+    padding: 20,
+    flex: 1,
+    backgroundColor: 'white'
+  },  
+
   loadingScreen: {
     alignItems: 'center',
     justifyContent: 'center'
