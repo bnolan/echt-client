@@ -1,11 +1,11 @@
 import React from 'react';
 import RNCamera from 'react-native-camera';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View, Image } from 'react-native';
 import Shutter from '../../components/Shutter';
 import store from '../../state/store';
 import simulatorUpload from '../../helpers/simulator-upload';
-import { Icon } from 'react-native-elements';
-import styles from '../styles';
+import { Icon, Button } from 'react-native-elements';
+import styles, { colors } from '../styles';
 
 export default class Selfie extends React.Component {
   constructor () {
@@ -13,47 +13,107 @@ export default class Selfie extends React.Component {
 
     this.state = {
       submitting: false,
+      path: null, // renders preview, used for submission
       error: null
     };
   }
 
-  submit (path) {
+  submitPhoto () {
     const { navigation: { navigate } } = this.props;
+    const { path } = this.state;
 
+    this.setState({ submitting: true, error: null });
+    console.log('path', path);
     store.signup(path).then((r) => {
+      console.log('r', r);
       this.setState({ submitting: false });
 
       if (r.success) {
+        this.setState({ path: null, error: null });
         navigate('Instructions');
         // TODO Use PIN screen once it can be made optional
         // navigate('Pincode');
       } else {
-        this.setState({
-          error: r.message
-        });
+        this.setState({ error: r.message });
       }
     });
+  }
+
+  retakePhoto () {
+    this.setState({ path: null, error: null, submitting: false });
   }
 
   takePhoto () {
     const options = {};
     var p;
 
-    this.setState({ submitting: true, error: null });
+    this.setState({ error: null });
 
     // Simulator doesn't support cam
     if (this.props.screenProps.isSimulator) {
       p = simulatorUpload();
     } else {
-      p = this.camera.capture({metadata: options});
+      p = this.camera.capture({ metadata: options });
     }
 
-    return p.then((data) => this.submit(data.path));
+    return p.then((data) => this.setState({ path: data.path }));
+  }
+
+  renderCamera () {
+    return (
+      <View style={styles.selfieCameraContainer}>
+        <RNCamera
+          ref={(cam) => { this.camera = cam; }}
+          style={styles.selfieCamera}
+          captureTarget={RNCamera.constants.CaptureTarget.disk}
+          captureQuality={RNCamera.constants.CaptureQuality.high}
+          type={RNCamera.constants.Type.front}
+          aspect={RNCamera.constants.Aspect.fill} />
+        <Shutter onPress={(e) => this.takePhoto()} />
+      </View>
+    );
+  }
+
+  renderPreview () {
+    const {submitting, path} = this.state;
+    return (
+      <View style={styles.selfiePreview}>
+        <Image style={styles.selfiePreviewImage} source={{uri: path}} />
+        { submitting && (
+        <ActivityIndicator
+          animating
+          size='large'
+          style={styles.selfiePreviewActivityIndicator} />
+        )}
+        <View style={styles.selfiePreviewButtons}>
+          <Button
+            title='Retake'
+            color={colors.textDark}
+            backgroundColor={colors.bgLight}
+            icon={{name: 'camera-alt', color: colors.textDark}}
+            style={styles.selfiePreviewButton}
+            buttonStyle={styles.selfiePreviewButton}
+            onPress={(e) => this.retakePhoto()}
+          />
+          <Button
+            title='Submit'
+            color={colors.textDark}
+            backgroundColor={colors.bgLight}
+            icon={{name: 'done', color: colors.textDark}}
+            style={styles.selfiePreviewButton}
+            buttonStyle={styles.selfiePreviewButton}
+            disabled={submitting}
+            onPress={(e) => this.submitPhoto()}
+          />
+        </View>
+      </View>
+    );
   }
 
   render () {
-    var icon;
+    const { submitting, path, error } = this.state;
 
+    var icon;
     if (this.state.error) {
       if (this.state.error.match(/too many/i)) {
         icon = 'group';
@@ -64,6 +124,8 @@ export default class Selfie extends React.Component {
       }
     }
 
+    const camView = path ? this.renderPreview() : this.renderCamera();
+
     return (
       <View style={[styles.container, styles.selfieScreen]}>
         <Text style={styles.header}>Take a selfie</Text>
@@ -73,27 +135,11 @@ export default class Selfie extends React.Component {
           to enter your email or your phone number.
         </Text>
 
-        <View style={styles.selfieCamera}>
-          { this.state.submitting
-            ? <ActivityIndicator
-              animating
-              size='large'
-              style={{width: 320, height: 320}} />
-            : <RNCamera
-              ref={(cam) => { this.camera = cam; }}
-              style={{ flex: 1, position: 'relative', zIndex: 100 }}
-              captureTarget={RNCamera.constants.CaptureTarget.disk}
-              captureQuality={RNCamera.constants.CaptureQuality.high}
-              type={RNCamera.constants.Type.front}
-              aspect={RNCamera.constants.Aspect.fill} />
-          }
+        { camView }
 
-          { this.state.submitting || <Shutter onPress={(e) => this.takePhoto()} /> }
-        </View>
+        { submitting && <Text style={styles.text}>Uploading selfie...</Text> }
 
-        { this.state.submitting && <Text style={styles.text}>Uploading selfie...</Text> }
-
-        { this.state.error && <View style={styles.selfieErrorBox}>
+        { error && <View style={styles.selfieErrorBox}>
           <Icon
             name={icon}
             color='#000000' />

@@ -77,8 +77,6 @@ const uploadHeight = 64 + 20;
       return <Upload key={u.uuid} upload={u} onPress={() => 'lol'} />;
     });
 
-    console.log('Camera#render');
-
     return (
       <RNCamera
         ref={(cam) => { this.camera = cam; }}

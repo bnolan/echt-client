@@ -65,7 +65,7 @@ export default StyleSheet.create({
   selfieScreen: {
     backgroundColor: colors.bgDark
   },
-  selfieCamera: {
+  selfieCameraContainer: {
     width: 320,
     height: 320,
     backgroundColor: colors.bgMedium,
@@ -73,6 +73,36 @@ export default StyleSheet.create({
     borderColor: '#aaaaaa',
     borderWidth: 1,
     borderRadius: 2
+  },
+  selfieCamera: {
+    flex: 1,
+    position: 'relative',
+    zIndex: 100
+  },
+  selfiePreview: {
+    flex: 1,
+    margin: 24
+  },
+  selfiePreviewImage: {
+    width: 320,
+    height: 320,
+    borderColor: '#aaaaaa',
+    borderWidth: 1,
+    borderRadius: 2
+  },
+  selfiePreviewActivityIndicator: {
+    position: 'absolute',
+    width: 320,
+    height: 320
+  },
+  selfiePreviewButtons: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  selfiePreviewButton: {
+    width: 160,
+    marginLeft: 0,
+    marginRight: 0
   },
   selfieError: {
     color: colors.bgDarker,
