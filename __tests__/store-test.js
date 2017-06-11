@@ -1,12 +1,6 @@
 /* globals it, expect, jest */
 
-import 'react-native';
-import React from 'react';
 import store from '../state/store';
-import td from 'testdouble';
-
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
 
 jest.mock('react-native-fs');
 
