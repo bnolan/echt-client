@@ -1,7 +1,6 @@
 import React from 'react';
 import styles, {colors} from '../styles';
 import { Button } from 'react-native-elements';
-import { Icon, Button } from 'react-native-elements';
 import { Text, View } from 'react-native';
 
 class Welcome extends React.Component {
