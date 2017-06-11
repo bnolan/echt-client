@@ -65,10 +65,13 @@ export default class Selfie extends React.Component {
     }
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.header}>How's your hair?</Text>
+      <View style={styles.selfieScreen}>
+        <Text style={styles.header}>Take a selfie</Text>
 
-        <Text style={styles.text}>Take a selfie</Text>
+        <Text style={styles.text}>
+          Echt remembers your face to recognize you, so you don't have
+          to enter your email or your phone number.
+        </Text>
 
         <View style={styles.selfieCamera}>
           { this.state.submitting ?
@@ -89,17 +92,14 @@ export default class Selfie extends React.Component {
           { this.state.submitting || <Shutter onPress={(e) => this.takePhoto()} /> }
         </View>
 
+        { this.state.submitting && <Text style={styles.text}>Uploading selfie...</Text> }
+
         { this.state.error && <View style={styles.selfieErrorBox}>
           <Icon
             name={icon}
-            color='#ff00aa' />
+            color='#000000' />
           <Text style={styles.selfieError}>{this.state.error}</Text>
         </View>}
-
-        <Text style={styles.textSmall}>
-          Echt remembers your face to recognize you, so you don't have
-          to enter your email or your phone number.
-        </Text>
       </View>
     );
   }

@@ -12,11 +12,11 @@ class Welcome extends React.Component {
 
     return (
       <View style={styles.welcomeScreen}>
-        <Text style={styles.welcomeHeader}>
+        <Text style={styles.header}>
           Welcome!
         </Text>
 
-        <Text style={styles.welcomeText}>
+        <Text style={styles.text}>
           Welcome to Echt, the photo sharing app
           for friends. Echt is different
           because you have to take selfies with people
@@ -26,10 +26,10 @@ class Welcome extends React.Component {
         <View style={styles.welcomeButton}>
           <Button
             raised
-            backgroundColor='#00aaff'
-            color='#ffffff'
+            backgroundColor='#ffffff'
+            color='#333333'
             onPress={() => navigate('Selfie')}
-            icon={{name: 'cached'}}
+            icon={{name: 'cached', color: '#333333'}}
             style={{width: 240}}
             title='Continue' />
         </View>

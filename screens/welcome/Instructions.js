@@ -1,44 +1,46 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View } from 'react-native';
 import { Button } from 'react-native-elements';
+import styles from './styles';
 
 export default class Instructions extends React.Component {
   render () {
     const { navigation: { navigate } } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View style={styles.instructionsScreen}>
         <Text style={styles.header}>
           Turn a selfie into a friend
         </Text>
 
-        <Text style={styles.text}>
+        <Text style={styles.instructionsText}>
           Your friends see
           photos you take in Echt.
         </Text>
 
-        <Text style={styles.text}>
+        <Text style={styles.instructionsText}>
           To add a friend, switch to the front facing camera
           and take a selfie with your friend.
         </Text>
 
-        <Text style={styles.text}>
+        <Text style={styles.instructionsText}>
           Echt will recognize your friend
           and send them a friend request.
         </Text>
 
-        <Text style={styles.text}>
+        <Text style={styles.instructionsText}>
           If your friend doesn't use Echt, you send
           them an invitation, and when they sign up, we'll
           add them.
         </Text>
 
-        <View style={styles.button}>
+        <View style={styles.welcomeButton}>
           <Button
             raised
             backgroundColor='#ffffff'
             color='#32006C'
             onPress={() => navigate('Main')}
+            style={{width: 240}}
             icon={{name: 'child-care', color: '#32006C'}}
             title='Start' />
         </View>
@@ -46,30 +48,3 @@ export default class Instructions extends React.Component {
     );
   }
 }
-
-// http://www.colourlovers.com/palette/3636765/seapunk_vaporwave
-// http://www.colourlovers.com/palette/3887337/Pale_Glitter
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#32006C',
-    flex: 1
-  },
-  header: {
-    color: '#FFFFFF',
-    fontSize: 24,
-    fontWeight: 'bold',
-    margin: 24
-  },
-  text: {
-    color: '#FFFFFF',
-    margin: 24,
-    marginBottom: 24,
-    marginTop: 0,
-    fontSize: 16
-  },
-  button: {
-
-  }
-
-});

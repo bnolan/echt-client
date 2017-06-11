@@ -104,9 +104,9 @@ const styles = StyleSheet.create({
   },
   header: {
     color: '#666666',
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    letterSpacing: -1,
+    fontFamily: 'arial rounded mt bold',
     margin: 20
   },
   noFriends: {

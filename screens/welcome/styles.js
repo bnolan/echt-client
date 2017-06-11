@@ -10,23 +10,25 @@ export default StyleSheet.create({
     borderRadius: 4
   },
 
-  // Pink and white
-  welcomeScreen: {
-    backgroundColor: '#333333',
-    flex: 1
-  },
-  welcomeHeader: {
-    color: '#00aaff',
-    fontSize: 48,
+  // Common
+  header: {
+    color: '#ffffff',
+    fontSize: 24,
     fontWeight: 'bold',
+    fontFamily: 'arial rounded mt bold',
     margin: 24,
     marginTop: 48,
     textAlign: 'center',
-    fontFamily: 'arial rounded mt bold'
   },
-  welcomeText: {
-    color: '#eeeeee',
+  text: {
+    color: '#dddddd',
     margin: 24
+  },
+
+  // Screens 
+  welcomeScreen: {
+    backgroundColor: '#333333',
+    flex: 1
   },
   welcomeButton: {
     marginTop: 24,
@@ -34,7 +36,7 @@ export default StyleSheet.create({
   },
 
   selfieScreen: {
-    backgroundColor: '#8795E8',
+    backgroundColor: '#333333',
     flex: 1
   },
   selfieCamera: {
@@ -42,8 +44,9 @@ export default StyleSheet.create({
     height: 320,
     backgroundColor: '#777777',
     margin: 24,
-    borderColor: '#ff00aa',
-    borderWidth: 1
+    borderColor: '#aaaaaa',
+    borderWidth: 1,
+    borderRadius: 2
   },
   selfieHeader: {
     color: '#ffffff',
@@ -61,7 +64,7 @@ export default StyleSheet.create({
     margin: 24
   },
   selfieError: {
-    color: '#ff00aa',
+    color: '#000000',
     lineHeight: 24,
     paddingLeft: 16
   },
@@ -123,25 +126,18 @@ export default StyleSheet.create({
     shadowOpacity: 0.4
   },
 
-  instructionView: {
-    backgroundColor: '#32006C',
+  instructionsScreen: {
+    backgroundColor: '#333333',
     flex: 1
   },
-  instructionHeader: {
-    color: '#FFFFFF',
-    fontSize: 24,
-    fontWeight: 'bold',
-    margin: 24
-  },
-  instructionText: {
-    color: '#FFFFFF',
+  instructionsText: {
+    color: '#dddddd',
     margin: 24,
-    marginBottom: 24,
-    marginTop: 0,
-    fontSize: 16
+    marginTop: 0
   },
-  instructionButton: {
-
-  }
+  instructionsButton: {
+    marginTop: 24,
+    alignItems: 'center'
+  },
 
 });
