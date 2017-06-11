@@ -2,7 +2,7 @@ import mobx from 'mobx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
-import styles from './styles';
+import styles, {colors} from './styles';
 import timeago from 'timeago-words';
 import { Button } from 'react-native-elements';
 import { FlatList, Text, View, Image } from 'react-native';
@@ -58,16 +58,16 @@ export default class Friends extends React.Component {
           <View style={styles.friendButtons}>
             <Button
               fontSize={12}
-              backgroundColor='#555'
-              color='#fff'
+              backgroundColor={styles.bgDark}
+              color={styles.textWhite}
               buttonStyle={styles.friendButton}
               icon={{name: 'check-circle'}}
               title='Accept' />
 
             <Button
               fontSize={12}
-              backgroundColor='#999'
-              color='#ccc'
+              backgroundColor={styles.bgMedium}
+              color={styles.textLight}
               buttonStyle={styles.friendButton}
               icon={{name: 'clear'}}
               title='Deny' />
