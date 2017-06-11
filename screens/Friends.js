@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, Text, TouchableHighlight, View, Image, Dimensions, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import store from '../state/store';
+import styles from './styles';
 
 export default class Friends extends React.Component {
   state = {
@@ -54,9 +55,9 @@ export default class Friends extends React.Component {
 
   renderEmptyState () {
     return (
-      <View style={styles.noFriends}>
-        <Text style={styles.header}>You have no friends.</Text>
-        <Text style={styles.paragraph}>
+      <View style={[styles.container, styles.noFriends]}>
+        <Text style={[styles.header, styles.dark]}>You have no friends.</Text>
+        <Text style={[styles.paragraph, styles.dark]}>
           Take a selfie with a friend (both of you in the photo
           at the same time) on the front facing camera and we
           will send them a friend request.
@@ -97,40 +98,3 @@ Friends.PropTypes = {
 Friends.defaultProps = {
   itemsPerRow: 3
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  header: {
-    color: '#666666',
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontFamily: 'arial rounded mt bold',
-    margin: 20
-  },
-  noFriends: {
-    padding: 20,
-    flex: 1,
-    backgroundColor: 'white'
-  },
-  bigEmoji: {
-    fontSize: 48,
-    margin: 20,
-    height: 60,
-    textAlign: 'center'
-  },
-  paragraph: {
-    fontSize: 16,
-    lineHeight: 24,
-    margin: 20,
-    color: '#777'
-  },
-  bold: {
-    fontSize: 16,
-    color: '#777',
-    fontWeight: 'bold',
-    margin: 20,
-    marginBottom: 0
-  }
-});

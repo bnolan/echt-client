@@ -2,7 +2,8 @@ import React from 'react';
 import store from '../state/store';
 import { Button } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
+import styles from './styles';
 
 @observer export default class Settings extends React.Component {
   setUser (name) {
@@ -64,10 +65,10 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
     // { store.isDevMode && <Debug /> }
 
     return (
-      <View style={styles.settings}>
-        <Text style={styles.header}>Settings.</Text>
+      <View style={[styles.container, styles.settingsScreen]}>
+        <Text style={[styles.header, styles.dark]}>Settings.</Text>
 
-        <View style={styles.actionContainer}>
+        <View style={styles.settingsActionContainer}>
           <Button
             raised
             backgroundColor='#999'
@@ -77,7 +78,7 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
             title='Log out' />
         </View>
 
-        <View style={styles.actionContainer}>
+        <View style={styles.settingsActionContainer}>
           <Button
             raised
             backgroundColor='#bbb'
@@ -90,32 +91,3 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
     );
   }
 }
-
-const styles = StyleSheet.create({
-  settings: {
-    padding: 20
-  },
-
-  header: {
-    color: '#666666',
-    fontSize: 28,
-    fontWeight: 'bold',
-    letterSpacing: -1,
-    margin: 20
-  },
-
-  userButton: {
-    marginTop: 12,
-    borderRadius: 4,
-    backgroundColor: '#eee'
-  },
-
-  actionContainer: {
-    width: 220,
-    marginTop: 20
-  },
-
-  userText: {
-    padding: 10
-  }
-});

@@ -5,7 +5,7 @@ import Shutter from '../../components/Shutter';
 import store from '../../state/store';
 import simulatorUpload from '../../helpers/simulator-upload';
 import { Icon } from 'react-native-elements';
-import styles from './styles';
+import styles from '../styles';
 
 export default class Selfie extends React.Component {
   constructor () {
@@ -65,7 +65,7 @@ export default class Selfie extends React.Component {
     }
 
     return (
-      <View style={styles.selfieScreen}>
+      <View style={[styles.container, styles.selfieScreen]}>
         <Text style={styles.header}>Take a selfie</Text>
 
         <Text style={styles.text}>
@@ -85,8 +85,7 @@ export default class Selfie extends React.Component {
               captureTarget={RNCamera.constants.CaptureTarget.disk}
               captureQuality={RNCamera.constants.CaptureQuality.high}
               type={RNCamera.constants.Type.front}
-              aspect={RNCamera.constants.Aspect.fill}>
-            </RNCamera>
+              aspect={RNCamera.constants.Aspect.fill} />
           }
 
           { this.state.submitting || <Shutter onPress={(e) => this.takePhoto()} /> }

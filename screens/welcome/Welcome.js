@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import { Icon, Button } from 'react-native-elements';
-import styles from './styles';
+import styles from '../styles';
 
 class Welcome extends React.Component {
   nextScreen () {
@@ -11,7 +11,7 @@ class Welcome extends React.Component {
     const { navigation: { navigate } } = this.props;
 
     return (
-      <View style={styles.welcomeScreen}>
+      <View style={[styles.container, styles.welcomeScreen]}>
         <Text style={styles.header}>
           Welcome!
         </Text>

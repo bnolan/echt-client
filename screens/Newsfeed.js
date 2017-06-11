@@ -1,9 +1,10 @@
 import React from 'react';
-import { Dimensions, FlatList, StyleSheet, Image, View, TouchableHighlight } from 'react-native';
+import { Dimensions, FlatList, Image, View, TouchableHighlight } from 'react-native';
 import { observer } from 'mobx-react/native';
 import mobx from 'mobx';
 import PropTypes from 'prop-types';
 import store from '../state/store';
+import styles from './styles';
 
 // curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
 
@@ -84,9 +85,3 @@ Newsfeed.PropTypes = {
 Newsfeed.defaultProps = {
   itemsPerRow: 3
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-});

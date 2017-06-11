@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, Dimensions, TouchableHighlight, StatusBar } from 'react-native';
+import { View, Dimensions, TouchableHighlight, StatusBar } from 'react-native';
 import { observer } from 'mobx-react/native';
 import PhotoView from 'react-native-photo-view';
 import Icon from 'react-native-vector-icons/Ionicons';
 import store from '../state/store';
+import styles from './styles';
 
 @observer
 export default class Photo extends React.Component {
@@ -36,7 +37,7 @@ export default class Photo extends React.Component {
     }
 
     return (
-      <View style={styles.actionsTop}>
+      <View style={styles.photoActionsTop}>
         <TouchableHighlight onPress={this.handleClose}>
           <Icon name='ios-close' size={30} style={styles.icon} />
         </TouchableHighlight>
@@ -50,9 +51,9 @@ export default class Photo extends React.Component {
     }
 
     return (
-      <View style={styles.actionsBottom}>
+      <View style={styles.photoActionsBottom}>
         <TouchableHighlight onPress={this.handleDelete}>
-          <Icon name='ios-trash' size={30} style={styles.icon} />
+          <Icon name='ios-trash' size={30} style={styles.photoIcon} />
         </TouchableHighlight>
       </View>
     );
@@ -100,38 +101,3 @@ Photo.propTypes = {
     })
   })
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-    alignItems: 'flex-end'
-  },
-  actionsTop: {
-    flex: 1,
-    alignItems: 'flex-end',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    padding: 10,
-    paddingRight: 20,
-    backgroundColor: 'black',
-    opacity: 0.7
-  },
-  actionsBottom: {
-    flex: 1,
-    alignItems: 'flex-end',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 10,
-    paddingRight: 20,
-    backgroundColor: 'black',
-    opacity: 0.7
-  },
-  icon: {
-    color: 'white'
-  }
-});

@@ -1,43 +1,56 @@
 import { StyleSheet } from 'react-native';
 
-// http://www.colourlovers.com/palette/3636765/seapunk_vaporwave
-// http://www.colourlovers.com/palette/3887337/Pale_Glitter
-
 export default StyleSheet.create({
-  settingsButton: {
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 4
-  },
-
   // Common
+  container: {
+    flex: 1
+  },
   header: {
-    color: '#ffffff',
+    color: '#dddddd',
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'arial rounded mt bold',
     margin: 24,
     marginTop: 48,
-    textAlign: 'center',
+    textAlign: 'center'
+  },
+  dark: {
+    color: '#666666'
   },
   text: {
     color: '#dddddd',
     margin: 24
   },
+  bigEmoji: {
+    fontSize: 48,
+    margin: 20,
+    height: 60,
+    textAlign: 'center'
+  },
+  paragraph: {
+    fontSize: 16,
+    lineHeight: 24,
+    margin: 20,
+    color: '#777'
+  },
+  bold: {
+    fontSize: 16,
+    color: '#777',
+    fontWeight: 'bold',
+    margin: 20,
+    marginBottom: 0
+  },
 
-  // Screens 
+  // Screens
   welcomeScreen: {
-    backgroundColor: '#333333',
-    flex: 1
+    backgroundColor: '#333333'
   },
   welcomeButton: {
     marginTop: 24,
     alignItems: 'center'
   },
-
   selfieScreen: {
-    backgroundColor: '#333333',
-    flex: 1
+    backgroundColor: '#333333'
   },
   selfieCamera: {
     width: 320,
@@ -47,21 +60,6 @@ export default StyleSheet.create({
     borderColor: '#aaaaaa',
     borderWidth: 1,
     borderRadius: 2
-  },
-  selfieHeader: {
-    color: '#ffffff',
-    fontSize: 24,
-    fontWeight: 'bold',
-    margin: 24
-  },
-  selfieText: {
-    color: '#ffffff',
-    margin: 24,
-    fontSize: 18
-  },
-  selfieTextSmall: {
-    color: '#eeeeee',
-    margin: 24
   },
   selfieError: {
     color: '#000000',
@@ -85,21 +83,8 @@ export default StyleSheet.create({
     shadowOpacity: 0.4
   },
   pincodeScreen: {
-    backgroundColor: '#8795E8',
-    flex: 1
+    backgroundColor: '#333333'
   },
-  pincodeHeader: {
-    color: '#ffffff',
-    fontSize: 24,
-    fontWeight: 'bold',
-    margin: 24
-  },
-  pincodeText: {
-    color: '#ffffff',
-    margin: 24,
-    fontSize: 18
-  },
-
   pinView: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -107,7 +92,6 @@ export default StyleSheet.create({
     marginTop: 20,
     marginBottom: 20
   },
-
   pinTextInput: {
     backgroundColor: '#F0F0F0',
     textAlign: 'center',
@@ -125,19 +109,56 @@ export default StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.4
   },
-
   instructionsScreen: {
-    backgroundColor: '#333333',
-    flex: 1
-  },
-  instructionsText: {
-    color: '#dddddd',
-    margin: 24,
-    marginTop: 0
+    backgroundColor: '#333333'
   },
   instructionsButton: {
     marginTop: 24,
     alignItems: 'center'
   },
-
+  friendScreen: {
+    backgroundColor: 'black'
+  },
+  friendsScreen: {
+    padding: 20,
+    backgroundColor: 'white'
+  },
+  loadingScreen: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  photoActionsTop: {
+    flex: 1,
+    alignItems: 'flex-end',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    padding: 10,
+    paddingRight: 20,
+    backgroundColor: 'black',
+    opacity: 0.7
+  },
+  photoActionsBottom: {
+    flex: 1,
+    alignItems: 'flex-end',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 10,
+    paddingRight: 20,
+    backgroundColor: 'black',
+    opacity: 0.7
+  },
+  photoIcon: {
+    color: 'white'
+  },
+  settingsScreen: {
+    alignItems: 'center'
+  },
+  settingsActionContainer: {
+    width: 220,
+    marginTop: 20
+  }
 });

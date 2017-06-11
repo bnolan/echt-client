@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import { observer } from 'mobx-react/native';
 import PhotoView from 'react-native-photo-view';
 import store from '../state/store';
+import styles from './styles';
 
 @observer
 export default class Friend extends React.Component {
@@ -19,7 +20,7 @@ export default class Friend extends React.Component {
 
     // TODO Proper dimension calc
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, styles.friendScreen]}>
         <PhotoView
           source={{uri: friend.photo.original.url}}
           minimumZoomScale={1}
@@ -41,10 +42,3 @@ Friend.propTypes = {
     })
   })
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black'
-  }
-});

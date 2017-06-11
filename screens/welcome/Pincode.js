@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, TextInput, StyleSheet } from 'react-native';
+import { Text, View, TextInput } from 'react-native';
 import { Button } from 'react-native-elements';
+import styles from '../styles';
 
 export default class PincodeScreen extends React.Component {
   constructor () {
@@ -71,10 +72,10 @@ export default class PincodeScreen extends React.Component {
     }
 
     return (
-      <View style={styles.pincodeScreen}>
-        <Text style={styles.pincodeHeader}>Security</Text>
+      <View style={[styles.container, styles.pincodeScreen]}>
+        <Text style={styles.header}>Security</Text>
 
-        <Text style={styles.pincodeText}>
+        <Text style={styles.text}>
           Enter a 4-digit pincode in case you
           get locked out or move to a new phone.
         </Text>
@@ -95,50 +96,3 @@ export default class PincodeScreen extends React.Component {
     );
   }
 }
-
-// http://www.colourlovers.com/palette/3636765/seapunk_vaporwave
-// http://www.colourlovers.com/palette/3887337/Pale_Glitter
-
-const styles = StyleSheet.create({
-  pincodeScreen: {
-    backgroundColor: '#8795E8',
-    flex: 1
-  },
-  pincodeHeader: {
-    color: '#ffffff',
-    fontSize: 24,
-    fontWeight: 'bold',
-    margin: 24
-  },
-  pincodeText: {
-    color: '#ffffff',
-    margin: 24,
-    fontSize: 18
-  },
-
-  pinView: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20
-  },
-
-  pinTextInput: {
-    backgroundColor: '#F0F0F0',
-    textAlign: 'center',
-    flex: 1,
-    marginLeft: 20,
-    marginRight: 20,
-    height: 50,
-    width: 40,
-    borderRadius: 5,
-    shadowColor: '#000000',
-    shadowOffset: {
-      width: 1,
-      height: 1
-    },
-    shadowRadius: 5,
-    shadowOpacity: 0.4
-  }
-});
