@@ -30,6 +30,7 @@
     "react-navigation": "^1.0.0-beta.9",
     "react-proptypes": "^1.0.0",
     "strftime": "^0.10.0",
+    "testdouble": "^3.0.0",
     "timeago-words": "^0.0.3",
     "uuid": "^3.0.1"
   },
