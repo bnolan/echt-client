@@ -10,7 +10,8 @@ export default class Selfie extends React.Component {
     super();
 
     this.state = {
-      submitting: false
+      submitting: false,
+      error: null
     };
   }
 
@@ -18,19 +19,25 @@ export default class Selfie extends React.Component {
     const { navigation: { navigate } } = this.props;
 
     store.signup(path).then((r) => {
-      this.setState({ submitting: false });
+      // this.setState({ submitting: false });
 
-      if (r.success) {
-        navigate('Instructions');
-        // TODO Use PIN screen once it can be made optional
-        // navigate('Pincode');
-      }
+      // if (r.success) {
+      //   navigate('Instructions');
+      //   // TODO Use PIN screen once it can be made optional
+      //   // navigate('Pincode');
+      // } else {
+      //   this.setState({
+      //     error: r.message
+      //   });
+      // }
     });
   }
 
   takePhoto () {
     const options = {};
     var p;
+
+    this.setState({ submitting: true });
 
     // Simulator doesn't support cam
     if (this.props.screenProps.isSimulator) {
@@ -49,24 +56,31 @@ export default class Selfie extends React.Component {
 
         <Text style={styles.text}>Take a selfie</Text>
 
-        <View style={styles.camera}>
-          <RNCamera
-            ref={(cam) => { this.camera = cam; }}
-            style={{ flex: 1, position: 'relative', zIndex: 100 }}
-            captureTarget={RNCamera.constants.CaptureTarget.disk}
-            captureQuality={RNCamera.constants.CaptureQuality.high}
-            type={RNCamera.constants.Type.front}
-            aspect={RNCamera.constants.Aspect.fill} />
+        <View style={styles.selfieCamera}>
+          { this.state.submitting ?
+            <ActivityIndicator
+              animating
+              size='large'
+              style={{width: 320, height: 320}} /> :
+            <RNCamera
+              ref={(cam) => { this.camera = cam; }}
+              style={{ flex: 1, position: 'relative', zIndex: 100 }}
+              captureTarget={RNCamera.constants.CaptureTarget.disk}
+              captureQuality={RNCamera.constants.CaptureQuality.high}
+              type={RNCamera.constants.Type.front}
+              aspect={RNCamera.constants.Aspect.fill}>
+            </RNCamera>
+          }
 
-          <Shutter onPress={(e) => this.takePhoto()} />
+          { this.state.submitting || <Shutter onPress={(e) => this.takePhoto()} /> }
         </View>
+
+        { this.state.error && <Text style={styles.selfieError}>{this.state.error}</Text>}
 
         <Text style={styles.textSmall}>
           Echt remembers your face to recognize you, so you don't have
           to enter your email or your phone number.
         </Text>
-
-        { this.state.submitting && <ActivityIndicator /> }
       </View>
     );
   }
