@@ -41,7 +41,7 @@ describe('store', () => {
     expect(store.friends).toHaveLength(2);
   });
 
-  it('should dispatch on merge', () => {
+  it('should observe on merge', () => {
     let isObserved = false;
 
     observe(store.friends, (changes) => {
@@ -57,7 +57,15 @@ describe('store', () => {
     store.merge(store.friends, [{uuid: '1234', name: 'ahitler'}]);
     expect(store.friends).toHaveLength(1);
 
+    let isObserved = false;
+
+    observe(store.friends, (changes) => {
+      isObserved = true;
+      expect(changes.type).toEqual('splice');
+    });
+
     store.remove(store.friends, [{uuid: '1234'}]);
+    expect(isObserved).toEqual(true);
     expect(store.friends).toHaveLength(0);
   });
 });
