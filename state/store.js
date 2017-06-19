@@ -471,20 +471,20 @@ export class EchtStore {
 const echtStore = new EchtStore();
 echtStore.load();
 
-// setTimeout(() => {
-//   const upload = {
-//     uuid: '1234',
-//     actions: [{
-//       type: 'ADD_FRIEND',
-//       user: {
-//         avatar: 'https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/users/user-92954f8c-7798-49f2-852a-2559d443c805.jpg',
-//         uuid: '92954f8c-7798-49f2-852a-2559d443c805'
-//       }
-//     }]
-//   };
+setTimeout(() => {
+  const upload = {
+    uuid: '1234',
+    actions: [{
+      type: 'ADD_FRIEND',
+      user: {
+        avatar: 'https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/users/user-92954f8c-7798-49f2-852a-2559d443c805.jpg',
+        uuid: '92954f8c-7798-49f2-852a-2559d443c805'
+      }
+    }]
+  };
 
-//   echtStore.merge(echtStore.uploads, [upload]);
-// }, 2000);
+  echtStore.merge(echtStore.uploads, [upload]);
+}, 2000);
 
 // DEBUGGING ONLY - see https://corbt.com/posts/2015/12/19/debugging-with-global-variables-in-react-native.html
 global.__store = echtStore;

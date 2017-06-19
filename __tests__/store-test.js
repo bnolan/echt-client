@@ -1,7 +1,7 @@
 /* globals describe, beforeEach, it, expect, jest */
 
 import {EchtStore} from '../state/store';
-import {observe, useStrict} from 'mobx';
+import {ObservableMap, observe, useStrict} from 'mobx';
 
 jest.mock('react-native-fs');
 
@@ -68,4 +68,13 @@ describe('store', () => {
     expect(isObserved).toEqual(true);
     expect(store.friends).toHaveLength(0);
   });
+
+  it('should generate upload', () => {
+    const upload = store.generateUpload();
+
+    expect(upload).toBeInstanceOf(ObservableMap);
+    expect(upload.get('uuid').length).toEqual(36);
+    expect(store.uploads.length).toEqual(1);
+  });
+
 });
