@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Dimensions } from 'react-native';
+import { Text, Image, View } from 'react-native';
+import { Button } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import PhotoView from 'react-native-photo-view';
 import store from '../state/store';
 import styles from './styles';
 
 @observer
 export default class InviteFriend extends React.Component {
   constructor () {
-    super()
+    super();
 
     console.log('#InviteFriend#ctor');
   }
@@ -26,6 +26,7 @@ export default class InviteFriend extends React.Component {
 
   render () {
     const uuid = this.props.navigation.state.params.uuid;
+    console.log(uuid);
     const photo = store.getPhoto(uuid);
     const action = photo.actions[0];
     const width = 92;
