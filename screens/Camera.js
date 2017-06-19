@@ -17,7 +17,6 @@ const uploadHeight = 64 + 20;
     super();
 
     this.state = {
-      cameraType: RNCamera.constants.Type.back,
       slideAnim: new Animated.Value(-uploadHeight)
     };
   }
@@ -26,6 +25,10 @@ const uploadHeight = 64 + 20;
     store.uploads.observe(() => {
       console.log('#uploads observe');
       this.addUpload();
+    });
+
+    this.setState({
+      cameraType: this.props.screenProps.isSimulator ? RNCamera.constants.Type.front : RNCamera.constants.Type.back
     });
   }
 

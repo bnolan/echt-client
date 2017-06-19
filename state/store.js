@@ -212,7 +212,7 @@ export class EchtStore {
       }).then(
         (response) => response.json()
       ).then((r) => {
-        console.log('Upload complete', r.success);
+        console.log('Upload complete', r);
         assert(r.success);
 
         // Upload the photo
