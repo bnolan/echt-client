@@ -9,6 +9,12 @@ import { STATUS } from '../../constants';
 const width = 128;
 const height = 128;
 
+/*
+ * Proposed means a friend request that's been sent to you and
+ * is waiting for you to accept (or deny). This naming scheme
+ * is super dumb.
+ */
+
 export default class ProposedFriend extends React.Component {
   onAccept () {
     // The store will remove the invite from the list, be good

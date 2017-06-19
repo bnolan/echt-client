@@ -1,6 +1,6 @@
 import AcceptedFriend from './friends/Accepted';
 import mobx from 'mobx';
-import PendingInvite from './friends/Pending';
+import SentFriendRequest from './friends/Sent';
 import ProposedFriend from './friends/Proposed';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -38,7 +38,7 @@ import { STATUS } from '../constants';
     if (item.status === STATUS.ACCEPTED) {
       return <AcceptedFriend friend={item} key={item.uuid} />;
     } else if (item.status === STATUS.PENDING) {
-      return <PendingInvite friend={item} key={item.uuid} />;
+      return <SentFriendRequest friend={item} key={item.uuid} />;
     } else if (item.status === STATUS.PROPOSED) {
       return <ProposedFriend friend={item} key={item.uuid} />;
     }

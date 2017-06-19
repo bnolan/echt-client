@@ -6,7 +6,12 @@ import { Text, View, Image } from 'react-native';
 const width = 128;
 const height = 128;
 
-export default class PendingFriend extends React.Component {
+/*
+ * lol naming concentions. Pending means this is a friend request
+ * you've sent to someone else and it's pending their acceptance.
+ */
+
+export default class SentFriendRequest extends React.Component {
   get photo () {
     return this.props.friend.photo.small.url;
   }
