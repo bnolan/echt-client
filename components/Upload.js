@@ -5,7 +5,7 @@ import { ACTION } from '../constants';
 import { observer } from 'mobx-react/native';
 
 const padding = 8;
-const iconSize = 16;
+const iconSize = 48;
 const width = 64;
 const height = 64;
 
@@ -14,9 +14,11 @@ const height = 64;
     const { navigation: { navigate } } = this.props;
     const action = this.props.upload.actions && this.props.upload.actions[0];
 
+    console.log('#onPress');
+
     if (action) {
       console.log('navigating...');
-      navigate('InviteFriend', { uuid: action.user.uuid });
+      navigate('InviteFriend', { uuid: this.props.upload.uuid });
     } else {
       // redirect to photo in newsfeed
     }
@@ -37,34 +39,29 @@ const height = 64;
       }
 
       icon =
-        <View style={styles.iconView}>
-          <Icon
-            name={iconName}
-            size={iconSize}
-            reverse
-            color='#FF00AA' />
-        </View>;
+        <Icon
+          raised
+          style={styles.iconView}
+          name={iconName}
+          size={iconSize}
+          onPress={this.onPress.bind(this)}
+          color='#FF00AA' />;
     }
 
     return (
       <View style={styles.border}>
-        <TouchableHighlight style={styles.container} activeOpacity={0.5} onPress={this.onPress.bind(this)}>
-          { icon }
-        </TouchableHighlight>
+        <Image
+          style={{position: 'absolute', top: 0, zIndex: 90, width: width, height: height}}
+          source={{uri: this.props.upload.url}}
+        />
 
-        <TouchableHighlight style={styles.container} activeOpacity={0.5} onPress={this.onPress.bind(this)}>
-          <View style={styles.container} >
+        <View style={styles.overlay}>
+          { icon ||
             <ActivityIndicator
               animating
               style={[styles.activity, {height: height - padding}]}
-              size='large' />
-
-            <Image
-              style={{width: width, height: height}}
-              source={{uri: this.props.upload.url}}
-            />
-          </View>
-        </TouchableHighlight>
+              size='large' /> }
+        </View>
       </View>
     );
   }
@@ -77,23 +74,17 @@ const styles = StyleSheet.create({
     height: height,
     zIndex: 90
   },
-  iconView: {
-    position: 'absolute',
-    left: -iconSize - 8,
-    top: -iconSize - 8,
-    width: iconSize,
-    height: iconSize,
-    zIndex: 100
-  },
-  activity: {
-    position: 'absolute',
-    zIndex: 90,
-    left: 0,
-    top: 5,
-    right: 0,
-    bottom: 0,
+  overlay: {
+    zIndex: 100,
     width: width,
     height: height,
+    flexDirection: 'column'
+  },
+  iconView: {
+    padding: padding,
+    zIndex: 200
+  },
+  activity: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: padding

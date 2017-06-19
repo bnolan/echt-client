@@ -43,7 +43,7 @@ export default class Newsfeed extends React.Component {
         <TouchableHighlight onPress={() => navigate('Photo', {uuid: item.uuid})}>
           <Image
             style={{width: width, height: height}}
-            source={{uri: item.small.url}}
+            source={{uri: item.small && item.small.url}}
           />
         </TouchableHighlight>
       </View>
