@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableHighlight, StyleSheet, Image, ActivityIndicator, View } from 'react-native';
+import { StyleSheet, Image, ActivityIndicator, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { ACTION } from '../constants';
 import { observer } from 'mobx-react/native';
