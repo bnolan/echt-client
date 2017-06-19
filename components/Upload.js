@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Image, ActivityIndicator, View } from 'react-native';
+import { TouchableHighlight, StyleSheet, Image, ActivityIndicator, View } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { ACTION } from '../constants';
 import { observer } from 'mobx-react/native';
@@ -11,7 +11,15 @@ const height = 64;
 
 @observer export default class Upload extends React.Component {
   onPress () {
-    this.props.onPress();
+    const { navigation: { navigate } } = this.props;
+    const action = this.props.upload.actions && this.props.upload.actions[0];
+
+    if (action) {
+      console.log('navigating...');
+      navigate('InviteFriend', { uuid: action.user.uuid });
+    } else {
+      // redirect to photo in newsfeed
+    }
   }
 
   render () {
@@ -31,7 +39,6 @@ const height = 64;
       icon =
         <View style={styles.iconView}>
           <Icon
-            onPress={(e) => this.toggleType()}
             name={iconName}
             size={iconSize}
             reverse
@@ -40,27 +47,36 @@ const height = 64;
     }
 
     return (
-      <TouchableOpacity activeOpacity={0.5} onPress={this.onPress.bind(this)}>
-        <View style={styles.border}>
+      <View style={styles.border}>
+        <TouchableHighlight style={styles.container} activeOpacity={0.5} onPress={this.onPress.bind(this)}>
           { icon }
+        </TouchableHighlight>
 
-          <ActivityIndicator
-            animating
-            style={[styles.activity, {height: height - padding}]}
-            size='large'
-          />
+        <TouchableHighlight style={styles.container} activeOpacity={0.5} onPress={this.onPress.bind(this)}>
+          <View style={styles.container} >
+            <ActivityIndicator
+              animating
+              style={[styles.activity, {height: height - padding}]}
+              size='large' />
 
-          <Image
-            style={{width: width, height: height}}
-            source={{uri: this.props.upload.url}}
-          />
-        </View>
-      </TouchableOpacity>
+            <Image
+              style={{width: width, height: height}}
+              source={{uri: this.props.upload.url}}
+            />
+          </View>
+        </TouchableHighlight>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: width,
+    height: height,
+    zIndex: 90
+  },
   iconView: {
     position: 'absolute',
     left: -iconSize - 8,

@@ -81,7 +81,7 @@ const uploadHeight = 64 + 20;
 
   render () {
     const uploads = mobx.toJS(store.uploads).map((u) => {
-      return <Upload key={u.uuid} upload={u} onPress={() => 'lol'} />;
+      return <Upload key={u.uuid} upload={u} navigation={this.props.navigation} />;
     });
 
     return (

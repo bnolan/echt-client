@@ -1,6 +1,7 @@
 import { StackNavigator } from 'react-navigation';
 import Friends from '../screens/Friends';
 import Friend from '../screens/Friend';
+import InviteFriend from '../screens/Invite-Friend';
 
 export default StackNavigator({
   Main: {
@@ -12,6 +13,10 @@ export default StackNavigator({
     navigationOptions: {
       headerMode: 'screen'
     }
+  },
+  InviteFriend: {
+    screen: InviteFriend,
+    path: 'friend/new/:uuid'
   }
 }, {
   mode: 'modal',
