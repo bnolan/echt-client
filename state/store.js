@@ -60,11 +60,11 @@ export class EchtStore {
   }
 
   getPhoto (uuid) {
-    return this.photos.find(p => p.uuid === uuid);
+    return this.photos.find(p => p.get('uuid') === uuid);
   }
 
   getFriend (uuid) {
-    return this.friends.find(p => p.uuid === uuid);
+    return this.friends.find(p => p.get('uuid') === uuid);
   }
 
   acceptFriendRequest (uuid) {
@@ -485,7 +485,7 @@ setTimeout(() => {
   };
 
   echtStore.merge(echtStore.uploads, [upload]);
-}, 2000);
+}, 1000);
 
 // DEBUGGING ONLY - see https://corbt.com/posts/2015/12/19/debugging-with-global-variables-in-react-native.html
 global.__store = echtStore;

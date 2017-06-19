@@ -77,4 +77,19 @@ describe('store', () => {
     expect(store.uploads.length).toEqual(1);
   });
 
+  it('should getPhoto', () => {
+    store.merge(store.photos, [{uuid: '1234', url: 'beep://boop'}]);
+
+    const photo = store.getPhoto('1234');
+    expect(photo).toBeTruthy();
+    expect(photo.get('uuid')).toEqual('1234');
+    expect(store.getPhoto('6969')).toBeFalsy();
+  });
+
+  it('should getFriend', () => {
+    store.merge(store.friends, [{uuid: '4545', name: 'dtrump'}]);
+
+    expect(store.getFriend('4545')).toBeTruthy();
+    expect(store.getFriend('6969')).toBeFalsy();
+  });
 });
