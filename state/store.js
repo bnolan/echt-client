@@ -139,9 +139,9 @@ export class EchtStore {
   }
 
   generateUpload () {
-    const upload = {
+    const upload = observable.map({
       uuid: uuid()
-    };
+    });
 
     this.merge(this.uploads, [upload]);
 
@@ -177,7 +177,7 @@ export class EchtStore {
     // UUID is generated client side and is accepted and persisted by the server
     // (unless the UUID already exists)
     var photo = {
-      uuid: upload.uuid,
+      uuid: upload.get('uuid'),
       info: {
         camera: details.camera
       },
@@ -188,7 +188,7 @@ export class EchtStore {
     };
 
     // Set thumbnail
-    upload.url = data.path;
+    upload.set('url', data.path);
 
     // Add to newsfeed
     this.merge(this.photos, [photo]);
@@ -220,7 +220,7 @@ export class EchtStore {
 
         if (r.photo.actions.length > 0) {
           // Photos with actions stay on the homescreen
-          upload.actions = r.photo.actions;
+          upload.set('actions', r.photo.actions);
           console.log('Upload has actions');
         } else {
           // Otherwise they get deleted
@@ -362,7 +362,7 @@ export class EchtStore {
 
   /**
    * @param {Array<mobx.map>} Items already in store
-   * @param {Array<object>} Items to be merged in (can contain duplicates)
+   * @param {Array<object|mobx.map>} Items to be merged in (can contain duplicates)
    * @return {Array<mobx.map>} Merged items
    */
   merge (storedItems = [], receivedItems = []) {
@@ -373,6 +373,8 @@ export class EchtStore {
 
       if (i.uuid) {
         existing = storedItems.find((p) => p.get('uuid') === i.uuid);
+      } else if (i.get && i.get('uuid')) {
+        existing = storedItems.find((p) => p.get('uuid') === i.get('uuid'));
       } else {
         existing = false;
       }
@@ -382,7 +384,7 @@ export class EchtStore {
         existing.merge(i);
       } else {
         // Add to front of the array
-        storedItems.unshift(observable.map(i));
+        storedItems.unshift(i.get ? i : observable.map(i));
       }
     });
 
@@ -468,6 +470,21 @@ export class EchtStore {
 
 const echtStore = new EchtStore();
 echtStore.load();
+
+// setTimeout(() => {
+//   const upload = {
+//     uuid: '1234',
+//     actions: [{
+//       type: 'ADD_FRIEND',
+//       user: {
+//         avatar: 'https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/users/user-92954f8c-7798-49f2-852a-2559d443c805.jpg',
+//         uuid: '92954f8c-7798-49f2-852a-2559d443c805'
+//       }
+//     }]
+//   };
+
+//   echtStore.merge(echtStore.uploads, [upload]);
+// }, 2000);
 
 // DEBUGGING ONLY - see https://corbt.com/posts/2015/12/19/debugging-with-global-variables-in-react-native.html
 global.__store = echtStore;
