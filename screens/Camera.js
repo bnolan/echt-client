@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
   toolbar: {
     position: 'absolute',
     top: 20,
-    left: 0,
-    right: 0,
+    left: 96,
+    right: 96,
     alignItems: 'center'
   },
   preview: {
