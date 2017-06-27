@@ -19,9 +19,6 @@
 {
   NSURL *jsCodeLocation;
 
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
-
-  // jsCodeLocation = [CodePush bundleURL];
   // Determine simulator mode so we can use an image picker rather than the cam
   // See http://stackoverflow.com/a/34732015/920574
   BOOL isSimulator = NO;
@@ -30,6 +27,9 @@
     jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle"];
     isSimulator = YES;
   #endif
+
+  // jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
+  jsCodeLocation = [CodePush bundleURL];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Echt"

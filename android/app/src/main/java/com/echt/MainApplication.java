@@ -3,11 +3,11 @@ package com.echt;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.microsoft.codepush.react.CodePush;
 import com.vydia.RNUploader.UploaderReactPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rnfs.RNFSPackage;
-import com.microsoft.codepush.react.CodePush;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -35,11 +35,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
             new UploaderReactPackage(),
             new PhotoViewPackage(),
             new VectorIconsPackage(),
             new RNFSPackage(),
-            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
             new RCTCameraPackage()
       );
     }
