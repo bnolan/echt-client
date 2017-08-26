@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
   },
   shutter: {
     borderWidth: 4,
-    borderColor: '#FF00AA',
-    backgroundColor: '#ffffff',
+    borderColor: '#FFFFFF',
+    backgroundColor: 'transparent',
     width: 64,
     height: 64,
     borderRadius: 48,
