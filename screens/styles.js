@@ -20,7 +20,7 @@ export default StyleSheet.create({
     color: colors.textLight,
     fontSize: 24,
     fontWeight: 'bold',
-    fontFamily: 'arial rounded mt bold',
+    fontFamily: 'helvetica neue',
     margin: 24,
     marginTop: 48,
     textAlign: 'center'
@@ -28,7 +28,7 @@ export default StyleSheet.create({
   headerSmall: {
     color: '#666666',
     fontWeight: 'bold',
-    fontFamily: 'arial rounded mt bold',
+    fontFamily: 'helvetica neue',
     margin: 12,
     marginBottom: 0
   },
