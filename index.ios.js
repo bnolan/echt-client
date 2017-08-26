@@ -1,14 +1,13 @@
+import codePush from 'react-native-code-push';
+import Loading from './screens/Loading';
+import MainNavigator from './navigators/MainNavigator';
 import React from 'react';
+import store from './state/store';
+import WelcomeNavigator from './navigators/WelcomeNavigator';
 import { AppRegistry } from 'react-native';
 import { observer } from 'mobx-react/native';
 
-import Loading from './screens/Loading';
-import MainNavigator from './navigators/MainNavigator';
-import WelcomeNavigator from './navigators/WelcomeNavigator';
-import store from './state/store';
-
-@observer
-class App extends React.Component {
+@observer class App extends React.Component {
   // TODO Doesn't pass through
   // getChildContext () {
   //   return {
@@ -29,8 +28,18 @@ class App extends React.Component {
     }
   }
 }
+
+// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+// App = codePush(codePushOptions)(App);
+
+@codePush class EchtApp extends React.Component {
+  render () {
+    return <App />;
+  }
+}
+
 // App.childContextTypes = {
 //   isSimulator: PropTypes.boolean
 // };
 
-AppRegistry.registerComponent('Echt', () => App);
+AppRegistry.registerComponent('Echt', () => EchtApp);

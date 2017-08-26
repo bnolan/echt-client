@@ -4,8 +4,18 @@ import { Button } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
 import { Alert, Text, View } from 'react-native';
 import styles from './styles';
+import codePush from 'react-native-code-push';
 
 @observer export default class Settings extends React.Component {
+  constructor () {
+    super();
+
+    this.state = {
+      label: '',
+      version: ''
+    };
+  }
+
   setUser (name) {
     const keys = {
       // userId: 302f590b-7932-490b-a4e2-5fd6f1c7df59
@@ -15,6 +25,12 @@ import styles from './styles';
     };
 
     store.setDeviceKey(keys[name]);
+  }
+
+  componentDidMount () {
+    // codePush.getUpdateMetadata().then((metadata) =>{
+    //   this.setState({label: metadata.label, version: metadata.appVersion, description: metadata.description});
+    // });
   }
 
   clearUser () {
@@ -89,5 +105,7 @@ import styles from './styles';
         </View>
       </View>
     );
+
+    // <Text>v{this.state.version}.{this.state.label}</Text>
   }
 }
