@@ -24,7 +24,7 @@ export default class Selfie extends React.Component {
     const { path } = this.state;
 
     this.setState({ submitting: true, error: null });
-    console.log('path', path);
+
     store.signup(path).then((r) => {
       console.log('r', r);
       this.setState({ submitting: false });
@@ -35,7 +35,7 @@ export default class Selfie extends React.Component {
         // TODO Use PIN screen once it can be made optional
         // navigate('Pincode');
       } else {
-        this.setState({ error: r.message });
+        this.setState({ path: null, error: r.message });
       }
     });
   }
@@ -66,76 +66,108 @@ export default class Selfie extends React.Component {
   }
 
   renderCamera () {
+    const { error } = this.state;
+
+    var view;
+
+    if (error) {
+      view = <View style={styles.selfieErrorBox}>
+        <Icon
+          name={this.icon}
+          color='#000000' />
+        <Text style={styles.selfieError}>{this.state.error}</Text>
+      </View>;
+    }
+
     return (
       <Animatable.View
         animation='fadeIn'
         delay={500}
-        style={[styles.selfieCameraContainer, {width: this.width + 2, height: this.width + 2}]}>
-        <RNCamera
-          ref={(cam) => { this.camera = cam; }}
-          style={[styles.selfieCamera, {width: this.width, height: this.width}]}
-          captureTarget={RNCamera.constants.CaptureTarget.disk}
-          captureQuality={RNCamera.constants.CaptureQuality.high}
-          type={RNCamera.constants.Type.front}
-          aspect={RNCamera.constants.Aspect.fill} />
-        <Shutter onPress={(e) => this.takePhoto()} />
+        style={[styles.selfieCameraContainer, {width: this.width + 2, height: (view ? 32 : 0) + this.width + 2}]}>
+
+        <View style={{width: this.width, height: this.width}}>
+          <RNCamera
+            ref={(cam) => { this.camera = cam; }}
+            style={[styles.selfieCamera, {width: this.width, height: this.width}]}
+            captureTarget={RNCamera.constants.CaptureTarget.disk}
+            captureQuality={RNCamera.constants.CaptureQuality.high}
+            type={RNCamera.constants.Type.front}
+            aspect={RNCamera.constants.Aspect.fill} />
+          <Shutter onPress={(e) => this.takePhoto()} />
+        </View>
+
+        { view }
       </Animatable.View>
     );
   }
 
+  get icon () {
+    if (this.state.error) {
+      if (this.state.error.match(/too many/i)) {
+        return 'group';
+      } else if (this.state.error.match(/no face/i)) {
+        return 'person-outline';
+      } else {
+        return 'error';
+      }
+    }
+  }
+
   renderPreview () {
-    const {submitting, path} = this.state;
+    const {submitting, error, path} = this.state;
+
+    var view;
+
+    if (submitting) {
+      view = <View
+        style={[styles.selfieUploading, {width: this.width}]}>
+        <Animatable.Text
+          style={styles.selfieUploadingText}
+          animation='fadeIn'>
+          Uploading...
+        </Animatable.Text>
+      </View>;
+    } else {
+      view = <Animatable.View animation='fadeIn' style={[styles.selfiePreviewButtons, {width: this.width}]}>
+        <Button
+          title='Retake'
+          color={colors.textDark}
+          backgroundColor={colors.bgLight}
+          icon={{name: 'camera-alt', color: colors.textDark}}
+          style={styles.selfiePreviewButton}
+          buttonStyle={styles.selfiePreviewButton}
+          onPress={(e) => this.retakePhoto()}
+        />
+        <Button
+          title='Submit'
+          color={colors.textDark}
+          backgroundColor={colors.bgLight}
+          icon={{name: 'done', color: colors.textDark}}
+          style={styles.selfiePreviewButton}
+          buttonStyle={styles.selfiePreviewButton}
+          disabled={submitting}
+          onPress={(e) => this.submitPhoto()}
+        />
+      </Animatable.View>;
+    }
+
     return (
       <View
-        style={[styles.selfiePreview, {width: this.width + 2, height: this.width + 2}]}>
+        style={[styles.selfiePreview, {width: this.width + 2, height: this.width + 32}]}>
+
         <Image
           style={[styles.selfiePreviewImage, {width: this.width, height: this.width}]}
           source={{uri: path}} />
-        { submitting && (
-        <ActivityIndicator
-          animating
-          size='large'
-          style={styles.selfiePreviewActivityIndicator} />
-        )}
-        <View style={[styles.selfiePreviewButtons, {width: this.width}]}>
-          <Button
-            title='Retake'
-            color={colors.textDark}
-            backgroundColor={colors.bgLight}
-            icon={{name: 'camera-alt', color: colors.textDark}}
-            style={styles.selfiePreviewButton}
-            buttonStyle={styles.selfiePreviewButton}
-            onPress={(e) => this.retakePhoto()}
-          />
-          <Button
-            title='Submit'
-            color={colors.textDark}
-            backgroundColor={colors.bgLight}
-            icon={{name: 'done', color: colors.textDark}}
-            style={styles.selfiePreviewButton}
-            buttonStyle={styles.selfiePreviewButton}
-            disabled={submitting}
-            onPress={(e) => this.submitPhoto()}
-          />
-        </View>
+
+        { submitting && <ActivityIndicator animating size='large' style={[styles.selfiePreviewActivityIndicator, {width: this.width, height: this.width}]} /> }
+
+        { view }
       </View>
     );
   }
 
   render () {
-    const { submitting, path, error } = this.state;
-
-    var icon;
-    if (this.state.error) {
-      if (this.state.error.match(/too many/i)) {
-        icon = 'group';
-      } else if (this.state.error.match(/no face/i)) {
-        icon = 'person-outline';
-      } else {
-        icon = 'error';
-      }
-    }
-
+    const { path } = this.state;
     const camView = path ? this.renderPreview() : this.renderCamera();
 
     return (
@@ -155,15 +187,6 @@ export default class Selfie extends React.Component {
         </Animatable.Text>
 
         { camView }
-
-        { submitting && <Text style={styles.text}>Uploading selfie...</Text> }
-
-        { error && <View style={styles.selfieErrorBox}>
-          <Icon
-            name={icon}
-            color='#000000' />
-          <Text style={styles.selfieError}>{this.state.error}</Text>
-        </View>}
       </View>
     );
   }

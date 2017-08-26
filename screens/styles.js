@@ -81,7 +81,6 @@ export default StyleSheet.create({
     zIndex: 100
   },
   selfiePreview: {
-    flex: 1,
     margin: 24
   },
   selfiePreviewImage: {
@@ -100,6 +99,21 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row'
   },
+  selfieUploading: {
+    backgroundColor: 'white',
+    flex: 1,
+    margin: 0,
+    padding: 0,
+    flexDirection: 'column'
+  },
+  selfieUploadingText: {
+    flex: 1,
+    textAlign: 'center',
+    paddingTop: 8,
+    padding: 0,
+    margin: 0,
+    color: '#555555'
+  },
   selfiePreviewButton: {
     flex: 1,
     marginLeft: 0,
@@ -108,23 +122,13 @@ export default StyleSheet.create({
   selfieError: {
     color: colors.bgDarker,
     lineHeight: 24,
-    paddingLeft: 16
+    paddingLeft: 8
   },
   selfieErrorBox: {
     backgroundColor: 'white',
-    borderRadius: 8,
     padding: 4,
-    margin: 30,
-    marginTop: 8,
-    marginBottom: 8,
     flexDirection: 'row',
-    shadowColor: colors.bgDarker,
-    shadowOffset: {
-      width: 1,
-      height: 1
-    },
-    shadowRadius: 5,
-    shadowOpacity: 0.4
+    marginRight: 2
   },
   pincodeScreen: {
     backgroundColor: colors.bgDark
