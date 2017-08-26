@@ -14,8 +14,8 @@ class Welcome extends React.Component {
     return (
       <View style={[styles.container, styles.welcomeScreen]}>
         <Animatable.Text
-          style={styles.header}
-          animation='fadeInUp'>
+          animation='fadeInUp'
+          style={styles.header}>
           Welcome!
         </Animatable.Text>
 

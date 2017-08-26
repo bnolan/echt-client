@@ -1,3 +1,4 @@
+import * as Animatable from 'react-native-animatable';
 import React from 'react';
 import RNCamera from 'react-native-camera';
 import Shutter from '../../components/Shutter';
@@ -66,7 +67,10 @@ export default class Selfie extends React.Component {
     height = width;
 
     return (
-      <View style={[styles.selfieCameraContainer, {width: width + 2, height: height + 2}]}>
+      <Animatable.View
+        animation='fadeIn'
+        delay={500}
+        style={[styles.selfieCameraContainer, {width: width + 2, height: height + 2}]}>
         <RNCamera
           ref={(cam) => { this.camera = cam; }}
           style={[styles.selfieCamera, {width, height}]}
@@ -75,7 +79,7 @@ export default class Selfie extends React.Component {
           type={RNCamera.constants.Type.front}
           aspect={RNCamera.constants.Aspect.fill} />
         <Shutter onPress={(e) => this.takePhoto()} />
-      </View>
+      </Animatable.View>
     );
   }
 
@@ -133,12 +137,19 @@ export default class Selfie extends React.Component {
 
     return (
       <View style={[styles.container, styles.selfieScreen]}>
-        <Text style={styles.header}>Take a selfie</Text>
+        <Animatable.Text
+          animation='fadeInUp'
+          style={styles.header}>
+          Take a selfie
+        </Animatable.Text>
 
-        <Text style={styles.text}>
+        <Animatable.Text 
+          animation='fadeIn'
+          delay={250}
+          style={styles.text}>
           Echt remembers your face to recognize you, so you don't have
-          to enter your email or your phone number.
-        </Text>
+          to enter your email or phone number.
+        </Animatable.Text>
 
         { camView }
 
