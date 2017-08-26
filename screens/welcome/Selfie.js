@@ -1,11 +1,11 @@
 import React from 'react';
 import RNCamera from 'react-native-camera';
-import { ActivityIndicator, Text, View, Image } from 'react-native';
 import Shutter from '../../components/Shutter';
-import store from '../../state/store';
 import simulatorUpload from '../../helpers/simulator-upload';
-import { Icon, Button } from 'react-native-elements';
+import store from '../../state/store';
 import styles, { colors } from '../styles';
+import { ActivityIndicator, Dimensions, Text, View, Image } from 'react-native';
+import { Icon, Button } from 'react-native-elements';
 
 export default class Selfie extends React.Component {
   constructor () {
@@ -60,11 +60,16 @@ export default class Selfie extends React.Component {
   }
 
   renderCamera () {
+    var { height, width } = Dimensions.get('window');
+
+    width -= 50;
+    height = width;
+
     return (
-      <View style={styles.selfieCameraContainer}>
+      <View style={[styles.selfieCameraContainer, {width: width + 2, height: height + 2}]}>
         <RNCamera
           ref={(cam) => { this.camera = cam; }}
-          style={styles.selfieCamera}
+          style={[styles.selfieCamera, {width, height}]}
           captureTarget={RNCamera.constants.CaptureTarget.disk}
           captureQuality={RNCamera.constants.CaptureQuality.high}
           type={RNCamera.constants.Type.front}
