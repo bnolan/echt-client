@@ -114,7 +114,7 @@ export default class Selfie extends React.Component {
   }
 
   renderPreview () {
-    const {submitting, error, path} = this.state;
+    const {submitting, path} = this.state;
 
     var view;
 

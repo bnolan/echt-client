@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
 import { Alert, Text, View } from 'react-native';
 import styles from './styles';
-import codePush from 'react-native-code-push';
+// import codePush from 'react-native-code-push';
 
 @observer export default class Settings extends React.Component {
   constructor () {
