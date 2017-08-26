@@ -1,7 +1,8 @@
+import * as Animatable from 'react-native-animatable';
 import React from 'react';
 import styles, {colors} from '../styles';
 import { Button } from 'react-native-elements';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 class Welcome extends React.Component {
   nextScreen () {
@@ -12,18 +13,26 @@ class Welcome extends React.Component {
 
     return (
       <View style={[styles.container, styles.welcomeScreen]}>
-        <Text style={styles.header}>
+        <Animatable.Text
+          style={styles.header}
+          animation='fadeInUp'>
           Welcome!
-        </Text>
+        </Animatable.Text>
 
-        <Text style={styles.text}>
+        <Animatable.Text
+          style={styles.text}
+          animation='fadeIn'
+          delay={250}>
           Welcome to Echt, the photo sharing app
           for friends. Echt is different
           because you have to take selfies with your friends
           to add them.
-        </Text>
+        </Animatable.Text>
 
-        <View style={styles.viewCentered}>
+        <Animatable.View
+          style={styles.viewCentered}
+          animation='fadeIn'
+          delay={500}>
           <Button
             raised
             onPress={() => navigate('Selfie')}
@@ -32,7 +41,7 @@ class Welcome extends React.Component {
             icon={{name: 'keyboard-arrow-right', color: colors.textDark}}
             style={styles.welcomeButton}
             title='Continue' />
-        </View>
+        </Animatable.View>
       </View>
     );
   }

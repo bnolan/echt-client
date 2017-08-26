@@ -20,6 +20,7 @@
     "prop-types": "^15.5.8",
     "react": "16.0.0-alpha.6",
     "react-native": "^0.43.3",
+    "react-native-animatable": "^1.2.3",
     "react-native-background-upload": "^3.0.0-beta",
     "react-native-camera": "https://github.com/lwansbrough/react-native-camera.git",
     "react-native-code-push": "^2.1.0-beta",
