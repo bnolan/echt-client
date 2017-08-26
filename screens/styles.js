@@ -101,7 +101,7 @@ export default StyleSheet.create({
     flexDirection: 'row'
   },
   selfiePreviewButton: {
-    width: 160,
+    flex: 1,
     marginLeft: 0,
     marginRight: 0
   },

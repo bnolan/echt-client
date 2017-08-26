@@ -60,20 +60,20 @@ export default class Selfie extends React.Component {
     return p.then((data) => this.setState({ path: data.path }));
   }
 
+  get width () {
+    var { width } = Dimensions.get('window');
+    return width - 50;
+  }
+
   renderCamera () {
-    var { height, width } = Dimensions.get('window');
-
-    width -= 50;
-    height = width;
-
     return (
       <Animatable.View
         animation='fadeIn'
         delay={500}
-        style={[styles.selfieCameraContainer, {width: width + 2, height: height + 2}]}>
+        style={[styles.selfieCameraContainer, {width: this.width + 2, height: this.width + 2}]}>
         <RNCamera
           ref={(cam) => { this.camera = cam; }}
-          style={[styles.selfieCamera, {width, height}]}
+          style={[styles.selfieCamera, {width: this.width, height: this.width}]}
           captureTarget={RNCamera.constants.CaptureTarget.disk}
           captureQuality={RNCamera.constants.CaptureQuality.high}
           type={RNCamera.constants.Type.front}
@@ -86,15 +86,18 @@ export default class Selfie extends React.Component {
   renderPreview () {
     const {submitting, path} = this.state;
     return (
-      <View style={styles.selfiePreview}>
-        <Image style={styles.selfiePreviewImage} source={{uri: path}} />
+      <View
+        style={[styles.selfiePreview, {width: this.width + 2, height: this.width + 2}]}>
+        <Image
+          style={[styles.selfiePreviewImage, {width: this.width, height: this.width}]}
+          source={{uri: path}} />
         { submitting && (
         <ActivityIndicator
           animating
           size='large'
           style={styles.selfiePreviewActivityIndicator} />
         )}
-        <View style={styles.selfiePreviewButtons}>
+        <View style={[styles.selfiePreviewButtons, {width: this.width}]}>
           <Button
             title='Retake'
             color={colors.textDark}
@@ -143,7 +146,7 @@ export default class Selfie extends React.Component {
           Take a selfie
         </Animatable.Text>
 
-        <Animatable.Text 
+        <Animatable.Text
           animation='fadeIn'
           delay={250}
           style={styles.text}>
