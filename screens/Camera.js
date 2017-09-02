@@ -8,7 +8,8 @@ import Upload from '../components/Upload';
 import { CAMERA } from '../constants';
 import { Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Animated, Easing, StyleSheet, View } from 'react-native';
+import { Animated, Dimensions, Easing, StyleSheet, View } from 'react-native';
+import { colors } from './styles';
 
 const uploadHeight = 64 + 20;
 
@@ -83,15 +84,17 @@ const uploadHeight = 64 + 20;
     const uploads = mobx.toJS(store.uploads).map((u) => {
       return <Upload key={u.uuid} upload={u} navigation={this.props.navigation} />;
     });
+    const { width, height } = Dimensions.get('window');
 
     return (
-      <RNCamera
-        ref={(cam) => { this.camera = cam; }}
-        style={styles.preview}
-        captureTarget={RNCamera.constants.CaptureTarget.disk}
-        captureQuality={RNCamera.constants.CaptureQuality.high}
-        type={this.state.cameraType}
-        aspect={RNCamera.constants.Aspect.fill}>
+      <View style={styles.cameraContainer}>
+        <RNCamera
+          ref={(cam) => { this.camera = cam; }}
+          style={[styles.camera, {width, height}]}
+          captureTarget={RNCamera.constants.CaptureTarget.disk}
+          captureQuality={RNCamera.constants.CaptureQuality.high}
+          type={this.state.cameraType}
+          aspect={RNCamera.constants.Aspect.fill} />
 
         <Animated.View style={{ ...uploadStyle, top: this.state.slideAnim }}>
           {uploads}
@@ -107,40 +110,52 @@ const uploadHeight = 64 + 20;
         </View>
 
         <Shutter onPress={(e) => this.takePhoto()} />
-      </RNCamera>
+      </View>
     );
   }
 }
 
 const uploadStyle = {
   position: 'absolute',
-  right: 20
+  right: 20,
+  zIndex: 200
 };
 
+// Work with absolute positioning because RNCamera doesn't allow nesting,
+// see https://github.com/lwansbrough/react-native-camera/issues/591
 const styles = StyleSheet.create({
+  cameraContainer: {
+    flex: 1
+  },
   cameraType: {
     borderWidth: 4,
     borderColor: 'red',
     width: 48,
     height: 48,
     borderRadius: 64,
-    marginTop: 50
+    marginTop: 50,
+    zIndex: 200
   },
   uploads: {
     position: 'absolute',
     top: 0,
-    right: 20
+    right: 20,
+    zIndex: 200
   },
   toolbar: {
     position: 'absolute',
     top: 20,
     left: 96,
     right: 96,
-    alignItems: 'center'
+    alignItems: 'center',
+    zIndex: 200
   },
-  preview: {
+  camera: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    backgroundColor: colors.bgDarker,
+    position: 'relative',
+    zIndex: 100,
+    width: 300,
+    height: 300
   }
 });

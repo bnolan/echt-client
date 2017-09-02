@@ -66,6 +66,8 @@ export default StyleSheet.create({
   selfieScreen: {
     backgroundColor: colors.bgDark
   },
+  // Work with absolute positioning because RNCamera doesn't allow nesting,
+  // see https://github.com/lwansbrough/react-native-camera/issues/591
   selfieCameraContainer: {
     width: 320,
     height: 320,
