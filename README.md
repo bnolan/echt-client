@@ -12,20 +12,54 @@ Globally install [react-native](https://facebook.github.io/react-native/docs/get
 
 Run `yarn`
 
-## Usage
+## Development
 
- * `yarn run ios`: Build for iOS and run in simulator
+### Simulator Use
 
+Use `yarn run ios` to build for iOS and run in simulator.
+The simulator will automatically used the bundle served at `localhost` by the process.
 Adjust the server address in the `jsCodeLocation` variable in `ios/AppDelegate.m`
-if you want to run a local development server, rather than serving the JavaScript bundle from S3.
-Note that by default it's using [CodePush](https://microsoft.github.io/code-push/)
-when the app is bundled for a device, and `localhost` when running in a simulator.
-This assumes that you run `yarn run server` in the [echt-server](https://github.com/bnolan/echt-server) repo locally.
+if you want to run a different server.
+
+### Deploy to device
+
+To run the app on a phone in debug mode, you need to open `ios/Echt.xcodeproj`
+in XCode, attach a device to your machine, and do a build for that device.
+When using the app on a phone, the bundle is served from [CodePush](https://microsoft.github.io/code-push/).
 
 At the moment, you need to adjust the `Build Setting > Development Team` assignments in XCode to get
 the app building (it's hardcoded to Ben's).
 
   LC_ALL=C find ios/Echt.xcodeproj/* -type f -exec sed -i "" "s/DWB7DKRZ7D/Y9AF3JTNBU/g" {} \;
+
+### Running a local endpoint
+
+By default, API calls will be made to the configured AWS API Gateway.
+You can adjust this in `config.js`, and run a local server through
+`yarn run server` in the [echt-server](https://github.com/bnolan/echt-server) repo.
+
+## Release
+
+### App bundles
+
+This is the actual app that gets submitted to the app stores (iOS only at the moment).
+
+TODO Describe process
+
+### JavaScript bundles
+
+The application logic lives in JavaScript, and can be released
+separately from the app bundle through [CodePush](https://microsoft.github.io/code-push/).
+You'll need to be added to the CodePush project as a collaborator first.
+
+Call `yarn run release-uat` and `yarn run release-prod`.
+This will upload the currently built bundle to the CodePush service.
+Since the app is configured to check for a bundle on each resume,
+the code should be available seconds after publishing.
+
+You can check CodePush update behaviour by running it in [debug mode](https://microsoft.github.io/code-push/docs/cli.html#link-5).
+This only works on the iOS simulator at the moment.
+There's no known way to determine update behaviour on a device.
 
 ## Debugging
 
