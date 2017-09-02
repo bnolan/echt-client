@@ -29,17 +29,11 @@ import { observer } from 'mobx-react/native';
   }
 }
 
-// let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
-// App = codePush(codePushOptions)(App);
-
-@codePush class EchtApp extends React.Component {
-  render () {
-    return <App />;
-  }
-}
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_RESUME };
+const CodePushableApp = codePush(codePushOptions)(App);
 
 // App.childContextTypes = {
 //   isSimulator: PropTypes.boolean
 // };
 
-AppRegistry.registerComponent('Echt', () => EchtApp);
+AppRegistry.registerComponent('Echt', () => CodePushableApp);
