@@ -18,7 +18,7 @@ module.exports = () => {
         });
       },
       error => {
-        console.log(error);
+        console.log('Simulator upload failed: ', error);
         reject(error);
       }
     );
