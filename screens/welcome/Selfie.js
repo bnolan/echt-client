@@ -15,7 +15,8 @@ export default class Selfie extends React.Component {
     this.state = {
       submitting: false,
       path: null, // renders preview, used for submission
-      error: null
+      error: null,
+      showCamera: true
     };
   }
 
@@ -30,7 +31,12 @@ export default class Selfie extends React.Component {
       this.setState({ submitting: false });
 
       if (r.success) {
-        this.setState({ path: null, error: null });
+        this.setState({ path: null, error: null, showCamera: false });
+
+        // Remove camera reference to avoid interference with <Camera> later.
+        // See https://github.com/lwansbrough/react-native-camera/issues/642#issuecomment-295402172
+        this.camera = null;
+
         navigate('Instructions');
         // TODO Use PIN screen once it can be made optional
         // navigate('Pincode');
@@ -67,8 +73,15 @@ export default class Selfie extends React.Component {
 
   renderCamera () {
     const { error } = this.state;
-
     var view;
+
+    // Remove camera from view to avoid interference with <Camera> later.
+    // This only works because we don't allow navigating back from
+    // <Instructions> to <Selfie> - once you've submitted a selfie, that's it.
+    // See https://github.com/lwansbrough/react-native-camera/issues/642#issuecomment-295402172
+    if (!this.state.showCamera) {
+      return null;
+    }
 
     if (error) {
       view = <View style={styles.selfieErrorBox}>
