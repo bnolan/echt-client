@@ -3953,11 +3953,7 @@ punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-q@^1.4.1:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/q/-/q-1.5.0.tgz#dd01bac9d06d30e6f219aecb8253ee9ebdc308f1"
-
-q@~1.4.1:
+q@^1.4.1, q@~1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/q/-/q-1.4.1.tgz#55705bcd93c5f3673530c2c2cbc0c2b3addc286e"
 
@@ -4037,8 +4033,10 @@ react-native-background-upload@^3.0.0-beta:
   resolved "https://registry.yarnpkg.com/react-native-background-upload/-/react-native-background-upload-3.0.0-beta.tgz#2696a23ed9890ba40aae568c2abdbe10d96b0e86"
 
 "react-native-camera@https://github.com/lwansbrough/react-native-camera.git":
-  version "0.6.0"
-  resolved "https://github.com/lwansbrough/react-native-camera.git#98de15cf9a250dd667e7459f5378e4dfe6a60f3c"
+  version "0.10.0"
+  resolved "https://github.com/lwansbrough/react-native-camera.git#161c56809508a06fa320bbe96144c8c612da3187"
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-code-push@^2.1.0-beta:
   version "2.1.0-beta"
@@ -4547,13 +4545,13 @@ sane@~1.5.0:
     walker "~1.0.5"
     watch "~0.10.0"
 
-sax@>=0.6.0, sax@^1.2.1:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.2.tgz#fd8631a23bc7826bef5d871bdb87378c95647828"
-
-sax@~1.1.1:
+sax@>=0.6.0, sax@~1.1.1:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.1.6.tgz#5d616be8a5e607d54e114afae55b7eaf2fcc3240"
+
+sax@^1.2.1:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.2.tgz#fd8631a23bc7826bef5d871bdb87378c95647828"
 
 semistandard@^11.0.0:
   version "11.0.0"
