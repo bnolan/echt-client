@@ -23,6 +23,9 @@ const uploadHeight = 64 + 20;
   }
 
   componentDidMount () {
+    // For #loadFixture
+    store.navigation = this.props.navigation;
+
     store.uploads.observe(() => {
       console.log('#uploads observe');
       this.addUpload();

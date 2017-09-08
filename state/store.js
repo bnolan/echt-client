@@ -22,6 +22,22 @@ export class EchtStore {
 
   @observable loaded = false;
 
+  loadFixture (fixture) {
+    this.uploads.concat(fixture.uploads);
+    this.photos = fixture.uploads;
+    this.friends = fixture.friends;
+    this.user = fixture.user;
+    this.loaded = true;
+
+    setTimeout(() => {
+      this.navigator.dispatch({
+        type: 'Navigate',
+        routeName: fixture.route.name,
+        params: fixture.route.params
+      });
+    });
+  }
+
   /**
    * CAUTION: Use for debugging purposes only
    */
@@ -474,6 +490,8 @@ export class EchtStore {
 
 const echtStore = new EchtStore();
 echtStore.load();
+
+echtStore.loadFixture(require('./fixtures/add-friend'));
 
 // setTimeout(() => {
 //   const upload = {
