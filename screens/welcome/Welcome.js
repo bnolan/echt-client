@@ -3,6 +3,7 @@ import React from 'react';
 import styles, {colors} from '../styles';
 import { Button } from 'react-native-elements';
 import { View } from 'react-native';
+import store from '../../state/store';
 
 class Welcome extends React.Component {
   nextScreen () {
@@ -10,6 +11,9 @@ class Welcome extends React.Component {
   }
   render () {
     const { navigation: { navigate } } = this.props;
+
+    // For #loadFixture
+    store.navigation = this.props.navigation;
 
     return (
       <View style={[styles.container, styles.welcomeScreen]}>
