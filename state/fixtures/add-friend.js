@@ -1,18 +1,19 @@
 import uuid from 'uuid/v4';
 
-const ingo = uuid();
-const ben = uuid();
+const photo = uuid();
 const key = uuid();
 
 export default {
   user: {
-    // uuid: ben(),
     key,
     loggedIn: true
   },
+  uploads: [{
+    uuid: photo
+  }],
   route: {
     params: {
-      uuid: ingo
+      uuid: photo
     },
     name: 'InviteFriend'
   }
