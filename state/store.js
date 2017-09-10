@@ -78,7 +78,7 @@ export class EchtStore {
       }
 
       this.navigation.dispatch({
-        type: 'Navigate',
+        type: 'Navigation/NAVIGATE',
         routeName: fixture.route.name,
         params: fixture.route.params
       });
