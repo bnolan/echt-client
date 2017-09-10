@@ -5,8 +5,11 @@ import { observable, computed } from 'mobx';
 import { STATUS, PHOTO_STATUS } from '../constants';
 import config from '../config';
 import assert from 'assert';
+import mobx from 'mobx';
 import RNFS from 'react-native-fs';
 import uuid from 'uuid/v4';
+
+import fixture from './fixtures/add-friend';
 
 export class EchtStore {
   @observable uploads = [];
@@ -22,20 +25,61 @@ export class EchtStore {
 
   @observable loaded = false;
 
+  constructor () {
+    this.isFixture = false;
+  }
+
+  get fetch () {
+    function mockFetch () {
+      console.log('Mocking fetch...');
+      return { then: mockFetch, catch: mockFetch };
+    }
+
+    if (this.isFixture) {
+      return mockFetch;
+    } else {
+      return fetch;
+    }
+  }
+
   loadFixture (fixture) {
-    this.uploads.concat(fixture.uploads);
-    this.photos = fixture.uploads;
-    this.friends = fixture.friends;
-    this.user = fixture.user;
+    // Prevents any network requests
+    this.isFixture = true;
+
+    this.uploads.replace(
+      (fixture.uploads || []).map((u) => observable.map(u))
+    );
+
+    this.photos.replace(
+      (fixture.photos || []).map((p) => observable.map(p))
+    );
+
+    this.friends.replace(
+      (fixture.friends || []).map((f) => observable.map(f))
+    );
+
+    this.user.key = fixture.user.key;
+    this.user.loggedIn = fixture.user.loggedIn;
+
     this.loaded = true;
 
-    setTimeout(() => {
-      this.navigator.dispatch({
+    console.log(fixture.uploads);
+    console.log(mobx.toJS(this.uploads));
+
+    // Wait until we have the navigation singleton
+    const interval = setInterval(() => {
+      if (this.navigation) {
+        clearTimeout(interval);
+      } else {
+        return;
+      }
+
+      this.navigation.dispatch({
         type: 'Navigate',
         routeName: fixture.route.name,
         params: fixture.route.params
       });
-    });
+    }, 50);
   }
 
   /**
@@ -93,7 +137,7 @@ export class EchtStore {
 
     this.remove(this.friends, [{ uuid: uuid }]);
 
-    return fetch(`${this.endpoint}/friends`, {
+    return this.fetch(`${this.endpoint}/friends`, {
       method: 'put',
       headers: this.headers,
       body: JSON.stringify(request)
@@ -112,7 +156,7 @@ export class EchtStore {
     let response;
     const request = { user: friendId, photoId: photoId };
 
-    return fetch(`${this.endpoint}/friends`, {
+    return this.fetch(`${this.endpoint}/friends`, {
       method: 'post',
       headers: this.headers,
       body: JSON.stringify(request)
@@ -128,7 +172,7 @@ export class EchtStore {
   }
 
   signup (path) {
-    return fetch(`${this.endpoint}/sign-up`)
+    return this.fetch(`${this.endpoint}/sign-up`)
       .then((r) => r.json())
       .then((body) => {
         this.user.key = body.deviceKey;
@@ -141,7 +185,7 @@ export class EchtStore {
           image: b64
         };
 
-        return fetch(`${this.endpoint}/sign-up`, {
+        return this.fetch(`${this.endpoint}/sign-up`, {
           method: 'post',
           headers: this.headers,
           body: JSON.stringify(request)
@@ -174,7 +218,7 @@ export class EchtStore {
       return false;
     }
 
-    return fetch(`${this.endpoint}/sign-up`, {
+    return this.fetch(`${this.endpoint}/sign-up`, {
       method: 'delete',
       headers: this.headers
     }).then(() => {
@@ -224,7 +268,7 @@ export class EchtStore {
 
         console.log('#uploading...');
 
-        return fetch(`${this.endpoint}/photos`, {
+        return this.fetch(`${this.endpoint}/photos`, {
           method: 'post',
           headers: this.headers,
           body: JSON.stringify(request)
@@ -264,7 +308,7 @@ export class EchtStore {
 
     assert(photoId);
 
-    return fetch(`${this.endpoint}/photos`, {
+    return this.fetch(`${this.endpoint}/photos`, {
       method: 'DELETE',
       body: JSON.stringify({uuid: photoId}),
       headers: this.headers
@@ -280,7 +324,7 @@ export class EchtStore {
     }
 
     // todo - send ?since=timestamp
-    return fetch(`${this.endpoint}/photos`, {
+    return this.fetch(`${this.endpoint}/photos`, {
       headers: this.headers
     }).then(
       (response) => response.json()
@@ -295,7 +339,7 @@ export class EchtStore {
       return false;
     }
 
-    return fetch(`${this.endpoint}/friends`, {
+    return this.fetch(`${this.endpoint}/friends`, {
       headers: this.headers
     }).then(
       (response) => response.json()
@@ -489,9 +533,10 @@ export class EchtStore {
 }
 
 const echtStore = new EchtStore();
-echtStore.load();
 
-echtStore.loadFixture(require('./fixtures/add-friend'));
+// echtStore.load();
+
+echtStore.loadFixture(fixture);
 
 // setTimeout(() => {
 //   const upload = {
