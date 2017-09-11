@@ -9,19 +9,22 @@ import { observer } from 'mobx-react/native';
 import { Image, View } from 'react-native';
 
 import {
-  Container,
-  Header,
-  Title,
-  Content,
+  Body,
   Button,
-  Grid,
+  Card,
+  CardItem, 
   Col,
-  Row,
+  Container,
+  Content,
+  Grid,
+  Header,
   Icon,
   Left,
   Right,
-  Body,
-  Text
+  Row,
+  Text,
+  Thumbnail,
+  Title
 } from 'native-base';
 
 @observer
@@ -88,26 +91,36 @@ export default class InviteFriend extends React.Component {
         </Header>
 
         <Grid>
-          <Row>
-            <Grid>
-              <Row>
-                <Image
-                  style={{width: width, height: height}}
-                  source={{uri: this.action.user.avatar}}
-                />
-              </Row>
+          <Row style={[ styles.margin15, styles.flex0 ]}>
+            <Card>
+              <CardItem>
+                <Left>
+                  <Body>
+                    <Text>Ingo</Text>
+                    <Text note>Joined May 2017</Text>
+                  </Body>
+                </Left>
+              </CardItem>
 
-              <Row>
+              <CardItem cardBody>
                 <Image
-                  style={{width: width, height: height}}
-                  source={{uri: this.upload.url}}
+                  style={{
+                    resizeMode: 'cover',
+                    width: null,
+                    height: 320,
+                    flex: 1
+                  }}
+                  source={{ uri: this.action.user.avatar }}
                 />
-              </Row>
-            </Grid>
+              </CardItem>
+            </Card>
+          </Row>
+
+          <Row>
           </Row>
 
           <Row style={styles.flex0}>
-            <Grid style={styles.m10}>
+            <Grid style={styles.margin10}>
               <Col style={styles.mr5}>
                 <Button block bordered onPress={this.onClose.bind(this)}>
                   <Text>Cancel</Text>

@@ -26,7 +26,7 @@ const uploadHeight = 64 + 20;
     // For #loadFixture
     store.navigation = this.props.navigation;
 
-    store.uploads.observe(() => {
+    this.uploadsObserver = store.uploads.observe(() => {
       console.log('#uploads observe');
       this.addUpload();
     });
@@ -34,6 +34,10 @@ const uploadHeight = 64 + 20;
     this.setState({
       cameraType: this.props.screenProps.isSimulator ? RNCamera.constants.Type.front : RNCamera.constants.Type.back
     });
+  }
+
+  componentWillUnmount () {
+    this.uploadsObserver();
   }
 
   toggleType () {

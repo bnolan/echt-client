@@ -18,6 +18,9 @@ export default {
   flex0: {
     flex: 0
   },
+  mb: {
+    marginBottom: 5
+  },
   mb10: {
     marginBottom: 10
   },
@@ -30,10 +33,10 @@ export default {
   mr5: {
     marginRight: 5
   },
-  m10: {
+  margin10: {
     margin: 10
   },
-  m15: {
+  margin15: {
     margin: 15
   }
 };
