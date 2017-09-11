@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
 import styles from './styles';
-import { Button } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
 import { Text, Image, View } from 'react-native';
 
@@ -53,9 +53,17 @@ export default class InviteFriend extends React.Component {
     // TODO Proper dimension calc
     return (
       <View style={styles.container}>
-        <Text style={[styles.header, styles.dark]}>
-          Add friend?
-        </Text>
+        <View style={[styles.headerView]}>
+          <Icon
+            name='sentiment-satisfied'
+            size={48}
+            color='#ffffff'
+          />
+
+          <Text style={[styles.header, styles.text]}>
+            Add friend?
+          </Text>
+        </View>
 
         <Text style={[styles.text, styles.dark]}>
           Do you want to send a friend invite to this person? Their
