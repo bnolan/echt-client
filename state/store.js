@@ -10,7 +10,7 @@ import RNFS from 'react-native-fs';
 import uuid from 'uuid/v4';
 import resize from '../helpers/resize';
 
-import fixture from './fixtures/welcome';
+import fixture from './fixtures/welcome-selfie';
 
 export class EchtStore {
 

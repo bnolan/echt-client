@@ -4,9 +4,20 @@ import RNCamera from 'react-native-camera';
 import Shutter from '../../components/Shutter';
 import simulatorUpload from '../../helpers/simulator-upload';
 import store from '../../state/store';
-import styles, { colors } from '../styles';
-import { ActivityIndicator, Dimensions, Text, View, Image } from 'react-native';
-import { Icon, Button } from 'react-native-elements';
+import styles from '../styles';
+import { ActivityIndicator, Dimensions, View, Image } from 'react-native';
+
+import {
+  Body,
+  Button,
+  Col,
+  Container,
+  Grid,
+  Header,
+  Row,
+  Text,
+  Title
+} from 'native-base';
 
 export default class Selfie extends React.Component {
   constructor () {
@@ -72,13 +83,25 @@ export default class Selfie extends React.Component {
 
   get width () {
     var { width } = Dimensions.get('window');
-    return width - 50;
+    return width - 32;
+  }
+
+  renderError () {
+    const { error } = this.state;
+
+    if (error) {
+      return (
+        <View style={styles.selfieErrorBox}>
+          <Icon
+            name={this.icon}
+            color='#000000' />
+          <Text style={styles.selfieError}>{this.state.error}</Text>
+        </View>
+      );
+    }
   }
 
   renderCamera () {
-    const { error } = this.state;
-    var view;
-
     // Remove camera from view to avoid interference with <Camera> later.
     // This only works because we don't allow navigating back from
     // <Instructions> to <Selfie> - once you've submitted a selfie, that's it.
@@ -87,34 +110,16 @@ export default class Selfie extends React.Component {
       return null;
     }
 
-    if (error) {
-      view = <View style={styles.selfieErrorBox}>
-        <Icon
-          name={this.icon}
-          color='#000000' />
-        <Text style={styles.selfieError}>{this.state.error}</Text>
-      </View>;
-    }
-
     return (
-      <Animatable.View
-        animation='fadeIn'
-        delay={500}
-        style={[styles.selfieCameraContainer, {width: this.width + 2, height: (view ? 32 : 0) + this.width + 2}]}>
-
-        <View style={{width: this.width, height: this.width}}>
-          <RNCamera
-            ref={(cam) => { this.camera = cam; }}
-            style={[styles.selfieCamera, {width: this.width, height: this.width}]}
-            captureTarget={RNCamera.constants.CaptureTarget.disk}
-            captureQuality={RNCamera.constants.CaptureQuality.high}
-            type={RNCamera.constants.Type.front}
-            aspect={RNCamera.constants.Aspect.fill} />
-          <Shutter onPress={(e) => this.takePhoto()} />
-        </View>
-
-        { view }
-      </Animatable.View>
+      <Row style={[ styles.margin15, styles.flex0 ]}>
+        <RNCamera
+          ref={(cam) => { this.camera = cam; }}
+          style={{ width: this.width, height: this.width, borderRadius: 4 }}
+          captureTarget={RNCamera.constants.CaptureTarget.disk}
+          captureQuality={RNCamera.constants.CaptureQuality.high}
+          type={RNCamera.constants.Type.front}
+          aspect={RNCamera.constants.Aspect.fill} />
+      </Row>
     );
   }
 
@@ -188,23 +193,39 @@ export default class Selfie extends React.Component {
     const camView = path ? this.renderPreview() : this.renderCamera();
 
     return (
-      <View style={[styles.container, styles.selfieScreen]}>
-        <Animatable.Text
-          animation='fadeInUp'
-          style={styles.header}>
-          Take a selfie
-        </Animatable.Text>
+      <Container style={styles.container}>
+        <Header>
+          <Body>
+            <Title>Take a selfie</Title>
+          </Body>
+        </Header>
 
-        <Animatable.Text
-          animation='fadeIn'
-          delay={250}
-          style={styles.text}>
-          Echt remembers your face to recognize you, so you don't have
-          to enter your email or phone number.
-        </Animatable.Text>
+        <Grid>
+          <Row style={[ styles.flex0, styles.margin15 ]}>
+            <Animatable.Text
+              animation='fadeIn'
+              delay={250}
+              style={styles.text}>
+              When you sign up, we remember your face, so we don't need
+              an email address.
+            </Animatable.Text>
+          </Row>
 
-        { camView }
-      </View>
+          { camView }
+
+          <Row>
+            { this.renderError() }
+          </Row>
+
+          <Row style={styles.margin15}>
+            <Button
+              block
+              onPress={() => this.takePhoto()}>
+              <Text>Take Selfie</Text>
+            </Button>
+          </Row>
+        </Grid>
+      </Container>
     );
   }
 }

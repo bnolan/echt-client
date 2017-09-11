@@ -1,31 +1,21 @@
 import * as Animatable from 'react-native-animatable';
 import React from 'react';
-import styles, {colors} from '../styles';
-import { View } from 'react-native';
+import styles from '../styles';
 import store from '../../state/store';
 
 import {
   Body,
   Button,
-  Card,
-  CardItem, 
   Col,
   Container,
-  Content,
   Grid,
   Header,
-  Icon,
-  Left,
-  Right,
   Row,
   Text,
-  Thumbnail,
   Title
 } from 'native-base';
-class Welcome extends React.Component {
-  nextScreen () {
 
-  }
+class Welcome extends React.Component {
   render () {
     const { navigation: { navigate } } = this.props;
 

@@ -16,8 +16,8 @@ export default {
     backgroundColor: '#FFF'
   },
   text: {
-    fontSize: 18,
-    lineHeight: 24,
+    fontSize: 16,
+    lineHeight: 22,
     color: '#333',
     fontFamily: 'System'
   },

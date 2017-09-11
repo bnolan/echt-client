@@ -4,6 +4,6 @@ export default {
     loggedIn: false
   },
   route: {
-    name: 'Welcome'
+    name: 'Selfie'
   }
 };
