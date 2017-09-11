@@ -83,11 +83,9 @@ export default class InviteFriend extends React.Component {
     return (
       <Container style={styles.container}>
         <Header>
-          <Left />
           <Body>
             <Title>Add friend</Title>
           </Body>
-          <Right />
         </Header>
 
         <Grid>

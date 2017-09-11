@@ -15,6 +15,12 @@ export default {
   container: {
     backgroundColor: '#FFF'
   },
+  text: {
+    fontSize: 18,
+    lineHeight: 24,
+    color: '#333',
+    fontFamily: 'System'
+  },
   flex0: {
     flex: 0
   },
