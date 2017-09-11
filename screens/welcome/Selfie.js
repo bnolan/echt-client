@@ -206,8 +206,9 @@ export default class Selfie extends React.Component {
               animation='fadeIn'
               delay={250}
               style={styles.text}>
-              When you sign up, we remember your face, so we don't need
-              an email address.
+              We use your selfie so that we can find
+              you in your friends photos. You don't need
+              an email address or phone number to sign up.
             </Animatable.Text>
           </Row>
 
