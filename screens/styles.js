@@ -32,11 +32,23 @@ export default StyleSheet.create({
     margin: 12,
     marginBottom: 0
   },
+  headerView: {
+    backgroundColor: '#ff00aa',
+    padding: 12,
+    flexDirection: 'row',
+    shadowColor: colors.bgDark,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 2,
+    shadowOpacity: 0.2
+  },
   dark: {
     color: colors.textDark
   },
   text: {
-    color: colors.textLight,
+    color: colors.textWhite,
     margin: 24
   },
   bigEmoji: {
