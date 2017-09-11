@@ -11,10 +11,38 @@ export const colors = {
   bgPink: '#ff00aa'
 };
 
+export default {
+  container: {
+    backgroundColor: '#FFF'
+  },
+  flex0: {
+    flex: 0
+  },
+  mb10: {
+    marginBottom: 10
+  },
+  mb15: {
+    marginBottom: 15
+  },
+  ml5: {
+    marginLeft: 5
+  },
+  mr5: {
+    marginRight: 5
+  },
+  m10: {
+    margin: 10
+  },
+  m15: {
+    margin: 15
+  }
+};
+
+/*
 export default StyleSheet.create({
   // Common
   container: {
-    flex: 1
+    backgroundColor: colors.bgLight
   },
   header: {
     color: colors.textLight,
@@ -179,7 +207,6 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
 
-  /* Friend list and friend invitation */
   friendScreen: {
     backgroundColor: colors.bgDarker
   },
@@ -267,3 +294,4 @@ export default StyleSheet.create({
     marginTop: 20
   }
 });
+*/

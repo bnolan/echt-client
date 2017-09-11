@@ -5,9 +5,24 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
 import styles from './styles';
-import { Button, Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Text, Image, View } from 'react-native';
+import { Image, View } from 'react-native';
+
+import {
+  Container,
+  Header,
+  Title,
+  Content,
+  Button,
+  Grid,
+  Col,
+  Row,
+  Icon,
+  Left,
+  Right,
+  Body,
+  Text
+} from 'native-base';
 
 @observer
 export default class InviteFriend extends React.Component {
@@ -47,11 +62,69 @@ export default class InviteFriend extends React.Component {
   render () {
     assert(this.upload, 'Upload does not exist');
 
-    const width = 128;
-    const height = 128;
+    const width = 240;
+    const height = 180;
 
     // TODO Proper dimension calc
+
+    /*
+      <Row style={styles.m15}>
+        <Text color='0x777777'>
+          Do you want to send a friend invite to this person?
+        </Text>
+      </Row>
+    */
+
+//        <Content style={styles.container}>
+
     return (
+      <Container style={styles.container}>
+        <Header>
+          <Left />
+          <Body>
+            <Title>Add friend</Title>
+          </Body>
+          <Right />
+        </Header>
+
+        <Grid>
+          <Row>
+            <Grid>
+              <Row>
+                <Image
+                  style={{width: width, height: height}}
+                  source={{uri: this.action.user.avatar}}
+                />
+              </Row>
+
+              <Row>
+                <Image
+                  style={{width: width, height: height}}
+                  source={{uri: this.upload.url}}
+                />
+              </Row>
+            </Grid>
+          </Row>
+
+          <Row style={styles.flex0}>
+            <Grid style={styles.m10}>
+              <Col style={styles.mr5}>
+                <Button block bordered onPress={this.onClose.bind(this)}>
+                  <Text>Cancel</Text>
+                </Button>
+              </Col>
+              <Col style={styles.ml5}>
+                <Button block onPress={this.onSend.bind(this)}>
+                  <Text>Send Invite</Text>
+                </Button>
+              </Col>
+            </Grid>
+          </Row>
+        </Grid>
+      </Container>
+    );
+
+    /*
       <View style={styles.container}>
         <View style={[styles.headerView]}>
           <Icon
@@ -83,7 +156,7 @@ export default class InviteFriend extends React.Component {
         <Button onPress={this.onSend.bind(this)} title='Send Invite' />
         <Button onPress={this.onClose.bind(this)} title='Close' />
       </View>
-    );
+    */
   }
 }
 
