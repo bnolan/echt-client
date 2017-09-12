@@ -118,7 +118,7 @@ import {
           <Row style={styles.flex0}>
             <Grid>
               <Col>
-                <Button block danger onPress={() => this.onDeleteAccount()}>
+                <Button bordered block danger onPress={() => this.onDeleteAccount()}>
                   <Text>Delete Account</Text>
                 </Button>
               </Col>

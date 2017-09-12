@@ -82,7 +82,7 @@ export default TabNavigator({
 }, {
   tabBarOptions: {
     showLabel: false,
-    activeTintColor: '#ff00aa',
+    activeTintColor: '#007AFF',
     activeBackgroundColor: '#ffffff',
     inactiveBackgroundColor: '#ffffff',
     inactiveTintColor: '#333333'
