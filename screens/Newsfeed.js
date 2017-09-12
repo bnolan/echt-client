@@ -6,7 +6,15 @@ import PropTypes from 'prop-types';
 import store from '../state/store';
 import styles from './styles';
 
-// curl --header "x-devicekey: eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJ1c2VySWQiOiIzMDJmNTkwYi03OTMyLTQ5MGItYTRlMi01ZmQ2ZjFjN2RmNTkiLCJkZXZpY2VJZCI6IjgzMWM1OWQ2LTc2MWUtNDQ2YS1iNGE3LTE1NjE0N2NkZDE5MCIsImlhdCI6MTQ5MDEwOTEyOX0." https://xypqnmu05f.execute-api.us-west-2.amazonaws.com/uat/photos
+import {
+  Body,
+  Content,
+  Container,
+  Header,
+  List,
+  Text,
+  Title
+} from 'native-base';
 
 @observer
 export default class Newsfeed extends React.Component {
@@ -63,17 +71,25 @@ export default class Newsfeed extends React.Component {
     const refreshing = this.state.refreshing;
 
     return (
-      <View style={styles.container}>
-        <FlatList
-          data={photos}
-          numColumns={itemsPerRow}
-          renderItem={this.renderItem}
-          keyExtractor={this.keyExtractor}
-          removeClippedSubviews={false}
-          onRefresh={this.handleRefresh}
-          refreshing={refreshing}
-        />
-      </View>
+      <Container style={styles.container}>
+        <Header>
+          <Body>
+            <Title>{photos.length} Photos</Title>
+          </Body>
+        </Header>
+
+        <Content style={styles.container}>
+          <FlatList
+            data={photos}
+            numColumns={itemsPerRow}
+            renderItem={this.renderItem}
+            keyExtractor={this.keyExtractor}
+            removeClippedSubviews={false}
+            onRefresh={this.handleRefresh}
+            refreshing={refreshing}
+          />
+        </Content>
+      </Container>
     );
   }
 }

@@ -12,14 +12,10 @@ import { STATUS } from '../constants';
 
 import {
   Body,
-  Button,
-  Col,
   Content,
   Container,
-  Grid,
   Header,
   List,
-  Row,
   Text,
   Title
 } from 'native-base';

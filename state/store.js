@@ -572,9 +572,8 @@ export class EchtStore {
 
 const echtStore = new EchtStore();
 
-// echtStore.load();
-
-echtStore.loadFixture(fixture);
+echtStore.load();
+// echtStore.loadFixture(fixture);
 
 // setTimeout(() => {
 //   const upload = {
@@ -593,6 +592,7 @@ echtStore.loadFixture(fixture);
 // }, 1000);
 
 // DEBUGGING ONLY - see https://corbt.com/posts/2015/12/19/debugging-with-global-variables-in-react-native.html
+//   (or you can use in production if you want, i'm not your mum. but ingo might smother you)
 global.__store = echtStore;
 
 export default echtStore;
