@@ -55,6 +55,8 @@ import {
       return <SentFriendRequest friend={item} key={item.uuid} />;
     } else if (item.status === STATUS.PROPOSED) {
       return <ProposedFriend friend={item} key={item.uuid} />;
+    } else {
+      throw new Error(`Invalid status for ${JSON.stringify(item)}`);
     }
   }
 

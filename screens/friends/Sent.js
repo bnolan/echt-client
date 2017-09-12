@@ -6,6 +6,7 @@ import {
   Text,
   Thumbnail,
   Left,
+  Right,
   Body
 } from 'native-base';
 
@@ -38,6 +39,7 @@ export default class SentFriendRequest extends React.Component {
           <Text>{this.name}</Text>
           <Text numberOfLines={1} note>Sent {timeago(createdAt)}</Text>
         </Body>
+        <Right />
       </ListItem>
     );
   }

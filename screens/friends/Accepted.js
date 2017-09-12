@@ -60,29 +60,3 @@ export default class Friends extends React.Component {
     );
   }
 }
-
-/*
-
-
-                <View style={styles.friendItem}>
-    <TouchableHighlight
-      style={{flex: 0.4}}
-      onPress={() => this.onPress()}>
-      <Image
-        style={{width: width, height: height}}
-        source={{uri: this.photo}}
-      />
-    </TouchableHighlight>
-
-    <View style={styles.friendItemDetail}>
-      <Text style={styles.headerSmall}>
-        Friend
-      </Text>
-
-      <Text style={styles.friendItemText}>
-        Since {strftime('%B %d', createdAt)}.
-      </Text>
-    </View>
-  </View>
-
-*/
