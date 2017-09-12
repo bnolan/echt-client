@@ -2,8 +2,8 @@ import { StyleSheet } from 'react-native';
 
 export const colors = {
   textWhite: '#fff',
-  textLight: '#ddd',
-  textDark: '#666',
+  textLight: '#777',
+  textDark: '#333',
   bgDarker: '#000',
   bgLight: '#fff',
   bgMedium: '#777',
@@ -18,7 +18,13 @@ export default {
   text: {
     fontSize: 16,
     lineHeight: 22,
-    color: '#333',
+    color: colors.textDark,
+    fontFamily: 'System'
+  },
+  lightText: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: colors.textLight,
     fontFamily: 'System'
   },
   flex0: {

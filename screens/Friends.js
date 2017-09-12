@@ -6,9 +6,22 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
 import styles from './styles';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { STATUS } from '../constants';
+
+import {
+  Body,
+  Button,
+  Col,
+  Content,
+  Container,
+  Grid,
+  Header,
+  Row,
+  Text,
+  Title
+} from 'native-base';
 
 @observer export default class Friends extends React.Component {
   state = {
@@ -54,14 +67,20 @@ import { STATUS } from '../constants';
 
   renderEmptyState () {
     return (
-      <View style={[styles.container, styles.noFriends]}>
-        <Text style={[styles.header, styles.dark]}>You have no friends.</Text>
-        <Text style={[styles.paragraph, styles.dark]}>
-          Take a selfie with a friend (both of you in the photo
-          at the same time) on the front facing camera and we
-          will send them a friend request.
-        </Text>
-      </View>
+      <Container style={styles.container}>
+        <Header>
+          <Body>
+            <Title>Friends</Title>
+          </Body>
+        </Header>
+
+        <Content padder>
+          <Text style={styles.lightText}>
+            Take a selfie with a friend and we
+            will send them a friend request.
+          </Text>
+        </Content>
+      </Container>
     );
   }
 
