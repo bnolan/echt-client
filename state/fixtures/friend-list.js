@@ -12,23 +12,26 @@ export default {
     key,
     loggedIn: true
   },
-  friends: [],
-  //   {
-  //     uuid: ingo,
-  //     type: STATUS.ACCEPTED,
-  //     photo: { small: { url: photos.ingo }}
-  //   },
-  //   {
-  //     uuid: sam,
-  //     type: STATUS.PENDING,
-  //     photo: { small: { url: photos.sam }}
-  //   },
-  //   {
-  //     uuid: rissa,
-  //     type: STATUS.PROPOSED,
-  //     photo: { small: { url: photos.rissa }}
-  //   }
-  // ],
+  friends: [
+    {
+      uuid: ingo,
+      status: STATUS.ACCEPTED,
+      photo: { small: { url: photos.ingo }},
+      createdAt: new Date() - 1000 * 3600 * 24 * 5
+    },
+    {
+      uuid: sam,
+      status: STATUS.RECIEVED,
+      photo: { small: { url: photos.sam }},
+      createdAt: new Date() - 1000 * 3600 * 24 * 2
+    },
+    {
+      uuid: rissa,
+      status: STATUS.SENT,
+      photo: { small: { url: photos.rissa }},
+      createdAt: new Date() - 1000 * 3600 * 4
+    }
+  ],
   route: {
     name: 'Friends'
   }

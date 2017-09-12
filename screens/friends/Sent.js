@@ -1,19 +1,26 @@
 import React from 'react';
-import styles from '../styles';
 import timeago from 'timeago-words';
-import { Text, View, Image } from 'react-native';
 
-const width = 128;
-const height = 128;
+import {
+  ListItem,
+  Text,
+  Thumbnail,
+  Left,
+  Body
+} from 'native-base';
 
 /*
- * lol naming concentions. Pending means this is a friend request
+ * fucking naming conventions. Pending means this is a friend request
  * you've sent to someone else and it's pending their acceptance.
  */
 
 export default class SentFriendRequest extends React.Component {
   get photo () {
     return this.props.friend.photo.small.url;
+  }
+
+  get name () {
+    return 'Request sent';
   }
 
   render () {
@@ -23,22 +30,15 @@ export default class SentFriendRequest extends React.Component {
     // a minute ago, 2 minutes ago, etc...)
 
     return (
-      <View style={styles.friendItem}>
-        <Image
-          style={{width: width, height: height, flex: 0.4}}
-          source={{uri: this.photo}}
-        />
-
-        <View style={styles.friendItemDetail}>
-          <Text style={styles.headerSmall}>
-            Friend request sent
-          </Text>
-
-          <Text style={styles.friendItemText}>
-            Sent {timeago(createdAt)}.
-          </Text>
-        </View>
-      </View>
+      <ListItem avatar>
+        <Left>
+          <Thumbnail small source={{uri: this.photo}} />
+        </Left>
+        <Body>
+          <Text>{this.name}</Text>
+          <Text numberOfLines={1} note>Sent {timeago(createdAt)}</Text>
+        </Body>
+      </ListItem>
     );
   }
 }

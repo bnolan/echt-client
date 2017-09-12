@@ -18,6 +18,7 @@ import {
   Container,
   Grid,
   Header,
+  List,
   Row,
   Text,
   Title
@@ -47,7 +48,7 @@ import {
       });
   }
 
-  renderItem ({item}) {
+  renderItem (item) {
     if (item.status === STATUS.ACCEPTED) {
       return <AcceptedFriend friend={item} key={item.uuid} />;
     } else if (item.status === STATUS.PENDING) {
@@ -93,18 +94,29 @@ import {
       return this.renderEmptyState();
     }
 
+    console.log(friends);
+
+    const friendCount = friends.filter((f) => f.status === STATUS.ACCEPTED).length;
+    const requestCount = friends.length - friendCount;
+
     return (
-      <View style={styles.container}>
-        <FlatList
-          data={friends}
-          numColumns={itemsPerRow}
-          renderItem={this.renderItem}
-          keyExtractor={this.keyExtractor}
-          removeClippedSubviews={false}
-          onRefresh={this.handleRefresh}
-          refreshing={refreshing}
-        />
-      </View>
+      <Container style={styles.container}>
+        <Header>
+          <Body>
+            <Title>
+              {friendCount} Friend{friendCount === 1 ? '' : 's'}
+              {requestCount > 0 ? ` and ${requestCount} Request${requestCount === 1 ? '' : 's'}` : ''}
+            </Title>
+          </Body>
+        </Header>
+
+        <Content>
+          <List
+            dataArray={friends}
+            renderRow={this.renderItem}
+          />
+        </Content>
+      </Container>
     );
   }
 }
