@@ -27,6 +27,9 @@ export default {
     color: colors.textLight,
     fontFamily: 'System'
   },
+  textCenter: {
+    textAlign: 'center'
+  },
   flex0: {
     flex: 0
   },

@@ -1,19 +1,34 @@
 import React from 'react';
 import store from '../state/store';
-import { Button } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Alert, Text, View } from 'react-native';
+import { Alert } from 'react-native';
 import styles from './styles';
 // import codePush from 'react-native-code-push';
+
+import {
+  Body,
+  Button,
+  Col,
+  Container,
+  Grid,
+  Header,
+  Row,
+  Text,
+  Title
+} from 'native-base';
 
 @observer export default class Settings extends React.Component {
   constructor () {
     super();
 
     this.state = {
-      label: '',
-      version: ''
+      label: undefined,
+      version: undefined
     };
+  }
+
+  get version () {
+    return this.state.version ? `${this.state.version}.${this.state.label}` : 'development';
   }
 
   setUser (name) {
@@ -78,34 +93,39 @@ import styles from './styles';
   }
 
   render () {
+    // <Text>v{this.state.version}.{this.state.label}</Text>
     // { store.isDevMode && <Debug /> }
 
+    /*
+      <Button warning bordered onPress={() => this.onClearUser()}>
+        <Text>Log out</Text>
+      </Button>
+    */
+
     return (
-      <View style={[styles.container, styles.settingsScreen]}>
-        <Text style={[styles.header, styles.dark]}>Settings.</Text>
+      <Container style={styles.container}>
+        <Header>
+          <Body>
+            <Title>Settings</Title>
+          </Body>
+        </Header>
 
-        <View style={styles.settingsActionContainer}>
-          <Button
-            raised
-            backgroundColor='#999'
-            color='#fff'
-            onPress={() => this.onClearUser()}
-            icon={{name: 'lock-outline'}}
-            title='Log out' />
-        </View>
+        <Grid style={[styles.container, styles.margin15]}>
+          <Row>
+            <Text style={styles.lightText}>App version {this.version}.</Text>
+          </Row>
 
-        <View style={styles.settingsActionContainer}>
-          <Button
-            raised
-            backgroundColor='#bbb'
-            color='#ddd'
-            onPress={() => this.onDeleteAccount()}
-            icon={{name: 'report'}}
-            title='Delete Account' />
-        </View>
-      </View>
+          <Row style={styles.flex0}>
+            <Grid>
+              <Col>
+                <Button block danger onPress={() => this.onDeleteAccount()}>
+                  <Text>Delete Account</Text>
+                </Button>
+              </Col>
+            </Grid>
+          </Row>
+        </Grid>
+      </Container>
     );
-
-    // <Text>v{this.state.version}.{this.state.label}</Text>
   }
 }
