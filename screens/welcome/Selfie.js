@@ -60,6 +60,10 @@ export default class Selfie extends React.Component {
     if (this.props.screenProps.isSimulator) {
       p = simulatorUpload();
     } else {
+      // Takes picture in default quality (high),
+      // which will be downsampled for a faster initial upload (and face reco).
+      // The full captured image will be uploaded in the background
+      // without requiring user interaction.
       p = this.camera.capture({ metadata: options });
     }
 

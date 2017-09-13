@@ -3,6 +3,7 @@ package com.echt;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.vydia.RNUploader.UploaderReactPackage;
 import com.reactnative.photoview.PhotoViewPackage;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImageResizerPackage(),
             new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
             new UploaderReactPackage(),
             new PhotoViewPackage(),

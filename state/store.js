@@ -7,8 +7,11 @@ import config from '../config';
 import assert from 'assert';
 import RNFS from 'react-native-fs';
 import uuid from 'uuid/v4';
+import resize from '../helpers/resize';
 
 export class EchtStore {
+
+  // Uploads currently in progress (with auto-generated uuids)
   @observable uploads = [];
 
   @observable photos = [];
@@ -118,7 +121,12 @@ export class EchtStore {
         this.user.key = body.deviceKey;
       })
       .then(() => {
-        return RNFS.readFile(path, 'base64');
+        // Resize to a smaller version for faster initial signup.
+        // Face reco only needs ~100px per face.
+        return resize.toMedium(path);
+      })
+      .then(resizeResult => {
+        return RNFS.readFile(resizeResult.path, 'base64');
       })
       .then((b64) => {
         const request = {
@@ -134,8 +142,11 @@ export class EchtStore {
       .then((r) => r.json())
       .then((body) => {
         if (body.success) {
+          const uuid = body.user.photo.uuid;
           this.user.key = body.deviceKey;
           this.save();
+
+          this.backgroundUpload(uuid, path);
         }
 
         return body;
@@ -198,7 +209,11 @@ export class EchtStore {
     this.merge(this.photos, [photo]);
     this.merge(this.uploads, [upload]);
 
-    return RNFS.readFile(data.path, 'base64')
+    // Upload a smaller version first for faster face reco.s
+    return resize.toMedium(data.path)
+      .then(resizeResult => {
+        return RNFS.readFile(resizeResult.path, 'base64');
+      })
       .then((data) => {
         const request = {
           image: data,
@@ -234,11 +249,34 @@ export class EchtStore {
 
         // Save the collection with the new photo
         this.save();
+
+        // Upload the full picture in the background
+        this.backgroundUpload(photo.uuid, data.path);
       })
       .catch((e) => {
         console.error('Error uploading...');
         console.error(e);
       });
+  }
+
+  backgroundUpload (uuid, path) {
+    RNFS.readFile(path, 'base64').then(data => {
+      console.log('Background upload for ', path);
+      const request = {
+        image: data,
+        uuid: uuid
+      };
+      return fetch(`${this.endpoint}/photos`, {
+        method: 'put',
+        headers: this.headers,
+        body: JSON.stringify(request)
+      });
+    }).then(
+      (response) => response.json()
+    ).then((r) => {
+      console.log('Background upload complete', r);
+      assert(r.success);
+    });
   }
 
   deletePhoto (photoId) {
