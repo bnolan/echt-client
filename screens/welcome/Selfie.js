@@ -4,7 +4,7 @@ import RNCamera from 'react-native-camera';
 import simulatorUpload from '../../helpers/simulator-upload';
 import store from '../../state/store';
 import styles, { colors } from '../styles';
-import { ActivityIndicator, Dimensions, View, Image } from 'react-native';
+import { ActivityIndicator, Dimensions, View, Image, StyleSheet } from 'react-native';
 
 import {
   Body,
@@ -164,13 +164,21 @@ export default class Selfie extends React.Component {
 
   renderPreview () {
     const {submitting, path} = this.state;
+    const opacity = submitting ? 0.5 : 1.0;
 
     return (
       <Row style={[ styles.margin15, styles.flex0 ]}>
         <Image
-          style={[styles.selfiePreviewImage, {width: this.width, height: this.width}]}
-          source={{uri: path}} />
-        { submitting && <ActivityIndicator animating size='large' style={[styles.selfiePreviewActivityIndicator, {width: this.width, height: this.width}]} /> }
+          style={[styles.selfiePreviewImage, {width: this.width, height: this.width, opacity: opacity}]}
+          source={{uri: path}}
+        />
+        { submitting &&
+          <ActivityIndicator
+            animating size='large'
+            style={[componentStyles.activityIndicator, {width: this.width, height: this.width}]}
+            color='white'
+          />
+        }
       </Row>
     );
   }
@@ -256,3 +264,9 @@ export default class Selfie extends React.Component {
     );
   }
 }
+
+const componentStyles = StyleSheet.create({
+  activityIndicator: {
+    position: 'absolute'
+  }
+});
