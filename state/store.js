@@ -10,7 +10,6 @@ import uuid from 'uuid/v4';
 import resize from '../helpers/resize';
 
 export class EchtStore {
-
   // Uploads currently in progress (with auto-generated uuids)
   @observable uploads = [];
 
