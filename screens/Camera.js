@@ -57,6 +57,12 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
     this.setState({ cameraData: null, error: null, submitting: false });
   }
 
+  navigateToFeed () {
+    const { navigation: { navigate } } = this.props;
+
+    navigate('Newsfeed');
+  }
+
   submitPhoto () {
     const { cameraData } = this.state;
     const upload = store.generateUpload();
@@ -143,6 +149,17 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
       />
     );
 
+    const feedView = (
+      <Icon
+        onPress={(e) => this.navigateToFeed()}
+        name='image'
+        size={24}
+        reverse
+        color='black'
+        key='image'
+      />
+  );
+
     // TODO Show error message
 
     return (
@@ -163,7 +180,9 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
             <View style={styles.toolbarColCenter}>
               { shutterView }
             </View>
-            <View style={styles.toolbarColRight} />
+            <View style={styles.toolbarColRight}>
+              { feedView }
+            </View>
           </View>
         </View>
       </View>
