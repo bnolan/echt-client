@@ -309,6 +309,8 @@ export class EchtStore {
 
         // Upload the full picture in the background
         this.backgroundUpload(photo.uuid, data.path);
+
+        return r;
       })
       .catch((e) => {
         console.error('Error uploading...');

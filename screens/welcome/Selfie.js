@@ -59,7 +59,6 @@ export default class Selfie extends React.Component {
 
   retakePhoto () {
     this.setState({ path: null, error: null, submitting: false });
-    this.takePhoto();
   }
 
   takePhoto () {

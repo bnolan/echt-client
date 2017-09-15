@@ -1,15 +1,12 @@
-import mobx from 'mobx';
 import React from 'react';
 import RNCamera from 'react-native-camera';
 import Shutter from '../components/Shutter';
 import simulatorUpload from '../helpers/simulator-upload';
 import store from '../state/store';
-import Upload from '../components/Upload';
 import { CAMERA } from '../constants';
 import { Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Animated, Dimensions, Easing, StyleSheet, View } from 'react-native';
-import { colors } from './styles';
+import { Image, Animated, Dimensions, StyleSheet, View } from 'react-native';
 
 const uploadHeight = 64 + 20;
 
@@ -18,6 +15,8 @@ const uploadHeight = 64 + 20;
     super();
 
     this.state = {
+      cameraData: null,
+      cameraType: null,
       slideAnim: new Animated.Value(-uploadHeight)
     };
   }
@@ -26,18 +25,9 @@ const uploadHeight = 64 + 20;
     // For #loadFixture
     store.navigation = this.props.navigation;
 
-    this.uploadsObserver = store.uploads.observe(() => {
-      console.log('#uploads observe');
-      this.addUpload();
-    });
-
     this.setState({
       cameraType: this.props.screenProps.isSimulator ? RNCamera.constants.Type.front : RNCamera.constants.Type.back
     });
-  }
-
-  componentWillUnmount () {
-    this.uploadsObserver();
   }
 
   toggleType () {
@@ -48,22 +38,8 @@ const uploadHeight = 64 + 20;
     }
   }
 
-  addUpload () {
-    this.state.slideAnim.setValue(-uploadHeight);
-
-    Animated.timing(
-      this.state.slideAnim, {
-        fromValue: -uploadHeight,
-        toValue: 1,
-        easing: Easing.linear,
-        duration: 1000 / 60 * 10
-      }
-    ).start();
-  }
-
   takePhoto () {
     const options = {};
-    const upload = store.generateUpload();
     var p;
 
     // Simulator doesn't support cam
@@ -73,96 +49,175 @@ const uploadHeight = 64 + 20;
       p = this.camera.capture({metadata: options});
     }
 
-    return p.then((data) => {
-      // Normalise data
-      data.path = `file://${data.path}`;
-
-      console.log('Uploading...', data);
-
-      return store.takePhoto(data, upload, {
-        camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
-      });
-    }).then(() => {
-      console.log('Done uploading...');
+    return p.then((cameraData) => {
+      // Normalise cameraData
+      cameraData.path = `file://${cameraData.path}`;
+      this.setState({ cameraData: cameraData });
     });
   }
 
-  render () {
-    const uploads = mobx.toJS(store.uploads).map((u) => {
-      return <Upload key={u.uuid} upload={u} navigation={this.props.navigation} />;
+  retakePhoto () {
+    this.setState({ cameraData: null, error: null, submitting: false });
+  }
+
+  submitPhoto () {
+    const { cameraData } = this.state;
+    const upload = store.generateUpload();
+
+    this.setState({ submitting: true, error: null });
+
+    return store.takePhoto(cameraData, upload, {
+      camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
+    }).then(r => {
+      console.debug('r', r);
+      if (r.success) {
+        this.setState({ cameraData: null, error: null, submitting: false });
+      } else {
+        this.setState({ cameraData: null, error: r.message, submitting: false });
+      }
     });
+  }
+
+  renderCamera () {
     const { width, height } = Dimensions.get('window');
 
     return (
-      <View style={styles.cameraContainer}>
-        <RNCamera
-          ref={(cam) => { this.camera = cam; }}
-          style={[styles.camera, {width, height}]}
-          captureTarget={RNCamera.constants.CaptureTarget.disk}
-          captureQuality={RNCamera.constants.CaptureQuality.high}
-          type={this.state.cameraType}
-          aspect={RNCamera.constants.Aspect.fill} />
+      <RNCamera
+        ref={(cam) => { this.camera = cam; }}
+        style={[styles.camera, {width, height}]}
+        captureTarget={RNCamera.constants.CaptureTarget.disk}
+        captureQuality={RNCamera.constants.CaptureQuality.high}
+        type={this.state.cameraType}
+        aspect={RNCamera.constants.Aspect.fill}
+      />
+    );
+  }
 
-        <Animated.View style={{ ...uploadStyle, top: this.state.slideAnim }}>
-          {uploads}
-        </Animated.View>
+  renderPreview () {
+    const { submitting, cameraData } = this.state;
+    const { width, height } = Dimensions.get('window');
+    const opacity = submitting ? 0.8 : 1.0;
 
-        <View style={styles.toolbar}>
-          <Icon
-            onPress={(e) => this.toggleType()}
-            name='sync'
-            size={24}
-            reverse
-            color='#FF00AA' />
+    return (
+      <View style={styles.flex0}>
+        <Image
+          style={{width: width, height: height, opacity: opacity}}
+          source={{uri: cameraData.path}}
+        />
+      </View>
+    );
+  }
+
+  render () {
+    const { cameraData, submitting } = this.state;
+    const previewing = Boolean(cameraData);
+    const { width, height } = Dimensions.get('window');
+    const cameraView = previewing ? this.renderPreview() : this.renderCamera();
+
+    // Only show toggle when not previewing
+    const toggleView = (!previewing &&
+      <Icon
+        onPress={(e) => this.toggleType()}
+        name='sync'
+        size={24}
+        reverse
+        color='black'
+        key='toggle'
+      />
+    );
+
+    const retakeView = (previewing &&
+      <Icon
+        onPress={(e) => this.retakePhoto()}
+        name='refresh'
+        size={24}
+        reverse
+        color='black'
+        key='refresh'
+      />
+    );
+
+    const shutterView = (
+      <Shutter
+        onPress={(e) => previewing ? this.submitPhoto() : this.takePhoto()}
+        isLoading={submitting}
+        isReady={previewing && !submitting}
+        key='shutter'
+      />
+    );
+
+    return (
+      <View style={styles.container}>
+        { cameraView }
+        <View style={[styles.overlayContainer, {width: width, height: height}]}>
+          <View style={styles.toolbarTop}>
+            <View style={styles.toolbarColLeft} />
+            <View style={styles.toolbarColCenter}>
+              { toggleView }
+            </View>
+            <View style={styles.toolbarColRight} />
+          </View>
+          <View style={styles.toolbarBottom}>
+            <View style={styles.toolbarColLeft}>
+              { retakeView }
+            </View>
+            <View style={styles.toolbarColCenter}>
+              { shutterView }
+            </View>
+            <View style={styles.toolbarColRight} />
+          </View>
         </View>
-
-        <Shutter onPress={(e) => this.takePhoto()} />
       </View>
     );
   }
 }
 
-const uploadStyle = {
-  position: 'absolute',
-  right: 20,
-  zIndex: 200
-};
-
 // Work with absolute positioning because RNCamera doesn't allow nesting,
 // see https://github.com/lwansbrough/react-native-camera/issues/591
 const styles = StyleSheet.create({
-  cameraContainer: {
+  container: {
     flex: 1
   },
-  cameraType: {
-    borderWidth: 4,
-    borderColor: 'red',
-    width: 48,
-    height: 48,
-    borderRadius: 64,
-    marginTop: 50,
-    zIndex: 200
-  },
-  uploads: {
+  overlayContainer: {
     position: 'absolute',
-    top: 0,
-    right: 20,
-    zIndex: 200
-  },
-  toolbar: {
-    position: 'absolute',
-    top: 20,
-    left: 96,
-    right: 96,
-    alignItems: 'center',
-    zIndex: 200
-  },
-  camera: {
-    flex: 1,
-    backgroundColor: colors.bgDarker,
-    position: 'relative',
     zIndex: 100,
-    width: 300,
-    height: 300
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  toolbarTop: {
+    flex: 1,
+    marginTop: 40,
+    justifyContent: 'flex-start',
+    // backgroundColor: 'green',
+    flexDirection: 'row',
+    alignItems: 'flex-start'
+  },
+  toolbarBottom: {
+    flex: 1,
+    marginBottom: 30,
+    justifyContent: 'flex-end',
+    // backgroundColor: 'red',
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
+  toolbarColLeft: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    // backgroundColor: '#ff00aa',
+    alignItems: 'center'
+  },
+  toolbarColCenter: {
+    flex: 1,
+    justifyContent: 'center',
+    // backgroundColor: '#ff00cc',
+    alignItems: 'center'
+  },
+  toolbarColRight: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    // backgroundColor: '#ff00ee',
+    alignItems: 'center'
   }
 });
