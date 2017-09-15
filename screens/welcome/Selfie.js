@@ -1,10 +1,9 @@
 import * as Animatable from 'react-native-animatable';
 import React from 'react';
 import RNCamera from 'react-native-camera';
-import Shutter from '../../components/Shutter';
 import simulatorUpload from '../../helpers/simulator-upload';
 import store from '../../state/store';
-import styles from '../styles';
+import styles, { colors } from '../styles';
 import { ActivityIndicator, Dimensions, View, Image } from 'react-native';
 
 import {
@@ -14,6 +13,7 @@ import {
   Container,
   Grid,
   Header,
+  Icon,
   Row,
   Text,
   Title
@@ -59,6 +59,7 @@ export default class Selfie extends React.Component {
 
   retakePhoto () {
     this.setState({ path: null, error: null, submitting: false });
+    this.takePhoto();
   }
 
   takePhoto () {
@@ -86,17 +87,55 @@ export default class Selfie extends React.Component {
     return width - 32;
   }
 
+  get icon () {
+
+  }
+
+  renderIntro () {
+    return (
+      <Row style={[ styles.flex0, styles.margin15 ]}>
+        <Animatable.Text
+          animation='fadeIn'
+          delay={250}
+          style={styles.text}>
+          We use your selfie to find
+          you in your friends' photos. You don't need
+          an email address or phone number to sign up.
+        </Animatable.Text>
+      </Row>
+    );
+  }
+
   renderError () {
     const { error } = this.state;
+    var icon;
+
+    if (this.state.error) {
+      if (this.state.error.match(/too many/i)) {
+        icon = 'people';
+      } else if (this.state.error.match(/no face/i)) {
+        icon = 'contact';
+      } else {
+        icon = 'alert';
+      }
+    }
 
     if (error) {
       return (
-        <View style={styles.selfieErrorBox}>
-          <Icon
-            name={this.icon}
-            color='#000000' />
-          <Text style={styles.selfieError}>{this.state.error}</Text>
-        </View>
+        <Row style={[ styles.flex0, styles.margin15 ]}>
+          <View style={[ styles.alert, styles.alertDanger ]}>
+            <Icon
+              name={icon}
+              color={colors.btnDangerColor}
+            />
+            <Text style={styles.alertDangerText}>{this.state.error}</Text>
+          </View>
+        </Row>
+      );
+    } else {
+      // Native base doesn't like NULLs as rows
+      return (
+        <Row style={{height: 1}} />
       );
     }
   }
@@ -107,7 +146,7 @@ export default class Selfie extends React.Component {
     // <Instructions> to <Selfie> - once you've submitted a selfie, that's it.
     // See https://github.com/lwansbrough/react-native-camera/issues/642#issuecomment-295402172
     if (!this.state.showCamera) {
-      return null;
+      return <Row style={{height: 1}} />;
     }
 
     return (
@@ -123,74 +162,78 @@ export default class Selfie extends React.Component {
     );
   }
 
-  get icon () {
-    if (this.state.error) {
-      if (this.state.error.match(/too many/i)) {
-        return 'group';
-      } else if (this.state.error.match(/no face/i)) {
-        return 'person-outline';
-      } else {
-        return 'error';
-      }
-    }
+  renderPreview () {
+    const {submitting, path} = this.state;
+
+    return (
+      <Row style={[ styles.margin15, styles.flex0 ]}>
+        <Image
+          style={[styles.selfiePreviewImage, {width: this.width, height: this.width}]}
+          source={{uri: path}} />
+        { submitting && <ActivityIndicator animating size='large' style={[styles.selfiePreviewActivityIndicator, {width: this.width, height: this.width}]} /> }
+      </Row>
+    );
   }
 
-  renderPreview () {
+  renderActions () {
     const {submitting, path} = this.state;
 
     var view;
 
     if (submitting) {
-      view = <View
-        style={[styles.selfieUploading, {width: this.width}]}>
-        <Animatable.Text
-          style={styles.selfieUploadingText}
-          animation='fadeIn'>
-          Uploading...
-        </Animatable.Text>
-      </View>;
+      // Native base doesn't like NULLs as rows
+      view = (
+        <Row style={{height: 1}} />
+      );
+    } else if (path) {
+      view = (
+        <Row style={[ styles.margin15, styles.flex0 ]}>
+          <Col>
+            <Button
+              block
+              light
+              onPress={(e) => this.retakePhoto()}
+            >
+              <Icon name='refresh' />
+              <Text>Retake</Text>
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              block
+              success
+              disabled={submitting}
+              onPress={(e) => this.submitPhoto()}
+            >
+              <Icon name='checkmark' />
+              <Text>Submit</Text>
+            </Button>
+          </Col>
+        </Row>
+      );
     } else {
-      view = <Animatable.View animation='fadeIn' style={[styles.selfiePreviewButtons, {width: this.width}]}>
-        <Button
-          title='Retake'
-          color={colors.textDark}
-          backgroundColor={colors.bgLight}
-          icon={{name: 'camera-alt', color: colors.textDark}}
-          style={styles.selfiePreviewButton}
-          buttonStyle={styles.selfiePreviewButton}
-          onPress={(e) => this.retakePhoto()}
-        />
-        <Button
-          title='Submit'
-          color={colors.textDark}
-          backgroundColor={colors.bgLight}
-          icon={{name: 'done', color: colors.textDark}}
-          style={styles.selfiePreviewButton}
-          buttonStyle={styles.selfiePreviewButton}
-          disabled={submitting}
-          onPress={(e) => this.submitPhoto()}
-        />
-      </Animatable.View>;
+      view = (
+        <Row style={[ styles.margin15, styles.flex0 ]}>
+          <Grid>
+            <Col>
+              <Button
+                block
+                onPress={() => this.takePhoto()}
+              >
+                <Icon name='camera' />
+                <Text>Take Selfie</Text>
+              </Button>
+            </Col>
+          </Grid>
+        </Row>
+      );
     }
 
-    return (
-      <View
-        style={[styles.selfiePreview, {width: this.width + 2, height: this.width + 32}]}>
-
-        <Image
-          style={[styles.selfiePreviewImage, {width: this.width, height: this.width}]}
-          source={{uri: path}} />
-
-        { submitting && <ActivityIndicator animating size='large' style={[styles.selfiePreviewActivityIndicator, {width: this.width, height: this.width}]} /> }
-
-        { view }
-      </View>
-    );
+    return view;
   }
 
   render () {
     const { path } = this.state;
-    const camView = path ? this.renderPreview() : this.renderCamera();
 
     return (
       <Container style={styles.container}>
@@ -201,30 +244,13 @@ export default class Selfie extends React.Component {
         </Header>
 
         <Grid>
-          <Row style={[ styles.flex0, styles.margin15 ]}>
-            <Animatable.Text
-              animation='fadeIn'
-              delay={250}
-              style={styles.text}>
-              We use your selfie so that we can find
-              you in your friends photos. You don't need
-              an email address or phone number to sign up.
-            </Animatable.Text>
-          </Row>
+          { this.renderIntro() }
 
-          { camView }
+          { path ? this.renderPreview() : this.renderCamera() }
 
-          <Row>
-            { this.renderError() }
-          </Row>
+          { this.renderError() }
 
-          <Row style={styles.margin15}>
-            <Button
-              block
-              onPress={() => this.takePhoto()}>
-              <Text>Take Selfie</Text>
-            </Button>
-          </Row>
+          { this.renderActions() }
         </Grid>
       </Container>
     );

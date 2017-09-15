@@ -1,14 +1,17 @@
-import { StyleSheet } from 'react-native';
+import commonColor from '../native-base-theme/variables/commonColor';
 
 export const colors = {
-  textWhite: '#fff',
-  textLight: '#777',
-  textDark: '#333',
-  bgDarker: '#000',
-  bgLight: '#fff',
-  bgMedium: '#777',
-  bgDark: '#333',
-  bgPink: '#ff00aa'
+  ...commonColor,
+  ...{
+    textWhite: '#fff',
+    textLight: '#777',
+    textDark: '#333',
+    bgDarker: '#000',
+    bgLight: '#fff',
+    bgMedium: '#777',
+    bgDark: '#333',
+    bgPink: '#ff00aa'
+  }
 };
 
 export default {
@@ -53,6 +56,15 @@ export default {
   },
   margin15: {
     margin: 15
+  },
+  alert: {
+    flex: 0
+  },
+  alertDanger: {
+    backgroundColor: commonColor.btnDangerBg
+  },
+  alertDangerText: {
+    color: commonColor.btnDangerColor
   }
 };
 
