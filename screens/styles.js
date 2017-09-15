@@ -18,6 +18,9 @@ export default {
   container: {
     backgroundColor: '#FFF'
   },
+  padding15: {
+    padding: 15
+  },
   text: {
     fontSize: 16,
     lineHeight: 22,
@@ -32,6 +35,9 @@ export default {
   },
   textCenter: {
     textAlign: 'center'
+  },
+  textParagraph: {
+    marginBottom: 10
   },
   flex0: {
     flex: 0
