@@ -1,19 +1,16 @@
 /* global fetch, __DEV__ */
 
 import { AsyncStorage } from 'react-native';
-import { observable, computed } from 'mobx';
+import mobx, { observable, computed } from 'mobx';
 import { STATUS, PHOTO_STATUS } from '../constants';
 import config from '../config';
 import assert from 'assert';
-import mobx from 'mobx';
 import RNFS from 'react-native-fs';
 import uuid from 'uuid/v4';
 import resize from '../helpers/resize';
-
-import fixture from './fixtures/friend-list';
+import fixtures from './fixtures';
 
 export class EchtStore {
-
   // Uploads currently in progress (with auto-generated uuids)
   @observable uploads = [];
 
@@ -66,8 +63,8 @@ export class EchtStore {
 
     this.loaded = true;
 
-    console.log(fixture.uploads);
-    console.log(mobx.toJS(this.uploads));
+    // Don't call save() here since we want fixtures to only persist
+    // for the current "session"
 
     // Wait until we have the navigation singleton
     const interval = setInterval(() => {
@@ -534,7 +531,7 @@ export class EchtStore {
       this.refreshFriends();
     });
 
-    Promise.all([
+    return Promise.all([
       getDeviceKey,
       getLoggedIn,
       getPhotos,
@@ -572,8 +569,12 @@ export class EchtStore {
 
 const echtStore = new EchtStore();
 
-echtStore.load();
-// echtStore.loadFixture(fixture);
+echtStore.load().then(() => {
+  // Optionally load a fixture (to simplify local debugging)
+  if (config.fixture) {
+    echtStore.loadFixture(fixtures[config.fixture]);
+  }
+});
 
 // setTimeout(() => {
 //   const upload = {
