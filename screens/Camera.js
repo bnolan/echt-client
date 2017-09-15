@@ -6,9 +6,7 @@ import store from '../state/store';
 import { CAMERA } from '../constants';
 import { Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Image, Animated, Dimensions, StyleSheet, View } from 'react-native';
-
-const uploadHeight = 64 + 20;
+import { Image, Dimensions, StyleSheet, View } from 'react-native';
 
 @observer export default class Camera extends React.Component {
   constructor () {
@@ -16,8 +14,7 @@ const uploadHeight = 64 + 20;
 
     this.state = {
       cameraData: null,
-      cameraType: null,
-      slideAnim: new Animated.Value(-uploadHeight)
+      cameraType: null
     };
   }
 
@@ -145,6 +142,8 @@ const uploadHeight = 64 + 20;
         key='shutter'
       />
     );
+
+    // TODO Show error message
 
     return (
       <View style={styles.container}>
