@@ -227,9 +227,12 @@ const UIManager = require('NativeModules').UIManager;
       opacity: this.state.previewOpacityAnim
     };
 
+    // Transform is a cheap fix for missing ability to un-mirror front cam,
+    // see https://github.com/lwansbrough/react-native-camera/issues/101
+    // TODO Fix this via an actual source image transform
     return (
       <Animated.Image
-        style={[styles.preview, animStyles]}
+        style={[styles.preview, animStyles, { transform: [ { scaleX: -1 } ] }]}
         source={{uri: cameraData.path}}
       />
     );
