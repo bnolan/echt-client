@@ -55,6 +55,7 @@ At the moment, you need to adjust the `Build Setting > Development Team` assignm
 the app building (it's hardcoded to Ben's).
 
   LC_ALL=C find ios/Echt.xcodeproj/* -type f -exec sed -i "" "s/DWB7DKRZ7D/Y9AF3JTNBU/g" {} \;
+  LC_ALL=C find ios/Echt.xcodeproj/* -type f -exec sed -i "" "s/io.echt.Echt/io.echt.Ingo/g" {} \;
 
 ### Running a local endpoint
 
