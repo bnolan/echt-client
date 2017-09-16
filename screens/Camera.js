@@ -50,7 +50,7 @@ const UIManager = require('NativeModules').UIManager;
     this.resetAnims();
 
     this.setState({
-      cameraType: this.props.screenProps.isSimulator ? RNCamera.constants.Type.front : RNCamera.constants.Type.back
+      cameraType: RNCamera.constants.Type.front
     });
 
     // Wait with measurements until next render loop (when elements are on screen)
