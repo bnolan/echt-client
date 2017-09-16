@@ -6,7 +6,8 @@ import store from '../state/store';
 import { CAMERA } from '../constants';
 import { Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Animated, Easing, Dimensions, StyleSheet, View, findNodeHandle } from 'react-native';
+import { Animated, Easing, Dimensions, StyleSheet, View, findNodeHandle, Text } from 'react-native';
+import PopupDialog, { SlideAnimation, DialogTitle, DialogButton } from 'react-native-popup-dialog';
 const UIManager = require('NativeModules').UIManager;
 
 @observer export default class Camera extends React.Component {
@@ -19,6 +20,7 @@ const UIManager = require('NativeModules').UIManager;
     this.state = {
       isPreviewing: false,
       isSubmitting: false,
+      error: null,
       cameraData: null,
       cameraType: null,
       previewWidthAnim: null,
@@ -75,6 +77,20 @@ const UIManager = require('NativeModules').UIManager;
         };
       });
     });
+  }
+
+  handleShutterPress () {
+    const { isPreviewing, isSubmitting } = this.state;
+
+    if (isSubmitting) return;
+
+    if (isPreviewing && !store.user.loggedIn) {
+      this.signup();
+    } else if (isPreviewing) {
+      this.submitPhoto();
+    } else {
+      this.takePhoto();
+    }
   }
 
   toggleType () {
@@ -136,7 +152,25 @@ const UIManager = require('NativeModules').UIManager;
         this.setState({ error: null, isSubmitting: false });
         this.minimisePreview();
       } else {
-        this.setState({ cameraData: null, error: r.message, isSubmitting: false });
+        this.setState({ cameraData: null, error: r.message, isSubmitting: false, isPreviewing: false });
+        this.refs.dialog.show();
+      }
+    });
+  }
+
+  signup () {
+    const { navigation: { navigate } } = this.props;
+    const { cameraData } = this.state;
+
+    this.setState({ isSubmitting: true, error: null });
+
+    return store.signup(cameraData.path).then(r => {
+      if (r.success) {
+        this.setState({ error: null, isSubmitting: false });
+        navigate('Instructions');
+      } else {
+        this.setState({ cameraData: null, error: r.message, isSubmitting: false, isPreviewing: false });
+        this.refs.dialog.show();
       }
     });
   }
@@ -238,17 +272,44 @@ const UIManager = require('NativeModules').UIManager;
     );
   }
 
+  renderError () {
+    const { error } = this.state;
+    const { width } = Dimensions.get('window');
+
+    return (
+      <PopupDialog
+        dialogAnimation={new SlideAnimation({ slideFrom: 'bottom' })}
+        onDismissed={() => {
+          this.setState({error: null});
+        }}
+        ref='dialog'
+        style={styles.dialog}
+        width={width - 40}
+        dialogTitle={<DialogTitle title='Something went wrong' />}
+        actions={[
+          <DialogButton text='Close' key='dialogButtonClose' onPress={() => { this.refs.dialog.dismiss(); }} />
+        ]}
+      >
+        <View style={styles.dialogContentView}>
+          <Text>{error}</Text>
+        </View>
+      </PopupDialog>
+    );
+  }
+
   render () {
     const { isSubmitting, isPreviewing } = this.state;
+    const loggedIn = store.user.loggedIn;
     const { width, height } = Dimensions.get('window');
     const cameraView = this.renderCamera();
     const previewView = (isPreviewing && this.renderPreview());
     const flashView = (
       <Animated.View style={[styles.flash, {opacity: this.state.flashAnim, width: width, height: height}]} />
     );
+    const errorView = this.renderError();
 
-    // Only show toggle when not isPreviewing
-    const toggleView = (!isPreviewing &&
+    // Hide this during preview and signup (where we only want selfies)
+    const toggleView = (!isPreviewing && loggedIn &&
       <Icon
         onPress={(e) => this.toggleType()}
         name='sync'
@@ -272,7 +333,7 @@ const UIManager = require('NativeModules').UIManager;
 
     const shutterView = (
       <Shutter
-        onPress={(e) => isPreviewing ? this.submitPhoto() : this.takePhoto()}
+        onPress={(e) => this.handleShutterPress()}
         isLoading={isSubmitting}
         isReady={isPreviewing && !isSubmitting}
         key='shutter'
@@ -301,6 +362,7 @@ const UIManager = require('NativeModules').UIManager;
         { cameraView }
         { previewView }
         { flashView }
+        { errorView }
         <View style={[styles.overlayContainer, {width: width, height: height}]}>
           <View style={styles.toolbarTop}>
             <View style={styles.toolbarColLeft} />
@@ -343,6 +405,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 90,
     backgroundColor: 'white'
+  },
+  dialog: {
+    position: 'absolute',
+    zIndex: 500,
+    backgroundColor: 'green'
+  },
+  dialogContentView: {
+    flex: 1,
+    padding: 20
   },
   overlayContainer: {
     position: 'absolute',

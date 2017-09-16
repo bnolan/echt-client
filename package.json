@@ -29,6 +29,7 @@
     "react-native-fs": "^2.3.2",
     "react-native-image-resizer": "^1.0.0",
     "react-native-photo-view": "^1.2.0",
+    "react-native-popup-dialog": "^0.9.35",
     "react-native-vector-icons": "^4.0.1",
     "react-navigation": "^1.0.0-beta.9",
     "react-proptypes": "^1.0.0",

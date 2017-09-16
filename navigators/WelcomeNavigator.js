@@ -1,6 +1,6 @@
 import { StackNavigator } from 'react-navigation';
 import WelcomeScreen from '../screens/welcome/Welcome';
-import SelfieScreen from '../screens/welcome/Selfie';
+import CameraScreen from '../screens/Camera';
 // import PincodeScreen from '../screens/welcome/Pincode';
 import InstructionsScreen from '../screens/welcome/Instructions';
 
@@ -10,7 +10,7 @@ export default StackNavigator({
     path: 'welcome/welcome'
   },
   Selfie: {
-    screen: SelfieScreen,
+    screen: CameraScreen,
     path: 'welcome/selfie'
   },
   // TODO Use PIN screen once it can be made optional
