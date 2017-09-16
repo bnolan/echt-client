@@ -149,8 +149,8 @@ const UIManager = require('NativeModules').UIManager;
       camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
     }).then(r => {
       if (r.success) {
-        this.setState({ error: null, isSubmitting: false });
-        this.minimisePreview();
+        this.setState({ error: null, isSubmitting: false }); // keep preview for minimizing
+        setTimeout(this.minimisePreview.bind(this), 50); // delay minimise to ensure feedIconContainer is available
       } else {
         this.setState({ cameraData: null, error: r.message, isSubmitting: false, isPreviewing: false });
         this.refs.dialog.show();
@@ -342,9 +342,10 @@ const UIManager = require('NativeModules').UIManager;
     );
 
     // Don't show this option durign signup
-    const feedView = (loggedIn &&
+    const feedView = (loggedIn && !isPreviewing &&
       <View
         ref='feedIconContainer'
+        onLayout={() => this.measureRefs()}
       >
         <Icon
           onPress={(e) => this.navigateToFeed()}
