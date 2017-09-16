@@ -61,6 +61,7 @@ export class EchtStore {
 
     this.user.key = fixture.user.key;
     this.user.loggedIn = fixture.user.loggedIn;
+    this.user.seenWelcome = fixture.user.seenWelcome;
 
     this.loaded = true;
 

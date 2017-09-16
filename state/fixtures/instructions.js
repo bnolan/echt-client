@@ -1,7 +1,8 @@
 export default {
   user: {
     key: null,
-    loggedIn: false
+    loggedIn: false,
+    seenWelcome: true
   },
   route: {
     name: 'Instructions'

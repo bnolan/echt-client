@@ -8,7 +8,8 @@ const key = uuid();
 export default {
   user: {
     key,
-    loggedIn: true
+    loggedIn: true,
+    seenWelcome: true
   },
   uploads: [{
     uuid: photo,

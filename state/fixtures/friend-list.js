@@ -10,7 +10,8 @@ const rissa = uuid();
 export default {
   user: {
     key,
-    loggedIn: true
+    loggedIn: true,
+    seenWelcome: true
   },
   friends: [
     {
