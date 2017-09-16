@@ -26,7 +26,8 @@ const UIManager = require('NativeModules').UIManager;
       previewTopAnim: null,
       previewLeftAnim: null,
       previewOpacityAnim: null,
-      previewRadiusAnim: null
+      previewRadiusAnim: null,
+      flashAnim: new Animated.Value(0)
     };
   }
 
@@ -96,6 +97,16 @@ const UIManager = require('NativeModules').UIManager;
     }
 
     return p.then((cameraData) => {
+      // Simulate a flash
+      this.state.flashAnim.setValue(1);
+      Animated.timing(
+        this.state.flashAnim,
+        {
+          toValue: 0,
+          duration: 300
+        }
+      ).start();
+
       // Normalise cameraData
       cameraData.path = `file://${cameraData.path}`;
       this.setState({ cameraData: cameraData, isPreviewing: true });
@@ -229,6 +240,9 @@ const UIManager = require('NativeModules').UIManager;
     const { width, height } = Dimensions.get('window');
     const cameraView = this.renderCamera();
     const previewView = (isPreviewing && this.renderPreview());
+    const flashView = (
+      <Animated.View style={[styles.flash, {opacity: this.state.flashAnim, width: width, height: height}]} />
+    );
 
     // Only show toggle when not isPreviewing
     const toggleView = (!isPreviewing &&
@@ -283,6 +297,7 @@ const UIManager = require('NativeModules').UIManager;
       <View style={styles.container}>
         { cameraView }
         { previewView }
+        { flashView }
         <View style={[styles.overlayContainer, {width: width, height: height}]}>
           <View style={styles.toolbarTop}>
             <View style={styles.toolbarColLeft} />
@@ -320,6 +335,11 @@ const styles = StyleSheet.create({
   preview: {
     position: 'absolute',
     zIndex: 75
+  },
+  flash: {
+    position: 'absolute',
+    zIndex: 90,
+    backgroundColor: 'white'
   },
   overlayContainer: {
     position: 'absolute',
