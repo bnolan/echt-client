@@ -15,9 +15,13 @@ import {
 
 export default class Instructions extends React.Component {
   finishSignup () {
-    // Automatically navigates to main screen
+    const { navigation: { goBack } } = this.props;
+
     store.user.loggedIn = true;
     store.save();
+
+    // You can never come back heres, harrrr!
+    goBack();
   }
 
   render () {

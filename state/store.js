@@ -1,7 +1,7 @@
 /* global fetch, __DEV__ */
 
 import { AsyncStorage } from 'react-native';
-import mobx, { observable, computed } from 'mobx';
+import { observable, computed } from 'mobx';
 import { STATUS, PHOTO_STATUS } from '../constants';
 import config from '../config';
 import assert from 'assert';
@@ -20,7 +20,8 @@ export class EchtStore {
 
   @observable user = {
     key: null,
-    loggedIn: false // used to mark finalisation of welcome screens
+    loggedIn: false,
+    seenWelcome: false // used to skip intro
   };
 
   @observable loaded = false;

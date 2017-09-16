@@ -2,14 +2,14 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import Camera from '../screens/Camera';
+import CameraNavigator from './CameraNavigator';
 import Settings from '../screens/Settings';
 import NewsfeedNavigator from './NewsfeedNavigator';
 import FriendsNavigator from './FriendsNavigator';
 
 export default TabNavigator({
-  Camera: {
-    screen: Camera,
+  CameraNav: {
+    screen: CameraNavigator,
     path: '',
     navigationOptions: {
       tabBarLabel: 'Camera',

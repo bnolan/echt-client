@@ -109,7 +109,7 @@ const UIManager = require('NativeModules').UIManager;
     if (this.props.screenProps.isSimulator) {
       p = simulatorUpload();
     } else {
-      p = this.camera.capture({metadata: options});
+      p = this.refs.camera.capture({metadata: options});
     }
 
     return p.then((cameraData) => {
@@ -166,7 +166,8 @@ const UIManager = require('NativeModules').UIManager;
 
     return store.signup(cameraData.path).then(r => {
       if (r.success) {
-        this.setState({ error: null, isSubmitting: false });
+        this.setState({ cameraData: null, error: null, isSubmitting: false, isPreviewing: false });
+
         navigate('Instructions');
       } else {
         this.setState({ cameraData: null, error: r.message, isSubmitting: false, isPreviewing: false });
@@ -239,7 +240,7 @@ const UIManager = require('NativeModules').UIManager;
 
     return (
       <RNCamera
-        ref={(cam) => { this.camera = cam; }}
+        ref='camera'
         style={[styles.camera, {width, height}]}
         captureTarget={RNCamera.constants.CaptureTarget.disk}
         captureQuality={RNCamera.constants.CaptureQuality.high}

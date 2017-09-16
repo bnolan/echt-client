@@ -1,4 +1,5 @@
 import * as Animatable from 'react-native-animatable';
+import { observer } from 'mobx-react/native';
 import React from 'react';
 import styles from '../styles';
 import store from '../../state/store';
@@ -15,10 +16,8 @@ import {
   Title
 } from 'native-base';
 
-class Welcome extends React.Component {
+@observer class Welcome extends React.Component {
   render () {
-    const { navigation: { navigate } } = this.props;
-
     // For #loadFixture
     store.navigation = this.props.navigation;
 
@@ -51,7 +50,7 @@ class Welcome extends React.Component {
                   delay={500}>
                   <Button
                     block
-                    onPress={() => navigate('Selfie')}>
+                    onPress={() => { store.user.seenWelcome = true; }}>
                     <Text>Begin</Text>
                   </Button>
                 </Animatable.View>
