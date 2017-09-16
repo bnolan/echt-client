@@ -320,7 +320,7 @@ const UIManager = require('NativeModules').UIManager;
       />
     );
 
-    const retakeView = (isPreviewing &&
+    const retakeView = (isPreviewing && !isSubmitting &&
       <Icon
         onPress={(e) => this.retakePhoto()}
         name='refresh'
@@ -340,7 +340,8 @@ const UIManager = require('NativeModules').UIManager;
       />
     );
 
-    const feedView = (
+    // Don't show this option durign signup
+    const feedView = (loggedIn &&
       <View
         ref='feedIconContainer'
       >
