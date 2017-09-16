@@ -13,8 +13,6 @@ const UIManager = require('NativeModules').UIManager;
   constructor () {
     super();
 
-    const { width, height } = Dimensions.get('window');
-
     this.refsToMeasure = ['feedIconContainer'];
     this.refMeasures = {};
 
@@ -23,18 +21,32 @@ const UIManager = require('NativeModules').UIManager;
       isSubmitting: false,
       cameraData: null,
       cameraType: null,
+      previewWidthAnim: null,
+      previewHeightAnim: null,
+      previewTopAnim: null,
+      previewLeftAnim: null,
+      previewOpacityAnim: null,
+      previewRadiusAnim: null
+    };
+  }
+
+  resetAnims () {
+    const { width, height } = Dimensions.get('window');
+    this.setState({
       previewWidthAnim: new Animated.Value(width),
       previewHeightAnim: new Animated.Value(height),
       previewTopAnim: new Animated.Value(0),
       previewLeftAnim: new Animated.Value(0),
       previewOpacityAnim: new Animated.Value(1),
       previewRadiusAnim: new Animated.Value(1)
-    };
+    });
   }
 
   componentDidMount () {
     // For #loadFixture
     store.navigation = this.props.navigation;
+
+    this.resetAnims();
 
     this.setState({
       cameraType: this.props.screenProps.isSimulator ? RNCamera.constants.Type.front : RNCamera.constants.Type.back
@@ -171,6 +183,7 @@ const UIManager = require('NativeModules').UIManager;
       )
     ]).start(({ finished }) => {
       if (finished) {
+        this.resetAnims();
         this.setState({ isPreviewing: false, cameraData: null });
       }
     });
