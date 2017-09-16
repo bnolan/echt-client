@@ -6,15 +6,29 @@ import store from '../state/store';
 import { CAMERA } from '../constants';
 import { Icon } from 'react-native-elements';
 import { observer } from 'mobx-react/native';
-import { Image, Dimensions, StyleSheet, View } from 'react-native';
+import { Animated, Easing, Dimensions, StyleSheet, View, findNodeHandle } from 'react-native';
+const UIManager = require('NativeModules').UIManager;
 
 @observer export default class Camera extends React.Component {
   constructor () {
     super();
 
+    const { width, height } = Dimensions.get('window');
+
+    this.refsToMeasure = ['feedIconContainer'];
+    this.refMeasures = {};
+
     this.state = {
+      isPreviewing: false,
+      isSubmitting: false,
       cameraData: null,
-      cameraType: null
+      cameraType: null,
+      previewWidthAnim: new Animated.Value(width),
+      previewHeightAnim: new Animated.Value(height),
+      previewTopAnim: new Animated.Value(0),
+      previewLeftAnim: new Animated.Value(0),
+      previewOpacityAnim: new Animated.Value(1),
+      previewRadiusAnim: new Animated.Value(1)
     };
   }
 
@@ -24,6 +38,29 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
 
     this.setState({
       cameraType: this.props.screenProps.isSimulator ? RNCamera.constants.Type.front : RNCamera.constants.Type.back
+    });
+
+    // Wait with measurements until next render loop (when elements are on screen)
+    // This assumes that every element measured here is always rendered.
+    // See https://stackoverflow.com/questions/30096038/react-native-getting-the-position-of-an-element
+    setTimeout(this.measureRefs.bind(this));
+  }
+
+  measureRefs () {
+    this.refsToMeasure.forEach(ref => {
+      if (!this.refs || !this.refs[ref]) return;
+
+      const handle = findNodeHandle(this.refs[ref]);
+      UIManager.measure(handle, (x, y, width, height, pX, pY) => {
+        this.refMeasures[ref] = {
+          x,
+          y,
+          width,
+          height,
+          pX,
+          pY
+        };
+      });
     });
   }
 
@@ -49,12 +86,12 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
     return p.then((cameraData) => {
       // Normalise cameraData
       cameraData.path = `file://${cameraData.path}`;
-      this.setState({ cameraData: cameraData });
+      this.setState({ cameraData: cameraData, isPreviewing: true });
     });
   }
 
   retakePhoto () {
-    this.setState({ cameraData: null, error: null, submitting: false });
+    this.setState({ cameraData: null, error: null, isSubmitting: false, isPreviewing: false });
   }
 
   navigateToFeed () {
@@ -67,16 +104,74 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
     const { cameraData } = this.state;
     const upload = store.generateUpload();
 
-    this.setState({ submitting: true, error: null });
+    this.setState({ isSubmitting: true, error: null });
 
     return store.takePhoto(cameraData, upload, {
       camera: this.state.cameraType === RNCamera.constants.Type.front ? CAMERA.FRONT_FACING : CAMERA.BACK_FACING
     }).then(r => {
-      console.debug('r', r);
       if (r.success) {
-        this.setState({ cameraData: null, error: null, submitting: false });
+        this.setState({ error: null, isSubmitting: false });
+        this.minimisePreview();
       } else {
-        this.setState({ cameraData: null, error: r.message, submitting: false });
+        this.setState({ cameraData: null, error: r.message, isSubmitting: false });
+      }
+    });
+  }
+
+  /**
+   * Minimise onto feed icon to visualise where the image goes
+   */
+  minimisePreview () {
+    const duration = 750;
+    const feedIconMeasures = this.refMeasures['feedIconContainer'];
+
+    Animated.parallel([
+      Animated.timing(
+        this.state.previewWidthAnim,
+        {
+          toValue: feedIconMeasures.width,
+          duration: duration
+        }
+      ),
+      Animated.timing(
+        this.state.previewHeightAnim,
+        {
+          toValue: feedIconMeasures.height,
+          duration: duration
+        }
+      ),
+      Animated.timing(
+        this.state.previewTopAnim,
+        {
+          toValue: feedIconMeasures.pY,
+          duration: duration
+        }
+      ),
+      Animated.timing(
+        this.state.previewLeftAnim,
+        {
+          toValue: feedIconMeasures.pX,
+          duration: duration,
+          easing: Easing.out(Easing.exp)
+        }
+      ),
+      Animated.timing(
+        this.state.previewOpacityAnim,
+        {
+          toValue: 0.5,
+          duration: duration
+        }
+      ),
+      Animated.timing(
+        this.state.previewRadiusAnim,
+        {
+          toValue: feedIconMeasures.width / 2,
+          duration: duration
+        }
+      )
+    ]).start(({ finished }) => {
+      if (finished) {
+        this.setState({ isPreviewing: false, cameraData: null });
       }
     });
   }
@@ -97,28 +192,33 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
   }
 
   renderPreview () {
-    const { submitting, cameraData } = this.state;
-    const { width, height } = Dimensions.get('window');
-    const opacity = submitting ? 0.8 : 1.0;
+    const { cameraData } = this.state;
+
+    const animStyles = {
+      borderRadius: this.state.previewRadiusAnim,
+      width: this.state.previewWidthAnim,
+      height: this.state.previewHeightAnim,
+      top: this.state.previewTopAnim,
+      left: this.state.previewLeftAnim,
+      opacity: this.state.previewOpacityAnim
+    };
 
     return (
-      <View style={styles.flex0}>
-        <Image
-          style={{width: width, height: height, opacity: opacity}}
-          source={{uri: cameraData.path}}
-        />
-      </View>
+      <Animated.Image
+        style={[styles.preview, animStyles]}
+        source={{uri: cameraData.path}}
+      />
     );
   }
 
   render () {
-    const { cameraData, submitting } = this.state;
-    const previewing = Boolean(cameraData);
+    const { isSubmitting, isPreviewing } = this.state;
     const { width, height } = Dimensions.get('window');
-    const cameraView = previewing ? this.renderPreview() : this.renderCamera();
+    const cameraView = this.renderCamera();
+    const previewView = (isPreviewing && this.renderPreview());
 
-    // Only show toggle when not previewing
-    const toggleView = (!previewing &&
+    // Only show toggle when not isPreviewing
+    const toggleView = (!isPreviewing &&
       <Icon
         onPress={(e) => this.toggleType()}
         name='sync'
@@ -129,7 +229,7 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
       />
     );
 
-    const retakeView = (previewing &&
+    const retakeView = (isPreviewing &&
       <Icon
         onPress={(e) => this.retakePhoto()}
         name='refresh'
@@ -142,22 +242,26 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
 
     const shutterView = (
       <Shutter
-        onPress={(e) => previewing ? this.submitPhoto() : this.takePhoto()}
-        isLoading={submitting}
-        isReady={previewing && !submitting}
+        onPress={(e) => isPreviewing ? this.submitPhoto() : this.takePhoto()}
+        isLoading={isSubmitting}
+        isReady={isPreviewing && !isSubmitting}
         key='shutter'
       />
     );
 
     const feedView = (
-      <Icon
-        onPress={(e) => this.navigateToFeed()}
-        name='image'
-        size={24}
-        reverse
-        color='black'
-        key='image'
-      />
+      <View
+        ref='feedIconContainer'
+      >
+        <Icon
+          onPress={(e) => this.navigateToFeed()}
+          name='image'
+          size={24}
+          reverse
+          color='black'
+          key='image'
+        />
+      </View>
   );
 
     // TODO Show error message
@@ -165,6 +269,7 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
     return (
       <View style={styles.container}>
         { cameraView }
+        { previewView }
         <View style={[styles.overlayContainer, {width: width, height: height}]}>
           <View style={styles.toolbarTop}>
             <View style={styles.toolbarColLeft} />
@@ -195,6 +300,13 @@ import { Image, Dimensions, StyleSheet, View } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  camera: {
+    zIndex: 50
+  },
+  preview: {
+    position: 'absolute',
+    zIndex: 75
   },
   overlayContainer: {
     position: 'absolute',
