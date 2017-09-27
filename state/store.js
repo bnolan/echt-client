@@ -10,6 +10,7 @@ import uuid from 'uuid/v4';
 import resize from '../helpers/resize';
 import fixtures from './fixtures';
 
+import fixtures from './state/fixtures';
 export class EchtStore {
   // Uploads currently in progress (with auto-generated uuids)
   @observable uploads = [];
@@ -383,61 +384,6 @@ export class EchtStore {
     }).then(
       (response) => response.json()
     ).then((r) => {
-      // FIXME DONT COMMIT
-      // r = {
-      //   "friends": [
-      //     {
-      //       "createdAt": "2017-06-11T02:17:27.235Z",
-      //       "photo": {
-      //         "original": {
-      //           "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-      //         },
-      //         "small": {
-      //           "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
-      //         },
-      //         "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-      //       },
-      //       "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
-      //       "requester": false,
-      //       "status": "PENDING",
-      //       "uuid": "95d6cf88-1728-4876-a1ff-1a48e4c6d460"
-      //     },
-      //     {
-      //       "createdAt": "2017-06-11T02:17:27.235Z",
-      //       "photo": {
-      //         "original": {
-      //           "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-      //         },
-      //         "small": {
-      //           "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
-      //         },
-      //         "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-      //       },
-      //       "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
-      //       "requester": false,
-      //       "status": "PROPOSED",
-      //       "uuid": "a5d6cf88-1728-4876-a1ff-1a48e4c6d460"
-      //     },
-      //     {
-      //       "createdAt": "2017-06-11T02:17:27.235Z",
-      //       "photo": {
-      //         "original": {
-      //           "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-      //         },
-      //         "small": {
-      //           "url": "https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/photos/photo-1858c635-b994-4380-b5d2-ec1a0cd49c7c-small.jpg"
-      //         },
-      //         "url": "https://s3-us-west-2.amazonaws.com/echt.test.us-west-2/users/user-95d6cf88-1728-4876-a1ff-1a48e4c6d460.jpg"
-      //       },
-      //       "photoId": "38800f1a-2e79-4da3-998c-8ce7c569c8d1",
-      //       "requester": false,
-      //       "status": "ACCEPTED",
-      //       "uuid": "b5d6cf88-1728-4876-a1ff-1a48e4c6d460"
-      //     }
-      //   ],
-      //   "success": true
-      // }
-
       this.friends = this.merge(this.friends, r.friends);
       this.save();
     });
@@ -573,28 +519,12 @@ export class EchtStore {
 
 const echtStore = new EchtStore();
 
-echtStore.load().then(() => {
-  // Optionally load a fixture (to simplify local debugging)
-  if (config.fixture) {
-    echtStore.loadFixture(fixtures[config.fixture]);
-  }
-});
-
-// setTimeout(() => {
-//   const upload = {
-//     uuid: '1234',
-//     url: 'https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/users/user-92954f8c-7798-49f2-852a-2559d443c805.jpg',
-//     actions: [{
-//       type: 'ADD_FRIEND',
-//       user: {
-//         avatar: 'https://s3-us-west-2.amazonaws.com/echt.uat.us-west-2/users/user-92954f8c-7798-49f2-852a-2559d443c805.jpg',
-//         uuid: '92954f8c-7798-49f2-852a-2559d443c805'
-//       }
-//     }]
-//   };
-
-//   echtStore.merge(echtStore.uploads, [upload]);
-// }, 1000);
+if (config.fixture) {
+  assert(fixtures[config.fixture], 'Invalid fixture in config.js');
+  echtStore.loadFixture(fixtures[config.fixture]);
+} else {
+  echtStore.load();
+}
 
 // DEBUGGING ONLY - see https://corbt.com/posts/2015/12/19/debugging-with-global-variables-in-react-native.html
 //   (or you can use in production if you want, i'm not your mum. but ingo might smother you)
