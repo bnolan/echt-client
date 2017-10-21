@@ -10,7 +10,6 @@ import uuid from 'uuid/v4';
 import resize from '../helpers/resize';
 import fixtures from './fixtures';
 
-import fixtures from './state/fixtures';
 export class EchtStore {
   // Uploads currently in progress (with auto-generated uuids)
   @observable uploads = [];
@@ -441,12 +440,10 @@ export class EchtStore {
   }
 
   load () {
-    const getDeviceKey = AsyncStorage.getItem('deviceKey').then((key) => {
-      this.user.key = key;
-    });
-
-    const getLoggedIn = AsyncStorage.getItem('loggedIn').then((value) => {
-      this.user.loggedIn = value === 'true';
+    const getUser = AsyncStorage.getItem('user').then((user) => {
+      if (user) {
+        this.user = JSON.parse(user);
+      }
     });
 
     const getPhotos = AsyncStorage.getItem('photos').then((result) => {
@@ -482,8 +479,7 @@ export class EchtStore {
     });
 
     return Promise.all([
-      getDeviceKey,
-      getLoggedIn,
+      getUser,
       getPhotos,
       getFriends
     ]).then(() => {
@@ -492,8 +488,7 @@ export class EchtStore {
   }
 
   save () {
-    AsyncStorage.setItem('deviceKey', this.user.key);
-    AsyncStorage.setItem('loggedIn', this.user.loggedIn ? 'true' : 'false');
+    AsyncStorage.setItem('user', JSON.stringify(this.user));
 
     const photos = this.photos.filter((p) => p.status !== PHOTO_STATUS.UPLOADING);
     AsyncStorage.setItem('photos', JSON.stringify(photos));

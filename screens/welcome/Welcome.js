@@ -50,7 +50,10 @@ import {
                   delay={500}>
                   <Button
                     block
-                    onPress={() => { store.user.seenWelcome = true; }}>
+                    onPress={() => {
+                      store.user.seenWelcome = true;
+                      store.save();
+                    }}>
                     <Text>Begin</Text>
                   </Button>
                 </Animatable.View>
