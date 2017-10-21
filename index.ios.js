@@ -19,7 +19,7 @@ import { observer } from 'mobx-react/native';
       return <Loading />;
     }
 
-    if (store.loggedIn) {
+    if (store.user.seenWelcome) {
       // https://github.com/react-community/react-navigation/issues/876
       return <MainNavigator screenProps={{isSimulator: this.props.isSimulator}} />;
     } else {

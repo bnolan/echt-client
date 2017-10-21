@@ -6,9 +6,19 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
 import styles from './styles';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { STATUS } from '../constants';
+
+import {
+  Body,
+  Content,
+  Container,
+  Header,
+  List,
+  Text,
+  Title
+} from 'native-base';
 
 @observer export default class Friends extends React.Component {
   state = {
@@ -34,13 +44,15 @@ import { STATUS } from '../constants';
       });
   }
 
-  renderItem ({item}) {
+  renderItem (item) {
     if (item.status === STATUS.ACCEPTED) {
       return <AcceptedFriend friend={item} key={item.uuid} />;
     } else if (item.status === STATUS.PENDING) {
       return <SentFriendRequest friend={item} key={item.uuid} />;
     } else if (item.status === STATUS.PROPOSED) {
       return <ProposedFriend friend={item} key={item.uuid} />;
+    } else {
+      throw new Error(`Invalid status for ${JSON.stringify(item)}`);
     }
   }
 
@@ -54,14 +66,20 @@ import { STATUS } from '../constants';
 
   renderEmptyState () {
     return (
-      <View style={[styles.container, styles.noFriends]}>
-        <Text style={[styles.header, styles.dark]}>You have no friends.</Text>
-        <Text style={[styles.paragraph, styles.dark]}>
-          Take a selfie with a friend (both of you in the photo
-          at the same time) on the front facing camera and we
-          will send them a friend request.
-        </Text>
-      </View>
+      <Container style={styles.container}>
+        <Header>
+          <Body>
+            <Title>Friends</Title>
+          </Body>
+        </Header>
+
+        <Content padder>
+          <Text style={styles.lightText}>
+            Take a selfie with a friend and we
+            will send them a friend request.
+          </Text>
+        </Content>
+      </Container>
     );
   }
 
@@ -74,18 +92,29 @@ import { STATUS } from '../constants';
       return this.renderEmptyState();
     }
 
+    console.log(friends);
+
+    const friendCount = friends.filter((f) => f.status === STATUS.ACCEPTED).length;
+    const requestCount = friends.length - friendCount;
+
     return (
-      <View style={styles.container}>
-        <FlatList
-          data={friends}
-          numColumns={itemsPerRow}
-          renderItem={this.renderItem}
-          keyExtractor={this.keyExtractor}
-          removeClippedSubviews={false}
-          onRefresh={this.handleRefresh}
-          refreshing={refreshing}
-        />
-      </View>
+      <Container style={styles.container}>
+        <Header>
+          <Body>
+            <Title>
+              {friendCount} Friend{friendCount === 1 ? '' : 's'}
+              {requestCount > 0 ? ` and ${requestCount} Request${requestCount === 1 ? '' : 's'}` : ''}
+            </Title>
+          </Body>
+        </Header>
+
+        <Content>
+          <List
+            dataArray={friends}
+            renderRow={this.renderItem}
+          />
+        </Content>
+      </Container>
     );
   }
 }

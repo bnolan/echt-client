@@ -21,6 +21,30 @@ The simulator will automatically used the bundle served at `localhost` by the pr
 Adjust the server address in the `jsCodeLocation` variable in `ios/AppDelegate.m`
 if you want to run a different server.
 
+### Fixtures
+
+Given the signup steps involved, it's hard to recreate an exact state
+to reach a particular view (e.g. having two users signed for for an "add friends" dialog).
+You can define fixtures in `state/fixtures.js`.
+They are activated through the `fixtures` key in `config.js`,
+mapping to keys in the `state/fixtures.js` exports.
+
+Example: Loads `state/fixtures/add-friend.js`.
+
+```json
+{
+  "fixtures": "addFriend"
+}
+```
+
+Note that the fixtures are tied to the UAT stage,
+since they reference image assets in S3.
+Fixtures only last for the current "session",
+and aren't persisted in the local device store.
+They'll prevent network access, so things will get weird
+if you try to actually use the app with fixtures - they're mostly geared
+for design iterations rather than end-to-end shortcuts.
+
 ### Deploy to device
 
 To run the app on a phone in debug mode, you need to open `ios/Echt.xcodeproj`
@@ -31,6 +55,7 @@ At the moment, you need to adjust the `Build Setting > Development Team` assignm
 the app building (it's hardcoded to Ben's).
 
   LC_ALL=C find ios/Echt.xcodeproj/* -type f -exec sed -i "" "s/DWB7DKRZ7D/Y9AF3JTNBU/g" {} \;
+  LC_ALL=C find ios/Echt.xcodeproj/* -type f -exec sed -i "" "s/io.echt.Echt/io.echt.Ingo/g" {} \;
 
 ### Running a local endpoint
 

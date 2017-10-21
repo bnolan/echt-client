@@ -1,20 +1,84 @@
-import { StyleSheet } from 'react-native';
+import commonColor from '../native-base-theme/variables/commonColor';
 
 export const colors = {
-  textWhite: '#fff',
-  textLight: '#ddd',
-  textDark: '#666',
-  bgDarker: '#000',
-  bgLight: '#fff',
-  bgMedium: '#777',
-  bgDark: '#333',
-  bgPink: '#ff00aa'
+  ...commonColor,
+  ...{
+    textWhite: '#fff',
+    textLight: '#777',
+    textDark: '#333',
+    bgDarker: '#000',
+    bgLight: '#fff',
+    bgMedium: '#777',
+    bgDark: '#333',
+    bgPink: '#ff00aa'
+  }
 };
 
+export default {
+  container: {
+    backgroundColor: '#FFF'
+  },
+  padding15: {
+    padding: 15
+  },
+  text: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: colors.textDark,
+    fontFamily: 'System'
+  },
+  lightText: {
+    fontSize: 16,
+    lineHeight: 22,
+    color: colors.textLight,
+    fontFamily: 'System'
+  },
+  textCenter: {
+    textAlign: 'center'
+  },
+  textParagraph: {
+    marginBottom: 10
+  },
+  flex0: {
+    flex: 0
+  },
+  mb: {
+    marginBottom: 5
+  },
+  mb10: {
+    marginBottom: 10
+  },
+  mb15: {
+    marginBottom: 15
+  },
+  ml5: {
+    marginLeft: 5
+  },
+  mr5: {
+    marginRight: 5
+  },
+  margin10: {
+    margin: 10
+  },
+  margin15: {
+    margin: 15
+  },
+  alert: {
+    flex: 0
+  },
+  alertDanger: {
+    backgroundColor: commonColor.btnDangerBg
+  },
+  alertDangerText: {
+    color: commonColor.btnDangerColor
+  }
+};
+
+/*
 export default StyleSheet.create({
   // Common
   container: {
-    flex: 1
+    backgroundColor: colors.bgLight
   },
   header: {
     color: colors.textLight,
@@ -32,11 +96,23 @@ export default StyleSheet.create({
     margin: 12,
     marginBottom: 0
   },
+  headerView: {
+    backgroundColor: '#ff00aa',
+    padding: 12,
+    flexDirection: 'row',
+    shadowColor: colors.bgDark,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 2,
+    shadowOpacity: 0.2
+  },
   dark: {
     color: colors.textDark
   },
   text: {
-    color: colors.textLight,
+    color: colors.textWhite,
     margin: 24
   },
   bigEmoji: {
@@ -167,7 +243,6 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
 
-  /* Friend list and friend invitation */
   friendScreen: {
     backgroundColor: colors.bgDarker
   },
@@ -255,3 +330,4 @@ export default StyleSheet.create({
     marginTop: 20
   }
 });
+*/

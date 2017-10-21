@@ -12,7 +12,7 @@ const toMedium = (path) => {
     640, // width (max, ratio is preserved)
     640, // height (max, ratio is preserved)
     'JPEG',
-    90, // quality
+    75, // quality
     0 // rotation
   );
 };

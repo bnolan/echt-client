@@ -2,14 +2,14 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import Camera from '../screens/Camera';
+import CameraNavigator from './CameraNavigator';
 import Settings from '../screens/Settings';
 import NewsfeedNavigator from './NewsfeedNavigator';
 import FriendsNavigator from './FriendsNavigator';
 
 export default TabNavigator({
-  Camera: {
-    screen: Camera,
+  CameraNav: {
+    screen: CameraNavigator,
     path: '',
     navigationOptions: {
       tabBarLabel: 'Camera',
@@ -82,7 +82,7 @@ export default TabNavigator({
 }, {
   tabBarOptions: {
     showLabel: false,
-    activeTintColor: '#ff00aa',
+    activeTintColor: '#007AFF',
     activeBackgroundColor: '#ffffff',
     inactiveBackgroundColor: '#ffffff',
     inactiveTintColor: '#333333'

@@ -1,13 +1,16 @@
 import React from 'react';
 import store from '../../state/store';
-import styles, { colors } from '../styles';
 import timeago from 'timeago-words';
-import { Button } from 'react-native-elements';
-import { Text, View, Image } from 'react-native';
-import { STATUS } from '../../constants';
 
-const width = 128;
-const height = 128;
+import {
+  Button,
+  ListItem,
+  Text,
+  Thumbnail,
+  Left,
+  Right,
+  Body
+} from 'native-base';
 
 /*
  * Proposed means a friend request that's been sent to you and
@@ -23,40 +26,34 @@ export default class ProposedFriend extends React.Component {
   }
 
   get photo () {
-    return this.props.friend.photo.small.url;
+    return this.props.friend.photo && this.props.friend.photo.small.url;
+  }
+
+  get name () {
+    return 'Friend request';
+  }
+
+  get time () {
+    const createdAt = new Date(this.props.friend.updatedAt || this.props.friend.createdAt);
+    return 'Recieved ' + timeago(createdAt);
   }
 
   render () {
-    const createdAt = new Date(this.props.friend.updatedAt || this.props.friend.createdAt);
-
     return (
-      <View style={styles.friendItem}>
-        <Image
-          style={{width: width, height: height, flex: 0.4}}
-          source={{uri: this.photo}}
-        />
-
-        <View style={styles.friendItemDetail}>
-          <Text style={styles.headerSmall}>
-            Friend request
-          </Text>
-
-          <Text style={styles.friendItemText}>
-            Recieved {timeago(createdAt)}.
-          </Text>
-
-          <View style={styles.friendButtons}>
-            { this.props.friend.status === STATUS.PENDING && <Button
-              onPress={() => this.onAccept()}
-              fontSize={12}
-              backgroundColor={colors.bgPink}
-              color={colors.textWhite}
-              buttonStyle={styles.friendButton}
-              icon={{name: 'check-circle'}}
-              title='Accept' /> }
-          </View>
-        </View>
-      </View>
+      <ListItem avatar>
+        <Left>
+          <Thumbnail small source={{uri: this.photo}} />
+        </Left>
+        <Body>
+          <Text>{this.name}</Text>
+          <Text numberOfLines={1} note>{this.time}</Text>
+        </Body>
+        <Right>
+          <Button bordered small onPress={() => this.onAccept()}>
+            <Text>Accept</Text>
+          </Button>
+        </Right>
+      </ListItem>
     );
   }
 }
