@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Dimensions, TouchableHighlight, StatusBar } from 'react-native';
+import mobx from 'mobx';
 import { observer } from 'mobx-react/native';
 import PhotoView from 'react-native-photo-view';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -66,10 +67,12 @@ export default class Photo extends React.Component {
     }
 
     const {width, height} = Dimensions.get('window');
-    const photo = store.getPhoto(uuid);
+
+    var photo = store.getPhoto(uuid);
     if (!photo) {
       return null;
     }
+    photo = mobx.toJS(photo);
 
     const topActions = this.renderTopActions();
     const bottomActions = this.renderBottomActions();
