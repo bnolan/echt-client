@@ -352,7 +352,7 @@ export class EchtStore {
       body: JSON.stringify({uuid: photoId}),
       headers: this.headers
     }).then(r => {
-      this.photos = this.photos.filter(photo => photo.uuid !== photoId);
+      this.photos = this.photos.filter(photo => photo.get('uuid') !== photoId);
       this.save();
     });
   }
