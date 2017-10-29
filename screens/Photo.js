@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Dimensions, TouchableHighlight, StatusBar } from 'react-native';
+import { View, Dimensions, TouchableHighlight, Image, StatusBar, StyleSheet, Alert } from 'react-native';
 import mobx from 'mobx';
 import { observer } from 'mobx-react/native';
 import PhotoView from 'react-native-photo-view';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Button, Text, Icon } from 'native-base';
 import store from '../state/store';
-import styles from './styles';
 
 @observer
 export default class Photo extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {showActions: true};
+    this.state = {showActions: false};
     this.handleClose = this.handleClose.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
   }
@@ -21,65 +20,34 @@ export default class Photo extends React.Component {
     this.setState({showActions: !this.state.showActions});
   }
 
+  deletePhoto () {
+    const uuid = this.props.navigation.state.params.uuid;
+    store.deletePhoto(uuid).then(r => {
+      // TODO Deferred deletion once we've got a loading indicator
+      // this.props.navigation.goBack();
+    });
+    this.props.navigation.goBack();
+  }
+
   handleClose () {
     this.props.navigation.goBack();
   }
 
   handleDelete () {
-    const uuid = this.props.navigation.state.params.uuid;
-    store.deletePhoto(uuid).then(r => {
-      this.props.navigation.goBack();
-    });
-  }
-
-  renderTopActions () {
-    if (!this.state.showActions) {
-      return null;
-    }
-
-    return (
-      <View style={styles.photoActionsTop}>
-        <TouchableHighlight onPress={this.handleClose}>
-          <Icon name='ios-close' size={30} style={styles.icon} />
-        </TouchableHighlight>
-      </View>
+    Alert.alert(
+      'Delete photo',
+      'Are you sure you want to delete this photo?',
+      [
+        {text: 'Cancel', style: 'cancel'},
+        {text: 'OK', onPress: () => this.deletePhoto()}
+      ]
     );
   }
 
-  renderBottomActions () {
-    if (!this.state.showActions) {
-      return null;
-    }
-
+  renderPhotoView (photo) {
+    const { width, height } = Dimensions.get('window');
     return (
-      <View style={styles.photoActionsBottom}>
-        <TouchableHighlight onPress={this.handleDelete}>
-          <Icon name='ios-trash' size={30} style={styles.photoIcon} />
-        </TouchableHighlight>
-      </View>
-    );
-  }
-
-  render () {
-    const uuid = this.props.navigation.state.params.uuid;
-    if (!uuid) {
-      return null;
-    }
-
-    const {width, height} = Dimensions.get('window');
-
-    var photo = store.getPhoto(uuid);
-    if (!photo) {
-      return null;
-    }
-    photo = mobx.toJS(photo);
-
-    const topActions = this.renderTopActions();
-    const bottomActions = this.renderBottomActions();
-
-    // TODO Proper dimension calc
-    return (
-      <View>
+      <View style={styles.container}>
         <StatusBar hidden />
         <PhotoView
           source={{uri: photo.original.url}}
@@ -88,10 +56,61 @@ export default class Photo extends React.Component {
           style={{flex: 1, width: width, height: height}}
           onTap={() => this.toggleActions()}
         />
-        {topActions}
-        {bottomActions}
       </View>
     );
+  }
+
+  renderEditView (photo) {
+    const actions = [
+      <Button
+        full
+        danger
+        onPress={this.handleDelete}
+        key='delete'
+      >
+        <Icon name='trash' />
+        <Text>Delete</Text>
+      </Button>
+    ];
+
+    return (
+      <View style={styles.container}>
+        <StatusBar hidden />
+        <TouchableHighlight
+          onPress={() => this.toggleActions()}
+          style={[styles.previewContainer]}
+        >
+          <Image
+            source={{uri: photo.original.url}}
+            style={[styles.preview]}
+          />
+        </TouchableHighlight>
+        <View style={[styles.actions]}>
+          {actions}
+        </View>
+      </View>
+    );
+  }
+
+  render () {
+    const uuid = this.props.navigation.state.params.uuid;
+    const { showActions } = this.state;
+
+    if (!uuid) {
+      return null;
+    }
+
+    var photo = store.getPhoto(uuid);
+    if (!photo) {
+      return null;
+    }
+    photo = mobx.toJS(photo);
+
+    if (showActions) {
+      return this.renderEditView(photo);
+    } else {
+      return this.renderPhotoView(photo);
+    }
   }
 }
 
@@ -104,3 +123,23 @@ Photo.propTypes = {
     })
   })
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'black'
+  },
+  previewContainer: {
+    flex: 1,
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    margin: 10
+  },
+  preview: {
+    flex: 1,
+    borderRadius: 10
+  },
+  actions: {
+    margin: 10
+  }
+});
