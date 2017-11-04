@@ -28,12 +28,11 @@ export default TabNavigator({
     path: 'newsfeed',
     navigationOptions: ({ navigation, screenProps }) => {
       // Hide photo route in photo detail view
-      const photoRoute = navigation.state.routes
-        .find(r => r.routeName === 'Photo');
-
+      const routes = navigation.state.routes;
+      const isPhotoRoute = (routes[routes.length - 1].routeName === 'NewsfeedPhoto');
       return {
         tabBarLabel: 'Photos',
-        tabBarVisible: !(photoRoute),
+        tabBarVisible: !(isPhotoRoute),
         tabBarIcon: ({ tintColor, focused }) => (
           <Ionicons
             name={focused ? 'ios-photos' : 'ios-photos-outline'}
@@ -49,12 +48,12 @@ export default TabNavigator({
     path: 'friends',
     navigationOptions: ({ navigation, screenProps }) => {
       // Hide photo route in photo detail view
-      const photoRoute = navigation.state.routes
-        .find(r => r.routeName === 'Photo');
+      const routes = navigation.state.routes;
+      const isPhotoRoute = (routes[routes.length - 1].routeName === 'FriendsPhoto');
 
       return {
         tabBarLabel: 'Friends',
-        tabBarVisible: !(photoRoute),
+        tabBarVisible: !(isPhotoRoute),
         tabBarIcon: ({ tintColor, focused }) => (
           <Ionicons
             name={focused ? 'ios-people' : 'ios-people-outline'}
@@ -87,6 +86,8 @@ export default TabNavigator({
     inactiveBackgroundColor: '#ffffff',
     inactiveTintColor: '#333333'
   },
-  swipeEnabled: true,
+  // TODO Interferes with PhotoBrowser
+  // see https://github.com/react-community/react-navigation/issues/1760#issuecomment-336521248
+  swipeEnabled: false,
   animationEnabled: true
 });

@@ -1,13 +1,12 @@
 import { StackNavigator } from 'react-navigation';
-import Photo from '../screens/Photo';
 import Newsfeed from '../screens/Newsfeed';
 
 export default StackNavigator({
-  Main: {
+  NewsfeedMain: {
     screen: Newsfeed
   },
-  Photo: {
-    screen: Photo,
+  NewsfeedPhoto: {
+    screen: Newsfeed,
     path: 'photo/:uuid',
     navigationOptions: {
       headerMode: 'screen'
