@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Dimensions, TouchableHighlight, Image, StatusBar, StyleSheet, Alert } from 'react-native';
-import mobx from 'mobx';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react/native';
 import PhotoView from 'react-native-photo-view';
 import { Button, Text, Icon } from 'native-base';
@@ -104,7 +104,7 @@ export default class Photo extends React.Component {
     if (!photo) {
       return null;
     }
-    photo = mobx.toJS(photo);
+    photo = toJS(photo);
 
     if (showActions) {
       return this.renderEditView(photo);

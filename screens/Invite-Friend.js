@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import assert from 'assert';
-import mobx from 'mobx';
+import { toJS } from 'mobx';
 import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
@@ -12,7 +12,7 @@ import {
   Body,
   Button,
   Card,
-  CardItem, 
+  CardItem,
   Col,
   Container,
   Content,
@@ -39,7 +39,7 @@ export default class InviteFriend extends React.Component {
   }
 
   get upload () {
-    return mobx.toJS(store.getUpload(this.uuid));
+    return toJS(store.getUpload(this.uuid));
   }
 
   get action () {

@@ -1,5 +1,5 @@
 import AcceptedFriend from './friends/Accepted';
-import mobx from 'mobx';
+import { toJS } from 'mobx';
 import SentFriendRequest from './friends/Sent';
 import ProposedFriend from './friends/Proposed';
 import PropTypes from 'prop-types';
@@ -84,7 +84,7 @@ import {
   }
 
   render () {
-    const friends = mobx.toJS(store.friends);
+    const friends = toJS(store.friends);
     const { itemsPerRow } = this.props;
     const refreshing = this.state.refreshing;
 

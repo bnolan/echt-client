@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dimensions, FlatList, Image, View, TouchableHighlight } from 'react-native';
 import { observer } from 'mobx-react/native';
-import mobx from 'mobx';
+import { toJS } from 'mobx';
 import PropTypes from 'prop-types';
 import store from '../state/store';
 import styles from './styles';
@@ -65,7 +65,7 @@ export default class Newsfeed extends React.Component {
   render () {
     // Prevent stupid flatlist getting photos[n+1]
     // and mobx goes waaah.
-    const photos = mobx.toJS(store.photos);
+    const photos = toJS(store.photos);
 
     const { itemsPerRow } = this.props;
     const refreshing = this.state.refreshing;
