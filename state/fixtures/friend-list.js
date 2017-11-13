@@ -1,5 +1,5 @@
 import uuid from 'uuid/v4';
-import { STATUS, ACTION } from '../../constants';
+import { STATUS } from '../../constants';
 import photos from './photos';
 
 const key = uuid();
@@ -17,19 +17,19 @@ export default {
     {
       uuid: ingo,
       status: STATUS.ACCEPTED,
-      photo: { small: { url: photos.ingo }},
+      photo: { small: { url: photos.ingo } },
       createdAt: new Date() - 1000 * 3600 * 24 * 5
     },
     {
       uuid: sam,
       status: STATUS.RECIEVED,
-      photo: { small: { url: photos.sam }},
+      photo: { small: { url: photos.sam } },
       createdAt: new Date() - 1000 * 3600 * 24 * 2
     },
     {
       uuid: rissa,
       status: STATUS.SENT,
-      photo: { small: { url: photos.rissa }},
+      photo: { small: { url: photos.rissa } },
       createdAt: new Date() - 1000 * 3600 * 4
     }
   ],
