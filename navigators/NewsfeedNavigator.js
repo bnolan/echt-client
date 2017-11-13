@@ -13,7 +13,7 @@ export default StackNavigator({
       headerMode: 'screen',
       // Avoid switching to the next tab state
       // See https://github.com/react-community/react-navigation/issues/1760#issuecomment-336521248
-      gesturesEnabled: false
+      swipeEnabled: false
     }
   }
 }, {

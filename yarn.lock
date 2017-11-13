@@ -5001,6 +5001,18 @@ react-navigation@^1.0.0-beta.19:
     react-native-drawer-layout-polyfill "^1.3.2"
     react-native-tab-view "^0.0.70"
 
+"react-navigation@https://github.com/chillu/react-navigation.git":
+  version "1.0.0-beta.19"
+  resolved "https://github.com/chillu/react-navigation.git#4a95c62eaadf910fa8d4da7710e4ac4fff338663"
+  dependencies:
+    babel-plugin-transform-define "^1.3.0"
+    clamp "^1.0.1"
+    hoist-non-react-statics "^2.2.0"
+    path-to-regexp "^1.7.0"
+    prop-types "^15.5.10"
+    react-native-drawer-layout-polyfill "^1.3.2"
+    react-native-tab-view "^0.0.70"
+
 react-proptypes@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-proptypes/-/react-proptypes-1.0.0.tgz#88e9cf5cc61b18844a5f57a06c839ae39fe9a57f"

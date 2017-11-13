@@ -33,7 +33,7 @@
     "react-native-photo-view": "^1.2.0",
     "react-native-popup-dialog": "^0.9.35",
     "react-native-vector-icons": "^4.4.0",
-    "react-navigation": "^1.0.0-beta.19",
+    "react-navigation": "https://github.com/chillu/react-navigation.git",
     "react-proptypes": "^1.0.0",
     "strftime": "^0.10.0",
     "testdouble": "^3.0.0",
