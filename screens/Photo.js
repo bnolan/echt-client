@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Dimensions, TouchableHighlight, Image, StatusBar, StyleSheet, Alert } from 'react-native';
+import { View, TouchableOpacity, StatusBar, StyleSheet, Alert } from 'react-native';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react/native';
-import PhotoView from 'react-native-photo-view';
+import { CachedImage } from 'react-native-img-cache';
 import { Button, Text, Icon } from 'native-base';
 import store from '../state/store';
 
@@ -45,17 +45,18 @@ export default class Photo extends React.Component {
   }
 
   renderPhotoView (photo) {
-    const { width, height } = Dimensions.get('window');
     return (
       <View style={styles.container}>
         <StatusBar hidden />
-        <PhotoView
-          source={{uri: photo.original.url}}
-          minimumZoomScale={1}
-          maximumZoomScale={3}
-          style={{flex: 1, width: width, height: height}}
-          onTap={() => this.toggleActions()}
-        />
+        <TouchableOpacity
+          onPress={() => this.toggleActions()}
+          style={[styles.viewContainer]}
+        >
+          <CachedImage
+            source={{uri: photo.original.url}}
+            style={[styles.viewPhoto]}
+          />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -76,15 +77,15 @@ export default class Photo extends React.Component {
     return (
       <View style={styles.container}>
         <StatusBar hidden />
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={() => this.toggleActions()}
-          style={[styles.previewContainer]}
+          style={[styles.editContainer]}
         >
-          <Image
+          <CachedImage
             source={{uri: photo.original.url}}
-            style={[styles.preview]}
+            style={[styles.editPhoto]}
           />
-        </TouchableHighlight>
+        </TouchableOpacity>
         <View style={[styles.actions]}>
           {actions}
         </View>
@@ -129,14 +130,23 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black'
   },
-  previewContainer: {
+  viewContainer: {
+    flex: 1,
+    flexGrow: 1
+  },
+  viewPhoto: {
+    flex: 1,
+    flexGrow: 1
+  },
+  editContainer: {
     flex: 1,
     flexGrow: 1,
     justifyContent: 'flex-start',
     margin: 10
   },
-  preview: {
+  editPhoto: {
     flex: 1,
+    flexGrow: 1,
     borderRadius: 10
   },
   actions: {
