@@ -7,7 +7,6 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.vydia.RNUploader.UploaderReactPackage;
-import com.reactnative.photoview.PhotoViewPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rnfs.RNFSPackage;
 import com.lwansbrough.RCTCamera.RCTCameraPackage;
@@ -41,7 +40,6 @@ public class MainApplication extends Application implements ReactApplication {
             new ImageResizerPackage(),
             new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
             new UploaderReactPackage(),
-            new PhotoViewPackage(),
             new VectorIconsPackage(),
             new RNFSPackage(),
             new RCTCameraPackage()
