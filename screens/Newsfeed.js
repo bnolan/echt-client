@@ -11,8 +11,6 @@ import {
   Content,
   Container,
   Header,
-  List,
-  Text,
   Title
 } from 'native-base';
 

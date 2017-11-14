@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import store from '../state/store';
 import styles from './styles';
-import { FlatList, View } from 'react-native';
 import { observer } from 'mobx-react/native';
 import { STATUS } from '../constants';
 
@@ -85,8 +84,6 @@ import {
 
   render () {
     const friends = toJS(store.friends);
-    const { itemsPerRow } = this.props;
-    const refreshing = this.state.refreshing;
 
     if (this.noFriends) {
       return this.renderEmptyState();

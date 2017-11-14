@@ -1,26 +1,13 @@
 import React from 'react';
 import strftime from 'strftime';
-import styles from '../styles';
-import { TouchableHighlight, View, Image } from 'react-native';
 
 import {
-  Container,
-  Header,
-  Title,
-  Content,
-  Button,
-  Icon,
-  List,
   ListItem,
   Text,
   Thumbnail,
   Left,
-  Right,
   Body
 } from 'native-base';
-
-const width = 128;
-const height = 128;
 
 export default class Friends extends React.Component {
   get photo () {

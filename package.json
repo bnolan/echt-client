@@ -55,6 +55,9 @@
     "preset": "react-native"
   },
   "semistandard": {
-    "parser": "babel-eslint"
+    "parser": "babel-eslint",
+    "ignore": [
+      "/native-base-theme/"
+    ]
   }
 }

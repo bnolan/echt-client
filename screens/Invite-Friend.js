@@ -6,7 +6,7 @@ import React from 'react';
 import store from '../state/store';
 import styles from './styles';
 import { observer } from 'mobx-react/native';
-import { Image, View } from 'react-native';
+import { Image } from 'react-native';
 
 import {
   Body,
@@ -15,15 +15,11 @@ import {
   CardItem,
   Col,
   Container,
-  Content,
   Grid,
   Header,
-  Icon,
   Left,
-  Right,
   Row,
   Text,
-  Thumbnail,
   Title
 } from 'native-base';
 
@@ -64,9 +60,6 @@ export default class InviteFriend extends React.Component {
 
   render () {
     assert(this.upload, 'Upload does not exist');
-
-    const width = 240;
-    const height = 180;
 
     // TODO Proper dimension calc
 
@@ -114,8 +107,7 @@ export default class InviteFriend extends React.Component {
             </Card>
           </Row>
 
-          <Row>
-          </Row>
+          <Row />
 
           <Row style={styles.flex0}>
             <Grid style={styles.margin10}>
